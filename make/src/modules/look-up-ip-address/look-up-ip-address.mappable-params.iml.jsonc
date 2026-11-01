@@ -1,0 +1,9 @@
+[
+  {
+    "name": "ip",
+    "type": "text",
+    "label": "IP address",
+    "help": "IPv4 or IPv6. A private or reserved address is answered as not routable, free.",
+    "required": true
+  }
+]

@@ -1,0 +1,1551 @@
+{
+  "info": {
+    "name": "ProofTell API",
+    "description": "ProofTell checks a phone number, an email address and an IP address: one at a time, or together as a 0 to 100 risk score with a verdict and its reasons. Phone lookups come in five levels (basic, line type, current carrier, line status, fraud score); emails are verified down to the mailbox; IPs are read for Tor, VPN and datacenter use and their geography.\n\nVersion 1: new fields, endpoints and error codes may appear at any time, so ignore what you do not know; a documented endpoint or field is removed or renamed only after the notice the terms of service give (60 days, §6).\n\nEvery request but the rate card sends `Authorization: Bearer {{api_key}}`: set the collection variable `api_key`. Create a key in the ProofTell dashboard (Developers → Integrations), named after this platform (Postman). A `pt_test_` key is the free sandbox: simulated, deterministic answers. A `pt_live_` key spends the account's balance. The sandbox's documented inputs: `+447700900123` (a GB mobile), `jane@example.com` (deliverable), `203.0.113.1` (a clean US address), `203.0.113.66` (Tor); the sandbox answers 501 on the files endpoints.\n\n`base_url` is `https://api.prooftell.com`. Money is a decimal string in USD, never a float. An error answers `{\"error\": {\"code\", \"message\"}}` under its HTTP status (401 `invalid_api_key`, 402 `insufficient_balance` with the amounts, 429 `rate_limited` with `retry_after`), and the test on every request fails with that code and message. The reference: https://prooftell.com/docs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Pricing and balance",
+      "description": "The public rate card, and the balance of the account the key belongs to: 200 proves the key.",
+      "item": [
+        {
+          "name": "The rate card",
+          "request": {
+            "name": "The rate card",
+            "description": "Public. One price list for everyone: the rate of every signal per run and per 1,000 (the list, what a\nmonth's first 10,000 checks of a signal cost), its volume tiers — each check of a signal prices at the tier\nthe account's month has reached, per the curve —, country bands for banded signals, the top-up amounts, the\nminimum top-up and the monthly amounts. Cached for five\nminutes. The website, the dashboard and the docs all read prices from here.\n",
+            "url": {
+              "path": [
+                "v1",
+                "pricing"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{base_url}}/v1/pricing"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [
+            {
+              "name": "Live (200)",
+              "originalRequest": {
+                "name": "The rate card",
+                "description": "Public. One price list for everyone: the rate of every signal per run and per 1,000 (the list, what a\nmonth's first 10,000 checks of a signal cost), its volume tiers — each check of a signal prices at the tier\nthe account's month has reached, per the curve —, country bands for banded signals, the top-up amounts, the\nminimum top-up and the monthly amounts. Cached for five\nminutes. The website, the dashboard and the docs all read prices from here.\n",
+                "url": {
+                  "path": [
+                    "v1",
+                    "pricing"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [],
+                  "raw": "{{base_url}}/v1/pricing"
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {},
+                "auth": {
+                  "type": "noauth"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"version\": \"2026-10-24\",\n  \"currency\": \"USD\",\n  \"services\": [\n    {\n      \"service\": \"phone_basic\",\n      \"label\": \"Phone intelligence, basic\",\n      \"per_run\": \"0.000000\",\n      \"per_1000\": \"0.00\",\n      \"tiers\": [\n        {\n          \"upto\": null,\n          \"per_run\": \"0.000000\",\n          \"per_1000\": \"0.00\"\n        }\n      ]\n    },\n    {\n      \"service\": \"phone_line_type\",\n      \"label\": \"Phone intelligence, line type\",\n      \"per_run\": \"0.002500\",\n      \"per_1000\": \"2.50\",\n      \"tiers\": [\n        {\n          \"upto\": 10000,\n          \"per_run\": \"0.002500\",\n          \"per_1000\": \"2.50\"\n        },\n        {\n          \"upto\": 50000,\n          \"per_run\": \"0.001750\",\n          \"per_1000\": \"1.75\"\n        },\n        {\n          \"upto\": 250000,\n          \"per_run\": \"0.001125\",\n          \"per_1000\": \"1.13\"\n        },\n        {\n          \"upto\": 1000000,\n          \"per_run\": \"0.000750\",\n          \"per_1000\": \"0.75\"\n        },\n        {\n          \"upto\": null,\n          \"per_run\": \"0.000500\",\n          \"per_1000\": \"0.50\"\n        }\n      ]\n    },\n    {\n      \"service\": \"phone_current_carrier\",\n      \"label\": \"Phone intelligence, current carrier\",\n      \"bands\": {\n        \"default\": {\n          \"per_1000\": \"5.50\",\n          \"tiers\": [\n            {\n              \"upto\": 10000,\n              \"per_run\": \"0.005500\",\n              \"per_1000\": \"5.50\"\n            },\n            {\n              \"upto\": 50000,\n              \"per_run\": \"0.003850\",\n              \"per_1000\": \"3.85\"\n            },\n            {\n              \"upto\": 250000,\n              \"per_run\": \"0.002475\",\n              \"per_1000\": \"2.48\"\n            },\n            {\n              \"upto\": null,\n              \"per_run\": \"0.001650\",\n              \"per_1000\": \"1.65\"\n            }\n          ],\n          \"countries\": [],\n          \"per_run\": \"0.005500\"\n        }\n      }\n    },\n    {\n      \"service\": \"phone_line_status\",\n      \"label\": \"Phone intelligence, line status\",\n      \"bands\": {\n        \"default\": {\n          \"per_1000\": \"13.50\",\n          \"tiers\": [\n            {\n              \"upto\": 10000,\n              \"per_run\": \"0.013500\",\n              \"per_1000\": \"13.50\"\n            },\n            {\n              \"upto\": 50000,\n              \"per_run\": \"0.009450\",\n              \"per_1000\": \"9.45\"\n            },\n            {\n              \"upto\": 250000,\n              \"per_run\": \"0.006075\",\n              \"per_1000\": \"6.08\"\n            },\n            {\n              \"upto\": null,\n              \"per_run\": \"0.004050\",\n              \"per_1000\": \"4.05\"\n            }\n          ],\n          \"countries\": [],\n          \"per_run\": \"0.013500\"\n        }\n      }\n    },\n    {\n      \"service\": \"email\",\n      \"label\": \"Email verification\",\n      \"per_run\": \"0.004000\",\n      \"per_1000\": \"4.00\",\n      \"tiers\": [\n        {\n          \"upto\": 10000,\n          \"per_run\": \"0.004000\",\n          \"per_1000\": \"4.00\"\n        },\n        {\n          \"upto\": 50000,\n          \"per_run\": \"0.002800\",\n          \"per_1000\": \"2.80\"\n        },\n        {\n          \"upto\": 250000,\n          \"per_run\": \"0.001800\",\n          \"per_1000\": \"1.80\"\n        },\n        {\n          \"upto\": 1000000,\n          \"per_run\": \"0.001200\",\n          \"per_1000\": \"1.20\"\n        },\n        {\n          \"upto\": null,\n          \"per_run\": \"0.000800\",\n          \"per_1000\": \"0.80\"\n        }\n      ]\n    },\n    {\n      \"service\": \"ip\",\n      \"label\": \"IP intelligence\",\n      \"per_run\": \"0.000500\",\n      \"per_1000\": \"0.50\",\n      \"tiers\": [\n        {\n          \"upto\": 10000,\n          \"per_run\": \"0.000500\",\n          \"per_1000\": \"0.50\"\n        },\n        {\n          \"upto\": 50000,\n          \"per_run\": \"0.000350\",\n          \"per_1000\": \"0.35\"\n        },\n        {\n          \"upto\": 250000,\n          \"per_run\": \"0.000225\",\n          \"per_1000\": \"0.23\"\n        },\n        {\n          \"upto\": 1000000,\n          \"per_run\": \"0.000150\",\n          \"per_1000\": \"0.15\"\n        },\n        {\n          \"upto\": null,\n          \"per_run\": \"0.000100\",\n          \"per_1000\": \"0.10\"\n        }\n      ]\n    }\n  ],\n  \"curve\": [\n    {\n      \"upto\": 10000,\n      \"multiplier\": 1\n    },\n    {\n      \"upto\": 50000,\n      \"multiplier\": 0.7\n    },\n    {\n      \"upto\": 250000,\n      \"multiplier\": 0.45\n    },\n    {\n      \"upto\": 1000000,\n      \"multiplier\": 0.3\n    },\n    {\n      \"upto\": null,\n      \"multiplier\": 0.2\n    }\n  ],\n  \"min_topup\": \"10.00\",\n  \"topup_amounts\": [\n    \"100.00\",\n    \"500.00\",\n    \"1000.00\",\n    \"5000.00\"\n  ],\n  \"subscription_amounts\": [\n    \"50.00\",\n    \"100.00\",\n    \"250.00\",\n    \"500.00\"\n  ]\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Your account's balance",
+          "request": {
+            "name": "Your account's balance",
+            "description": "Balance — paid and promotional money, held amounts, in dollars to four places — and what this month's runs\ncost so far, across the account: the organizations of an account share one balance, so every key of the\naccount answers the same figures, whichever organization it belongs to.\n",
+            "url": {
+              "path": [
+                "v1",
+                "balance"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{base_url}}/v1/balance"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "response": [
+            {
+              "name": "Live (200)",
+              "originalRequest": {
+                "name": "Your account's balance",
+                "description": "Balance — paid and promotional money, held amounts, in dollars to four places — and what this month's runs\ncost so far, across the account: the organizations of an account share one balance, so every key of the\naccount answers the same figures, whichever organization it belongs to.\n",
+                "url": {
+                  "path": [
+                    "v1",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [],
+                  "raw": "{{base_url}}/v1/balance"
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"currency\": \"USD\",\n  \"balance\": \"124.0000\",\n  \"paid\": \"126.4000\",\n  \"promotional\": \"0.0000\",\n  \"held\": \"2.4000\",\n  \"usage\": {\n    \"month\": \"2026-10\",\n    \"runs\": 3550,\n    \"amount\": \"12.4000\",\n    \"signals\": {\n      \"phone_line_type\": {\n        \"runs\": 2000,\n        \"amount\": \"5.0000\"\n      },\n      \"phone_current_carrier\": {\n        \"runs\": 800,\n        \"amount\": \"4.4000\"\n      },\n      \"email\": {\n        \"runs\": 750,\n        \"amount\": \"3.0000\"\n      }\n    }\n  }\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Checks",
+      "description": "The four checks, charged per check from the balance; with a pt_test_ key each is a free, simulated and deterministic answer.",
+      "item": [
+        {
+          "name": "Look up a phone number",
+          "request": {
+            "name": "Look up a phone number",
+            "description": "A phone lookup in five levels, each including the ones before it (`level`, default `line_type`):\n\n- **basic** — free: whether the number is valid, its E.164, international and national formats, its country\n  and calling code. No line type, no carrier.\n- **line_type** — plus the line type (mobile, fixed line, VoIP, toll-free, premium-rate…), the carrier the\n  range was allocated to (`original_carrier`), the region and the time zone, from the numbering plan.\n  Charged when `status` is `success`; a number that could not be parsed is answered and free.\n- **current_carrier** — plus the carrier the number is on today and whether it was ported\n  (`current_carrier`).\n- **line_status** — plus whether the subscriber is on the network right now and, when not, why —\n  switched off, absent, unknown subscriber… (`line_status`, an HLR lookup; `current_carrier` is filled from\n  the same network answer).\n- **fraud_score** — plus the number's fraud intelligence: validity against the regulator's allocated ranges,\n  the range's service type (premium-rate, satellite, VoIP, M2M…), IPRN and MSRN flags with dates, a 0–100\n  score with its `risk_level` (`fraud_score`; `current_carrier` and `line_status` are filled from the same\n  answer, presence without the reason detail).\n\nCharged from your balance at the step of the volume curve your account's month has reached for each line\n(`curve` on `/v1/pricing`: the list for a month's first 10,000 checks of a signal, less past them; `cost`\nsays what this call cost). Without balance a call fails with 402 `insufficient_balance` and the amounts to\ntop up — `basic` too: it costs nothing, but like every live call it needs a balance. There is no free quota;\nthe sandbox is the free path.\n\nThe levels above line type are provider-backed: they need balance,\nare priced per country band (`/v1/pricing`), and the call's cost is the line type's line plus\nthe level's line, each charged on its own outcome. Where ProofTell does not offer a level —\nfor the number's country, or at all yet — its line says `unavailable` with `not_offered` or\n`not_offered_in_country`, costs nothing, and the line type's answer still comes back. When nothing\ncan run, the call fails with 503.\n\n**Line status where it reaches.** The presence check reaches some mobile networks and not others;\nthe dashboard's Coverage page lists them by country and carrier. In a country where it\nreaches none — the United States among them — a `line_status` request is answered from the current\ncarrier. On a network it does not reach — or a fixed line — the presence check names the\nnetwork but not the subscriber's state. Either way the answer carries the `current_carrier` block\nand a `line_status` block with `covered: false` and `reason: network_not_covered` (`fixed_line` for\na fixed line), the `line_status` line is `unavailable` with that reason and costs nothing, and the\n`current_carrier` line carries the charge: the call costs line type plus current carrier, never line\nstatus. When the check can name only the network the number was issued to, `current_carrier` has that\nas `original_carrier` (no `carrier`, no `ported`) and the call costs line type only. Where the\ncurrent carrier level is not offered (for the number's country, or at all), its line is `unavailable`\nwith that reason, the answer carries no `current_carrier` block and no network, and the call costs\nline type only.\n\n**Fraud score without presence.** Where the fraud score cannot query presence, `line_status` comes back\nwith `reason: presence_not_available` and the call is charged for what came back: the\n`current_carrier` line (when the carrier the number is on today is known — the United States, for\none) plus the `fraud_score` line at the rate of the score alone (`phone_fraud_score_only` on\n`/v1/pricing`), the `line_status` line `unavailable` at no cost. When portability is not available either,\n`current_carrier` is `unavailable` with `portability_not_available`, the network known is under\n`current_carrier.original_carrier`, and the call costs line type plus the score alone — as it does when\nthe current carrier level is not offered for the number: then its line says so, and the answer\ncarries no `current_carrier` block and no network.\n\nWith a `pt_test_` key the call is a sandbox: the result is simulated and deterministic, no\nsignal is called, nothing is billed, and the answer carries every field a live one has. A level\nyour organization is not offered answers as it does with a live key: its line `unavailable` with\n`not_offered`, no block. Any number works and its country follows the dialling code\n(`+447700900123` is a GB mobile); a national number is read in `country`, as with a live key\n(`07700 900123` with `GB` is that mobile). `+15005550001` is a valid mobile, `+15005550002` VoIP\n(fraud score: medium), `+15005550003` not valid (`status: success`, `valid: false`, `reason:\nunrecognized_range`), `+15005550004` answers 503 as an unavailable signal would,\n`+15005550006` a premium-rate IPRN (line type: `premium_rate`; fraud score: high), `+15005550007` toll-free,\n`+15005550008` a line of unknown type and `+15005550009` a ported number (current carrier: on\nanother carrier). The sandbox follows the coverage: a US number at `line_status` gets the\nuncovered answer, as with a live key. `+447700900005` is switched off (line status: not present), and\n`+447700900010` is on a network line status does not reach.\n`+442079460000` is a fixed line (line status: `fixed_line`; fraud score: `presence_not_available`), and\n`+447700900011` is on a network with no portability data (line status: only\n`current_carrier.original_carrier`, charged as line type; fraud score: `presence_not_available`, the\n`current_carrier` line `unavailable` with `portability_not_available`). At `basic` no number is\nmagic: the check is the api's own, computed for any number as with a live key.\n",
+            "url": {
+              "path": [
+                "v1",
+                "phone"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{base_url}}/v1/phone"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+447700900123\",\n  \"country\": \"GB\",\n  \"level\": \"line_status\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Sandbox (200)",
+              "originalRequest": {
+                "name": "Look up a phone number",
+                "description": "A phone lookup in five levels, each including the ones before it (`level`, default `line_type`):\n\n- **basic** — free: whether the number is valid, its E.164, international and national formats, its country\n  and calling code. No line type, no carrier.\n- **line_type** — plus the line type (mobile, fixed line, VoIP, toll-free, premium-rate…), the carrier the\n  range was allocated to (`original_carrier`), the region and the time zone, from the numbering plan.\n  Charged when `status` is `success`; a number that could not be parsed is answered and free.\n- **current_carrier** — plus the carrier the number is on today and whether it was ported\n  (`current_carrier`).\n- **line_status** — plus whether the subscriber is on the network right now and, when not, why —\n  switched off, absent, unknown subscriber… (`line_status`, an HLR lookup; `current_carrier` is filled from\n  the same network answer).\n- **fraud_score** — plus the number's fraud intelligence: validity against the regulator's allocated ranges,\n  the range's service type (premium-rate, satellite, VoIP, M2M…), IPRN and MSRN flags with dates, a 0–100\n  score with its `risk_level` (`fraud_score`; `current_carrier` and `line_status` are filled from the same\n  answer, presence without the reason detail).\n\nCharged from your balance at the step of the volume curve your account's month has reached for each line\n(`curve` on `/v1/pricing`: the list for a month's first 10,000 checks of a signal, less past them; `cost`\nsays what this call cost). Without balance a call fails with 402 `insufficient_balance` and the amounts to\ntop up — `basic` too: it costs nothing, but like every live call it needs a balance. There is no free quota;\nthe sandbox is the free path.\n\nThe levels above line type are provider-backed: they need balance,\nare priced per country band (`/v1/pricing`), and the call's cost is the line type's line plus\nthe level's line, each charged on its own outcome. Where ProofTell does not offer a level —\nfor the number's country, or at all yet — its line says `unavailable` with `not_offered` or\n`not_offered_in_country`, costs nothing, and the line type's answer still comes back. When nothing\ncan run, the call fails with 503.\n\n**Line status where it reaches.** The presence check reaches some mobile networks and not others;\nthe dashboard's Coverage page lists them by country and carrier. In a country where it\nreaches none — the United States among them — a `line_status` request is answered from the current\ncarrier. On a network it does not reach — or a fixed line — the presence check names the\nnetwork but not the subscriber's state. Either way the answer carries the `current_carrier` block\nand a `line_status` block with `covered: false` and `reason: network_not_covered` (`fixed_line` for\na fixed line), the `line_status` line is `unavailable` with that reason and costs nothing, and the\n`current_carrier` line carries the charge: the call costs line type plus current carrier, never line\nstatus. When the check can name only the network the number was issued to, `current_carrier` has that\nas `original_carrier` (no `carrier`, no `ported`) and the call costs line type only. Where the\ncurrent carrier level is not offered (for the number's country, or at all), its line is `unavailable`\nwith that reason, the answer carries no `current_carrier` block and no network, and the call costs\nline type only.\n\n**Fraud score without presence.** Where the fraud score cannot query presence, `line_status` comes back\nwith `reason: presence_not_available` and the call is charged for what came back: the\n`current_carrier` line (when the carrier the number is on today is known — the United States, for\none) plus the `fraud_score` line at the rate of the score alone (`phone_fraud_score_only` on\n`/v1/pricing`), the `line_status` line `unavailable` at no cost. When portability is not available either,\n`current_carrier` is `unavailable` with `portability_not_available`, the network known is under\n`current_carrier.original_carrier`, and the call costs line type plus the score alone — as it does when\nthe current carrier level is not offered for the number: then its line says so, and the answer\ncarries no `current_carrier` block and no network.\n\nWith a `pt_test_` key the call is a sandbox: the result is simulated and deterministic, no\nsignal is called, nothing is billed, and the answer carries every field a live one has. A level\nyour organization is not offered answers as it does with a live key: its line `unavailable` with\n`not_offered`, no block. Any number works and its country follows the dialling code\n(`+447700900123` is a GB mobile); a national number is read in `country`, as with a live key\n(`07700 900123` with `GB` is that mobile). `+15005550001` is a valid mobile, `+15005550002` VoIP\n(fraud score: medium), `+15005550003` not valid (`status: success`, `valid: false`, `reason:\nunrecognized_range`), `+15005550004` answers 503 as an unavailable signal would,\n`+15005550006` a premium-rate IPRN (line type: `premium_rate`; fraud score: high), `+15005550007` toll-free,\n`+15005550008` a line of unknown type and `+15005550009` a ported number (current carrier: on\nanother carrier). The sandbox follows the coverage: a US number at `line_status` gets the\nuncovered answer, as with a live key. `+447700900005` is switched off (line status: not present), and\n`+447700900010` is on a network line status does not reach.\n`+442079460000` is a fixed line (line status: `fixed_line`; fraud score: `presence_not_available`), and\n`+447700900011` is on a network with no portability data (line status: only\n`current_carrier.original_carrier`, charged as line type; fraud score: `presence_not_available`, the\n`current_carrier` line `unavailable` with `portability_not_available`). At `basic` no number is\nmagic: the check is the api's own, computed for any number as with a live key.\n",
+                "url": {
+                  "path": [
+                    "v1",
+                    "phone"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [],
+                  "raw": "{{base_url}}/v1/phone"
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"+447700900123\",\n  \"country\": \"GB\",\n  \"level\": \"line_status\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"success\",\n  \"phone\": \"+447700900123\",\n  \"valid\": true,\n  \"line_type\": \"mobile\",\n  \"region\": \"Sandbox\",\n  \"country\": \"United Kingdom\",\n  \"country_code\": \"GB\",\n  \"country_prefix\": \"44\",\n  \"international_format\": \"+44 7700 900123\",\n  \"national_format\": \"07700 900123\",\n  \"e164\": \"+447700900123\",\n  \"original_carrier\": \"Sandbox Wireless\",\n  \"timezone\": [\n    \"Europe/London\"\n  ],\n  \"geographical\": false,\n  \"level\": \"line_status\",\n  \"line_status\": {\n    \"status\": \"success\",\n    \"present\": \"yes\",\n    \"reachable\": true,\n    \"covered\": true,\n    \"ported\": false,\n    \"network\": \"Sandbox Wireless\",\n    \"line_type\": \"mobile\",\n    \"country_code\": \"GB\"\n  },\n  \"current_carrier\": {\n    \"status\": \"success\",\n    \"carrier\": \"Sandbox Wireless\",\n    \"ported\": false,\n    \"country_code\": \"GB\",\n    \"source\": \"line_status\"\n  },\n  \"cost\": \"0.000000\",\n  \"currency\": \"USD\",\n  \"signals\": {\n    \"line_type\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\"\n    },\n    \"line_status\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\"\n    }\n  }\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Verify an email address",
+          "request": {
+            "name": "Verify an email address",
+            "description": "Verimail's verification, sold by ProofTell: the response is Verimail's `/v3/verify` JSON —\n`status`, `result`, `verdict`, `reason`, `billed`, `suggested_action`, `flags` and the rest,\nunchanged — plus ProofTell's `cost`, `currency` and `signals`. A run is charged exactly when\nVerimail would have charged it (its `billed` is `true`): syntax errors, unknowns and\nsoftbounces are free.\n\nSame rules as `/v1/phone` when the balance cannot cover a run. `timeout` (milliseconds,\nat most 45000, Verimail's own budget) bounds the SMTP dialogue; past it the address comes\nback `unknown`, free.\n\nWith a `pt_test_` key the call is a sandbox, simulated and free, in Verimail's own\nvocabulary — its four verdicts (`deliverable`, `undeliverable`, `risky`, `unknown`), its\n`reason` names and `code`s, `billed`, `suggested_action` and `flags`. Any address is\n`deliverable` (`mailbox_exists`); `<name>@sandbox.prooftell.com` with `<name>` one of\n`undeliverable` (`hardbounce`, `mailbox_rejected`), `disposable` (`risky`,\n`disposable_domain`), `catchall` (`risky`, `domain_catch_all`), `greylisted` (`unknown`,\n`softbounce`, free), `risky` (`inbox_full`, `mailbox_full`) or `role` (deliverable, with\n`flags.role_account`) gives that result; `unavailable` answers 503.\n",
+            "url": {
+              "path": [
+                "v1",
+                "email"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{base_url}}/v1/email"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jane@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Sandbox (200)",
+              "originalRequest": {
+                "name": "Verify an email address",
+                "description": "Verimail's verification, sold by ProofTell: the response is Verimail's `/v3/verify` JSON —\n`status`, `result`, `verdict`, `reason`, `billed`, `suggested_action`, `flags` and the rest,\nunchanged — plus ProofTell's `cost`, `currency` and `signals`. A run is charged exactly when\nVerimail would have charged it (its `billed` is `true`): syntax errors, unknowns and\nsoftbounces are free.\n\nSame rules as `/v1/phone` when the balance cannot cover a run. `timeout` (milliseconds,\nat most 45000, Verimail's own budget) bounds the SMTP dialogue; past it the address comes\nback `unknown`, free.\n\nWith a `pt_test_` key the call is a sandbox, simulated and free, in Verimail's own\nvocabulary — its four verdicts (`deliverable`, `undeliverable`, `risky`, `unknown`), its\n`reason` names and `code`s, `billed`, `suggested_action` and `flags`. Any address is\n`deliverable` (`mailbox_exists`); `<name>@sandbox.prooftell.com` with `<name>` one of\n`undeliverable` (`hardbounce`, `mailbox_rejected`), `disposable` (`risky`,\n`disposable_domain`), `catchall` (`risky`, `domain_catch_all`), `greylisted` (`unknown`,\n`softbounce`, free), `risky` (`inbox_full`, `mailbox_full`) or `role` (deliverable, with\n`flags.role_account`) gives that result; `unavailable` answers 503.\n",
+                "url": {
+                  "path": [
+                    "v1",
+                    "email"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [],
+                  "raw": "{{base_url}}/v1/email"
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"jane@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"success\",\n  \"email\": \"jane@example.com\",\n  \"result\": \"deliverable\",\n  \"deliverable\": true,\n  \"did_you_mean\": \"\",\n  \"user\": \"jane\",\n  \"domain\": \"example.com\",\n  \"code\": 200,\n  \"verdict\": \"deliverable\",\n  \"reason\": \"mailbox_exists\",\n  \"billed\": true,\n  \"suggested_action\": \"accept\",\n  \"flags\": {\n    \"disposable\": false,\n    \"role_account\": false,\n    \"free_provider\": false,\n    \"catch_all\": false\n  },\n  \"provider\": \"\",\n  \"latency_ms\": 12,\n  \"cost\": \"0.000000\",\n  \"currency\": \"USD\",\n  \"signals\": {\n    \"email\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\"\n    }\n  }\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Look up an IP address",
+          "request": {
+            "name": "Look up an IP address",
+            "description": "ProofTell's own IP intelligence: geography and network from GeoLite2, plus open Tor,\nVPN and datacenter lists — all in ProofTell's infrastructure, the address never leaves.\nCharged when the address parsed and was looked up; a private or reserved address is\nanswered (`routable: false`) and free. Same rules as `/v1/phone` when the balance cannot\ncover a run.\n\nWith a `pt_test_` key the call is a sandbox, simulated and free: `203.0.113.1` is clean,\n`203.0.113.66` Tor, `203.0.113.77` VPN, `203.0.113.99` datacenter and `203.0.113.4`\nanswers 503.\n",
+            "url": {
+              "path": [
+                "v1",
+                "ip"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{base_url}}/v1/ip"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ip\": \"203.0.113.66\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Sandbox (200)",
+              "originalRequest": {
+                "name": "Look up an IP address",
+                "description": "ProofTell's own IP intelligence: geography and network from GeoLite2, plus open Tor,\nVPN and datacenter lists — all in ProofTell's infrastructure, the address never leaves.\nCharged when the address parsed and was looked up; a private or reserved address is\nanswered (`routable: false`) and free. Same rules as `/v1/phone` when the balance cannot\ncover a run.\n\nWith a `pt_test_` key the call is a sandbox, simulated and free: `203.0.113.1` is clean,\n`203.0.113.66` Tor, `203.0.113.77` VPN, `203.0.113.99` datacenter and `203.0.113.4`\nanswers 503.\n",
+                "url": {
+                  "path": [
+                    "v1",
+                    "ip"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [],
+                  "raw": "{{base_url}}/v1/ip"
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ip\": \"203.0.113.66\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"ip\": \"203.0.113.66\",\n  \"status\": \"success\",\n  \"version\": 4,\n  \"routable\": true,\n  \"country_code\": \"US\",\n  \"country\": \"United States\",\n  \"region\": \"New York\",\n  \"city\": \"Sandbox City\",\n  \"latitude\": 40.7128,\n  \"longitude\": -74.006,\n  \"accuracy_km\": 20,\n  \"timezone\": \"America/New_York\",\n  \"asn\": 64500,\n  \"as_org\": \"SANDBOX-NET\",\n  \"is_tor\": true,\n  \"is_vpn\": false,\n  \"is_datacenter\": true,\n  \"is_anonymous\": true,\n  \"anycast\": false,\n  \"data_version\": \"sandbox\",\n  \"cost\": \"0.000000\",\n  \"currency\": \"USD\",\n  \"signals\": {\n    \"ip\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\"\n    }\n  }\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Assess the risk of an identity",
+          "request": {
+            "name": "Assess the risk of an identity",
+            "description": "Send any mix of phone, email and IP. Each signal runs in parallel; a supplied signal that\ncannot run (its source unavailable, or not offered) is reported, never guessed; one not\nsupplied is absent from the answer.\n\nWhen a supplied signal is unavailable — its source down or past its time budget, or the signal\nnot offered right now (its line says `reason: not_offered`) — the score comes from the signals\nthat ran, the missing one adds a 0-point reason `signal_unavailable_<signal>`, and the verdict\nis raised to at least `review` (an organization setting can turn the raise off). When none of\nthe supplied signals ran, the call fails with 503 `signals_unavailable`.\n\nThe call costs the signals that returned a result, each at the step of the volume curve your\naccount's month has reached for that signal (`curve` on `/v1/pricing`; `cost`, `currency`, and a\nline per signal); unavailable signals cost nothing. The same rules as `/v1/phone` apply when the\nbalance cannot cover the call: the 402 names its whole price.\n\nWith a `pt_test_` key the call is a sandbox: results are simulated and deterministic, no\nsignal is called, nothing is billed, and `mode` is `test`. Any input works, and every\ndocumented reason can be reached: phones `+15005550001` (valid mobile), `+15005550002`\n(VoIP), `+15005550003` (not valid), `+15005550004` (signal unavailable), `+15005550007`\n(toll-free), `+15005550008` (unknown line type), any other number with the country of its\ndialling code (`+447700900123` with the US sandbox IP is a `geo_mismatch`; a national number\nis read in `country`, as with a live key); emails\n`<name>@sandbox.prooftell.com` with `<name>` one of `deliverable`, `undeliverable`,\n`disposable`, `catchall`, `greylisted`, `risky`, `role`, `unavailable`; IPs `203.0.113.1`\n(clean, US), `203.0.113.66` (Tor), `203.0.113.77` (VPN), `203.0.113.99` (datacenter),\n`203.0.113.4` (unavailable).\n\nRate limit: 20 requests a second per key on each server instance, bursts of 50 (429\n`rate_limited`): an approximate ceiling against runaway clients, not a quota — with several\ninstances serving, a key may get more through.\n",
+            "url": {
+              "path": [
+                "v1",
+                "assess"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{base_url}}/v1/assess"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+447700900123\",\n  \"email\": \"jane@example.com\",\n  \"ip\": \"203.0.113.1\",\n  \"country\": \"GB\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Sandbox (200)",
+              "originalRequest": {
+                "name": "Assess the risk of an identity",
+                "description": "Send any mix of phone, email and IP. Each signal runs in parallel; a supplied signal that\ncannot run (its source unavailable, or not offered) is reported, never guessed; one not\nsupplied is absent from the answer.\n\nWhen a supplied signal is unavailable — its source down or past its time budget, or the signal\nnot offered right now (its line says `reason: not_offered`) — the score comes from the signals\nthat ran, the missing one adds a 0-point reason `signal_unavailable_<signal>`, and the verdict\nis raised to at least `review` (an organization setting can turn the raise off). When none of\nthe supplied signals ran, the call fails with 503 `signals_unavailable`.\n\nThe call costs the signals that returned a result, each at the step of the volume curve your\naccount's month has reached for that signal (`curve` on `/v1/pricing`; `cost`, `currency`, and a\nline per signal); unavailable signals cost nothing. The same rules as `/v1/phone` apply when the\nbalance cannot cover the call: the 402 names its whole price.\n\nWith a `pt_test_` key the call is a sandbox: results are simulated and deterministic, no\nsignal is called, nothing is billed, and `mode` is `test`. Any input works, and every\ndocumented reason can be reached: phones `+15005550001` (valid mobile), `+15005550002`\n(VoIP), `+15005550003` (not valid), `+15005550004` (signal unavailable), `+15005550007`\n(toll-free), `+15005550008` (unknown line type), any other number with the country of its\ndialling code (`+447700900123` with the US sandbox IP is a `geo_mismatch`; a national number\nis read in `country`, as with a live key); emails\n`<name>@sandbox.prooftell.com` with `<name>` one of `deliverable`, `undeliverable`,\n`disposable`, `catchall`, `greylisted`, `risky`, `role`, `unavailable`; IPs `203.0.113.1`\n(clean, US), `203.0.113.66` (Tor), `203.0.113.77` (VPN), `203.0.113.99` (datacenter),\n`203.0.113.4` (unavailable).\n\nRate limit: 20 requests a second per key on each server instance, bursts of 50 (429\n`rate_limited`): an approximate ceiling against runaway clients, not a quota — with several\ninstances serving, a key may get more through.\n",
+                "url": {
+                  "path": [
+                    "v1",
+                    "assess"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [],
+                  "raw": "{{base_url}}/v1/assess"
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"phone\": \"+447700900123\",\n  \"email\": \"jane@example.com\",\n  \"ip\": \"203.0.113.1\",\n  \"country\": \"GB\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"asm_4ceu7cr3cm7nah6r\",\n  \"mode\": \"test\",\n  \"score\": 15,\n  \"verdict\": \"allow\",\n  \"reasons\": [\n    {\n      \"code\": \"geo_mismatch\",\n      \"points\": 15,\n      \"message\": \"The phone number's country (GB) differs from the IP address's (US).\"\n    }\n  ],\n  \"signals\": {\n    \"phone\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\",\n      \"result\": {\n        \"status\": \"success\",\n        \"phone\": \"+447700900123\",\n        \"valid\": true,\n        \"line_type\": \"mobile\",\n        \"region\": \"Sandbox\",\n        \"country\": \"United Kingdom\",\n        \"country_code\": \"GB\",\n        \"country_prefix\": \"44\",\n        \"international_format\": \"+44 7700 900123\",\n        \"national_format\": \"07700 900123\",\n        \"e164\": \"+447700900123\",\n        \"original_carrier\": \"Sandbox Wireless\",\n        \"timezone\": [\n          \"Europe/London\"\n        ],\n        \"geographical\": false\n      }\n    },\n    \"email\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\",\n      \"result\": {\n        \"status\": \"success\",\n        \"email\": \"jane@example.com\",\n        \"result\": \"deliverable\",\n        \"deliverable\": true,\n        \"did_you_mean\": \"\",\n        \"user\": \"jane\",\n        \"domain\": \"example.com\",\n        \"code\": 200,\n        \"verdict\": \"deliverable\",\n        \"reason\": \"mailbox_exists\",\n        \"suggested_action\": \"accept\",\n        \"flags\": {\n          \"disposable\": false,\n          \"role_account\": false,\n          \"free_provider\": false,\n          \"catch_all\": false\n        },\n        \"provider\": \"\",\n        \"latency_ms\": 12\n      }\n    },\n    \"ip\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\",\n      \"result\": {\n        \"ip\": \"203.0.113.1\",\n        \"status\": \"success\",\n        \"version\": 4,\n        \"routable\": true,\n        \"country_code\": \"US\",\n        \"country\": \"United States\",\n        \"region\": \"New York\",\n        \"city\": \"Sandbox City\",\n        \"latitude\": 40.7128,\n        \"longitude\": -74.006,\n        \"accuracy_km\": 20,\n        \"timezone\": \"America/New_York\",\n        \"asn\": 64500,\n        \"as_org\": \"SANDBOX-NET\",\n        \"is_tor\": false,\n        \"is_vpn\": false,\n        \"is_datacenter\": false,\n        \"is_anonymous\": false,\n        \"anycast\": false,\n        \"data_version\": \"sandbox\"\n      }\n    }\n  },\n  \"ruleset\": \"2026-10-07\",\n  \"cost\": \"0.000000\",\n  \"currency\": \"USD\",\n  \"createdAt\": \"2026-10-27T15:59:50.195198859Z\"\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Files",
+      "description": "A file of numbers, addresses or IPs checked as a job: create, upload (a PUT to the answer's upload_url with its headers, outside this collection), finish, run, follow, download, stop, delete. Start a file job stores the new file's id in {{file_id}} for the other requests. Live keys only: the sandbox answers 501.",
+      "item": [
+        {
+          "name": "Your organization's 100 newest files",
+          "request": {
+            "name": "Your organization's 100 newest files",
+            "description": "The organization's 100 newest files, newest first. There is no paging: an older file is still\nreached by its id (`GET /v1/files/{fileId}`) until it expires, 30 days after upload.\n",
+            "url": {
+              "path": [
+                "v1",
+                "files"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{base_url}}/v1/files"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "response": [
+            {
+              "name": "Live (200)",
+              "originalRequest": {
+                "name": "Your organization's 100 newest files",
+                "description": "The organization's 100 newest files, newest first. There is no paging: an older file is still\nreached by its id (`GET /v1/files/{fileId}`) until it expires, 30 days after upload.\n",
+                "url": {
+                  "path": [
+                    "v1",
+                    "files"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [],
+                  "raw": "{{base_url}}/v1/files"
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"id\": \"fil_k2m9q7x3a8b4c5d6\",\n    \"name\": \"leads.csv\",\n    \"status\": \"verifying\",\n    \"stage\": \"queued\",\n    \"format\": {\n      \"bom\": false,\n      \"encoding\": \"UTF-8\",\n      \"kind\": \"csv\",\n      \"lenient\": false,\n      \"delimiter\": \",\"\n    },\n    \"columns\": {\n      \"email\": 1,\n      \"phone\": 2,\n      \"ip\": -1,\n      \"header_row\": true\n    },\n    \"rows\": 3,\n    \"unique_rows\": 2,\n    \"signals\": [\n      \"phone_line_type\"\n    ],\n    \"country\": \"MA\",\n    \"hold\": \"0.0050\",\n    \"charged\": \"0.0000\",\n    \"counters\": {},\n    \"error\": null,\n    \"created_at\": \"2026-10-27T09:12:44.512031Z\",\n    \"expires_at\": \"2026-11-26T09:12:44.512031Z\"\n  }\n]"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Start a file job",
+          "request": {
+            "name": "Start a file job",
+            "description": "Two ways in. **Signed upload** (up to 1 GB and 5 million rows; an XLSX up to 50 MB): send JSON `{name, content_type}`; the answer carries\n`upload_url` and `headers` — PUT the bytes there with exactly those headers (the URL accepts one\nupload of at most 1 GB, for 12 hours), then call `finish`. **Direct upload** (up to 32 MB): send the bytes as\n`multipart/form-data` field `file`; analysis runs at once and the answer is the analysed job. A request\nbody over 32 MB is refused with a 413 by the platform before it reaches the api, without a JSON body:\nuse the signed upload for larger files.\nUpload and analysis are free. CSV, TSV, TXT (one value per line) and XLSX. Files need a\nlive key: with a `pt_test_` key every `/v1/files` call answers 501 `sandbox_not_available`.\n",
+            "url": {
+              "path": [
+                "v1",
+                "files"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{base_url}}/v1/files"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"leads.csv\",\n  \"content_type\": \"text/csv\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Live (201)",
+              "originalRequest": {
+                "name": "Start a file job",
+                "description": "Two ways in. **Signed upload** (up to 1 GB and 5 million rows; an XLSX up to 50 MB): send JSON `{name, content_type}`; the answer carries\n`upload_url` and `headers` — PUT the bytes there with exactly those headers (the URL accepts one\nupload of at most 1 GB, for 12 hours), then call `finish`. **Direct upload** (up to 32 MB): send the bytes as\n`multipart/form-data` field `file`; analysis runs at once and the answer is the analysed job. A request\nbody over 32 MB is refused with a 413 by the platform before it reaches the api, without a JSON body:\nuse the signed upload for larger files.\nUpload and analysis are free. CSV, TSV, TXT (one value per line) and XLSX. Files need a\nlive key: with a `pt_test_` key every `/v1/files` call answers 501 `sandbox_not_available`.\n",
+                "url": {
+                  "path": [
+                    "v1",
+                    "files"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [],
+                  "raw": "{{base_url}}/v1/files"
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"leads.csv\",\n  \"content_type\": \"text/csv\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"file\": {\n    \"id\": \"fil_k2m9q7x3a8b4c5d6\",\n    \"name\": \"leads.csv\",\n    \"status\": \"uploading\",\n    \"stage\": \"upload\",\n    \"format\": null,\n    \"columns\": null,\n    \"rows\": 0,\n    \"unique_rows\": 0,\n    \"signals\": [],\n    \"country\": null,\n    \"hold\": \"0.0000\",\n    \"charged\": \"0.0000\",\n    \"counters\": {},\n    \"error\": null,\n    \"created_at\": \"2026-10-27T09:12:44.512031Z\",\n    \"expires_at\": \"2026-11-26T09:12:44.512031Z\"\n  },\n  \"headers\": {\n    \"x-goog-if-generation-match\": \"0\",\n    \"Content-Type\": \"text/csv\",\n    \"x-goog-content-length-range\": \"0,1073741824\"\n  },\n  \"upload_url\": \"https://storage.googleapis.com/prooftell-files/orgs/org_7d2kq9x4m3b8p6tz/files/fil_k2m9q7x3a8b4c5d6/source?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=…&X-Goog-Date=20261027T091244Z&X-Goog-Expires=43200&X-Goog-SignedHeaders=content-type%3Bhost%3Bx-goog-content-length-range%3Bx-goog-if-generation-match&X-Goog-Signature=…\"\n}"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"file_id\", pm.response.json().file.id); }"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "A file job and its progress",
+          "request": {
+            "name": "A file job and its progress",
+            "url": {
+              "path": [
+                "v1",
+                "files",
+                ":fileId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "value": "{{file_id}}",
+                  "key": "fileId",
+                  "disabled": false,
+                  "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                }
+              ],
+              "raw": "{{base_url}}/v1/files/:fileId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "response": [
+            {
+              "name": "Live (200)",
+              "originalRequest": {
+                "name": "A file job and its progress",
+                "url": {
+                  "path": [
+                    "v1",
+                    "files",
+                    ":fileId"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "value": "{{file_id}}",
+                      "key": "fileId",
+                      "disabled": false,
+                      "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                    }
+                  ],
+                  "raw": "{{base_url}}/v1/files/:fileId"
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"fil_k2m9q7x3a8b4c5d6\",\n  \"name\": \"leads.csv\",\n  \"status\": \"verifying\",\n  \"stage\": \"queued\",\n  \"format\": {\n    \"bom\": false,\n    \"encoding\": \"UTF-8\",\n    \"kind\": \"csv\",\n    \"lenient\": false,\n    \"delimiter\": \",\"\n  },\n  \"columns\": {\n    \"email\": 1,\n    \"phone\": 2,\n    \"ip\": -1,\n    \"header_row\": true\n  },\n  \"rows\": 3,\n  \"unique_rows\": 2,\n  \"signals\": [\n    \"phone_line_type\"\n  ],\n  \"country\": \"MA\",\n  \"hold\": \"0.0050\",\n  \"charged\": \"0.0000\",\n  \"counters\": {},\n  \"error\": null,\n  \"created_at\": \"2026-10-27T09:12:44.512031Z\",\n  \"expires_at\": \"2026-11-26T09:12:44.512031Z\",\n  \"header\": [\n    \"name\",\n    \"email\",\n    \"phone\"\n  ],\n  \"samples\": [\n    [\n      \"Ann\",\n      \"ann@example.com\",\n      \"0612345678\"\n    ],\n    [\n      \"Bob\",\n      \"bob@example.com\",\n      \"+447400123456\"\n    ],\n    [\n      \"Ann\",\n      \"ann@example.com\",\n      \"0612345678\"\n    ]\n  ]\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Delete a file job and its objects",
+          "request": {
+            "name": "Delete a file job and its objects",
+            "url": {
+              "path": [
+                "v1",
+                "files",
+                ":fileId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "value": "{{file_id}}",
+                  "key": "fileId",
+                  "disabled": false,
+                  "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                }
+              ],
+              "raw": "{{base_url}}/v1/files/:fileId"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {}
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "The signed upload landed — analyse it",
+          "request": {
+            "name": "The signed upload landed — analyse it",
+            "url": {
+              "path": [
+                "v1",
+                "files",
+                ":fileId",
+                "finish"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "value": "{{file_id}}",
+                  "key": "fileId",
+                  "disabled": false,
+                  "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                }
+              ],
+              "raw": "{{base_url}}/v1/files/:fileId/finish"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {}
+          },
+          "response": [
+            {
+              "name": "Live (200)",
+              "originalRequest": {
+                "name": "The signed upload landed — analyse it",
+                "url": {
+                  "path": [
+                    "v1",
+                    "files",
+                    ":fileId",
+                    "finish"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "value": "{{file_id}}",
+                      "key": "fileId",
+                      "disabled": false,
+                      "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                    }
+                  ],
+                  "raw": "{{base_url}}/v1/files/:fileId/finish"
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"fil_k2m9q7x3a8b4c5d6\",\n  \"name\": \"leads.csv\",\n  \"status\": \"ready\",\n  \"stage\": \"ready\",\n  \"format\": {\n    \"bom\": false,\n    \"encoding\": \"UTF-8\",\n    \"kind\": \"csv\",\n    \"lenient\": false,\n    \"delimiter\": \",\"\n  },\n  \"columns\": {\n    \"email\": 1,\n    \"phone\": 2,\n    \"ip\": -1,\n    \"header_row\": true\n  },\n  \"rows\": 3,\n  \"unique_rows\": 0,\n  \"signals\": [],\n  \"country\": null,\n  \"hold\": \"0.0000\",\n  \"charged\": \"0.0000\",\n  \"counters\": {},\n  \"error\": null,\n  \"created_at\": \"2026-10-27T09:12:44.512031Z\",\n  \"expires_at\": \"2026-11-26T09:12:44.512031Z\",\n  \"header\": [\n    \"name\",\n    \"email\",\n    \"phone\"\n  ],\n  \"samples\": [\n    [\n      \"Ann\",\n      \"ann@example.com\",\n      \"0612345678\"\n    ],\n    [\n      \"Bob\",\n      \"bob@example.com\",\n      \"+447400123456\"\n    ],\n    [\n      \"Ann\",\n      \"ann@example.com\",\n      \"0612345678\"\n    ]\n  ]\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Run the file",
+          "request": {
+            "name": "Run the file",
+            "description": "Holds what the file's unique rows cost per selected signal on your balance — priced down the\nvolume curve from the step your account's month has reached for that signal (`curve` on\n`/v1/pricing`), the dearest country bands at the dearest steps — (402 `insufficient_balance`\nwith the amounts when it cannot cover it), then runs. Rows are charged as they complete, at\nthe step each reaches, against the hold, and what is left of it is released at the end;\nduplicates run once and are flagged in `pt_duplicate_of`; rows a source could not judge are\nfree. `columns` overrides the detected mapping (0-based; -1 = none). `country` reads the phone\ncolumn's national numbers in that country (`0612345678` with `MA`); a number written with its\ncountry code keeps it. Without `country`, give numbers in E.164; a `country` that is not an\nISO 3166-1 alpha-2 code with a numbering plan is 400 `bad_request`.\n\nThe phone column runs at one level (`signals`: `phone_line_type`, or `phone_current_carrier`, `phone_line_status`\nor `phone_fraud_score`; `basic` is by API only), priced as `/v1/phone` prices it: the line type's line plus\nthe level's at each number's country band, held with the dearest bands first. A level needs to be offered to\nyour organization (400 otherwise) and no disputed card payment on the account (403 `payment_disputed`);\na number no numbering plan knows runs line type only, its level line free, and a country where the\nlevel is not served answers `not_offered_in_country` for that row, free.\n",
+            "url": {
+              "path": [
+                "v1",
+                "files",
+                ":fileId",
+                "verify"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "value": "{{file_id}}",
+                  "key": "fileId",
+                  "disabled": false,
+                  "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                }
+              ],
+              "raw": "{{base_url}}/v1/files/:fileId/verify"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"signals\": [\n    \"phone_line_type\"\n  ],\n  \"columns\": {\n    \"phone\": 2,\n    \"email\": 1,\n    \"ip\": -1,\n    \"header_row\": true\n  },\n  \"country\": \"MA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "Live (200)",
+              "originalRequest": {
+                "name": "Run the file",
+                "description": "Holds what the file's unique rows cost per selected signal on your balance — priced down the\nvolume curve from the step your account's month has reached for that signal (`curve` on\n`/v1/pricing`), the dearest country bands at the dearest steps — (402 `insufficient_balance`\nwith the amounts when it cannot cover it), then runs. Rows are charged as they complete, at\nthe step each reaches, against the hold, and what is left of it is released at the end;\nduplicates run once and are flagged in `pt_duplicate_of`; rows a source could not judge are\nfree. `columns` overrides the detected mapping (0-based; -1 = none). `country` reads the phone\ncolumn's national numbers in that country (`0612345678` with `MA`); a number written with its\ncountry code keeps it. Without `country`, give numbers in E.164; a `country` that is not an\nISO 3166-1 alpha-2 code with a numbering plan is 400 `bad_request`.\n\nThe phone column runs at one level (`signals`: `phone_line_type`, or `phone_current_carrier`, `phone_line_status`\nor `phone_fraud_score`; `basic` is by API only), priced as `/v1/phone` prices it: the line type's line plus\nthe level's at each number's country band, held with the dearest bands first. A level needs to be offered to\nyour organization (400 otherwise) and no disputed card payment on the account (403 `payment_disputed`);\na number no numbering plan knows runs line type only, its level line free, and a country where the\nlevel is not served answers `not_offered_in_country` for that row, free.\n",
+                "url": {
+                  "path": [
+                    "v1",
+                    "files",
+                    ":fileId",
+                    "verify"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "value": "{{file_id}}",
+                      "key": "fileId",
+                      "disabled": false,
+                      "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                    }
+                  ],
+                  "raw": "{{base_url}}/v1/files/:fileId/verify"
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"signals\": [\n    \"phone_line_type\"\n  ],\n  \"columns\": {\n    \"phone\": 2,\n    \"email\": 1,\n    \"ip\": -1,\n    \"header_row\": true\n  },\n  \"country\": \"MA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": \"fil_k2m9q7x3a8b4c5d6\",\n  \"name\": \"leads.csv\",\n  \"status\": \"verifying\",\n  \"stage\": \"queued\",\n  \"format\": {\n    \"bom\": false,\n    \"encoding\": \"UTF-8\",\n    \"kind\": \"csv\",\n    \"lenient\": false,\n    \"delimiter\": \",\"\n  },\n  \"columns\": {\n    \"email\": 1,\n    \"phone\": 2,\n    \"ip\": -1,\n    \"header_row\": true\n  },\n  \"rows\": 3,\n  \"unique_rows\": 2,\n  \"signals\": [\n    \"phone_line_type\"\n  ],\n  \"country\": \"MA\",\n  \"hold\": \"0.0050\",\n  \"charged\": \"0.0000\",\n  \"counters\": {},\n  \"error\": null,\n  \"created_at\": \"2026-10-27T09:12:44.512031Z\",\n  \"expires_at\": \"2026-11-26T09:12:44.512031Z\"\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Stop a running file",
+          "request": {
+            "name": "Stop a running file",
+            "url": {
+              "path": [
+                "v1",
+                "files",
+                ":fileId",
+                "stop"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "value": "{{file_id}}",
+                  "key": "fileId",
+                  "disabled": false,
+                  "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                }
+              ],
+              "raw": "{{base_url}}/v1/files/:fileId/stop"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {}
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "A 15-minute link to the result",
+          "request": {
+            "name": "A 15-minute link to the result",
+            "url": {
+              "path": [
+                "v1",
+                "files",
+                ":fileId",
+                "download"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "description": "`result`: the CSV result; `xlsx`: the result as a workbook, for an XLSX upload only (409 for any other); `source`: the file as uploaded. Another value is 400.",
+                  "key": "which",
+                  "value": "result"
+                }
+              ],
+              "variable": [
+                {
+                  "value": "{{file_id}}",
+                  "key": "fileId",
+                  "disabled": false,
+                  "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                }
+              ],
+              "raw": "{{base_url}}/v1/files/:fileId/download?which=result"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "response": [
+            {
+              "name": "Live (200)",
+              "originalRequest": {
+                "name": "A 15-minute link to the result",
+                "url": {
+                  "path": [
+                    "v1",
+                    "files",
+                    ":fileId",
+                    "download"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [
+                    {
+                      "disabled": false,
+                      "description": "`result`: the CSV result; `xlsx`: the result as a workbook, for an XLSX upload only (409 for any other); `source`: the file as uploaded. Another value is 400.",
+                      "key": "which",
+                      "value": "result"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "value": "{{file_id}}",
+                      "key": "fileId",
+                      "disabled": false,
+                      "description": "The file's id (fil_…): {{file_id}}, set by Start a file job, or one from Your organization's 100 newest files."
+                    }
+                  ],
+                  "raw": "{{base_url}}/v1/files/:fileId/download?which=result"
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"url\": \"https://storage.googleapis.com/prooftell-files/orgs/org_7d2kq9x4m3b8p6tz/files/fil_k2m9q7x3a8b4c5d6/partial-1793116790327.csv?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=…&X-Goog-Date=20261027T091244Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=…\"\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Compatibility",
+      "description": "The verify call of Veriphone and Verimail, answered by ProofTell under the same names.",
+      "item": [
+        {
+          "name": "Compatibility: Veriphone's and Verimail's verify call",
+          "request": {
+            "name": "Compatibility: Veriphone's and Verimail's verify call",
+            "description": "Veriphone's and Verimail's `/v3/verify`, served as they are under a ProofTell key: a caller of either moves\nto ProofTell by changing the base URL and the key, nothing else. New integrations use `/v1/phone` and\n`/v1/email`, which take a JSON body and the five phone levels; this call exists for the integrations written\nagainst those two APIs, and is part of this contract (the notice above applies to it).\n\nOne call verifies one thing, chosen by the parameter sent:\n\n- `phone` — Veriphone's call: `mode` is the level (`static`, the default, is `line_type`; `current` is\n  `current_carrier`; another value is 400 `invalid_level`); `record` is read and ignored. `default_country`\n  is `country`, read as Veriphone reads it: a value that is not a country with a numbering plan is ignored,\n  and a national number sent without one is read in the country of the address the call comes from\n  (ProofTell's own GeoLite2: the address goes nowhere). The answer is Veriphone's for that mode, field by\n  field, a [CompatPhoneResult](https://prooftell.com/docs#schema-CompatPhoneResult): at `mode=current`, Veriphone's current-mode fields\n  (`current_carrier` is the carrier's name, `ported`, `current_mccmnc`…), not `/v1/phone`'s\n  `current_carrier` block; plus ProofTell's `cost`, `currency`, `signals` and `level`, charged as\n  `/v1/phone` charges that level.\n- `email` — Verimail's call: `timeout` as on `/v1/email`; `evidence` is read and ignored. The answer is\n  `/v1/email`'s: Verimail's JSON plus `cost`, `currency` and `signals`.\n\nBoth at once, or neither, is 400 `bad_request`. Parameters are read from the query string first, then the\nform body, as the two APIs read them; the key is `Authorization: Bearer`, or else the form field or the query\nparameter `key` (never a cookie). Prefer the header and a form body. The rules of `/v1/*` apply: the rate\nlimits, the balance (402 `insufficient_balance`), the sandbox with a `pt_test_` key. An error comes in the\nenvelope those callers already parse, a [CompatError](https://prooftell.com/docs#schema-CompatError): `status` is `error`, `code` the\nHTTP status, `type` ProofTell's error code and `message` the sentence.\n",
+            "url": {
+              "path": [
+                "v3",
+                "verify"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "description": "Veriphone's call: the number, E.164, or national with `default_country`.",
+                  "key": "phone",
+                  "value": "%2B447700900123"
+                },
+                {
+                  "disabled": true,
+                  "description": "ISO 3166-1 alpha-2, for a number in national format; without it (or with a value that is not a country), the country of the address the call comes from.",
+                  "key": "default_country",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "description": "The phone level.",
+                  "key": "mode",
+                  "value": "current"
+                },
+                {
+                  "disabled": true,
+                  "description": "Verimail's call: the address.",
+                  "key": "email",
+                  "value": ""
+                },
+                {
+                  "disabled": true,
+                  "description": "Milliseconds for the SMTP dialogue, as on `/v1/email`.",
+                  "key": "timeout",
+                  "value": ""
+                },
+                {
+                  "disabled": true,
+                  "description": "The API key, when it is not sent as the bearer.",
+                  "key": "key",
+                  "value": ""
+                }
+              ],
+              "variable": [],
+              "raw": "{{base_url}}/v3/verify?phone=%2B447700900123&mode=current"
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "response": [
+            {
+              "name": "Sandbox (200)",
+              "originalRequest": {
+                "name": "Compatibility: Veriphone's and Verimail's verify call",
+                "description": "Veriphone's and Verimail's `/v3/verify`, served as they are under a ProofTell key: a caller of either moves\nto ProofTell by changing the base URL and the key, nothing else. New integrations use `/v1/phone` and\n`/v1/email`, which take a JSON body and the five phone levels; this call exists for the integrations written\nagainst those two APIs, and is part of this contract (the notice above applies to it).\n\nOne call verifies one thing, chosen by the parameter sent:\n\n- `phone` — Veriphone's call: `mode` is the level (`static`, the default, is `line_type`; `current` is\n  `current_carrier`; another value is 400 `invalid_level`); `record` is read and ignored. `default_country`\n  is `country`, read as Veriphone reads it: a value that is not a country with a numbering plan is ignored,\n  and a national number sent without one is read in the country of the address the call comes from\n  (ProofTell's own GeoLite2: the address goes nowhere). The answer is Veriphone's for that mode, field by\n  field, a [CompatPhoneResult](https://prooftell.com/docs#schema-CompatPhoneResult): at `mode=current`, Veriphone's current-mode fields\n  (`current_carrier` is the carrier's name, `ported`, `current_mccmnc`…), not `/v1/phone`'s\n  `current_carrier` block; plus ProofTell's `cost`, `currency`, `signals` and `level`, charged as\n  `/v1/phone` charges that level.\n- `email` — Verimail's call: `timeout` as on `/v1/email`; `evidence` is read and ignored. The answer is\n  `/v1/email`'s: Verimail's JSON plus `cost`, `currency` and `signals`.\n\nBoth at once, or neither, is 400 `bad_request`. Parameters are read from the query string first, then the\nform body, as the two APIs read them; the key is `Authorization: Bearer`, or else the form field or the query\nparameter `key` (never a cookie). Prefer the header and a form body. The rules of `/v1/*` apply: the rate\nlimits, the balance (402 `insufficient_balance`), the sandbox with a `pt_test_` key. An error comes in the\nenvelope those callers already parse, a [CompatError](https://prooftell.com/docs#schema-CompatError): `status` is `error`, `code` the\nHTTP status, `type` ProofTell's error code and `message` the sentence.\n",
+                "url": {
+                  "path": [
+                    "v3",
+                    "verify"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [
+                    {
+                      "disabled": false,
+                      "description": "Veriphone's call: the number, E.164, or national with `default_country`.",
+                      "key": "phone",
+                      "value": "%2B447700900123"
+                    },
+                    {
+                      "disabled": true,
+                      "description": "ISO 3166-1 alpha-2, for a number in national format; without it (or with a value that is not a country), the country of the address the call comes from.",
+                      "key": "default_country",
+                      "value": ""
+                    },
+                    {
+                      "disabled": false,
+                      "description": "The phone level.",
+                      "key": "mode",
+                      "value": "current"
+                    },
+                    {
+                      "disabled": true,
+                      "description": "Verimail's call: the address.",
+                      "key": "email",
+                      "value": ""
+                    },
+                    {
+                      "disabled": true,
+                      "description": "Milliseconds for the SMTP dialogue, as on `/v1/email`.",
+                      "key": "timeout",
+                      "value": ""
+                    },
+                    {
+                      "disabled": true,
+                      "description": "The API key, when it is not sent as the bearer.",
+                      "key": "key",
+                      "value": ""
+                    }
+                  ],
+                  "variable": [],
+                  "raw": "{{base_url}}/v3/verify?phone=%2B447700900123&mode=current"
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"success\",\n  \"phone\": \"+447700900123\",\n  \"phone_valid\": true,\n  \"phone_type\": \"mobile\",\n  \"phone_region\": \"Sandbox\",\n  \"country\": \"United Kingdom\",\n  \"country_code\": \"GB\",\n  \"country_prefix\": \"44\",\n  \"international_number\": \"+44 7700 900123\",\n  \"local_number\": \"07700 900123\",\n  \"e164\": \"+447700900123\",\n  \"carrier\": \"Sandbox Wireless\",\n  \"mode\": \"current\",\n  \"timezone\": [\n    \"Europe/London\"\n  ],\n  \"geographical\": false,\n  \"original_carrier\": \"Sandbox Wireless\",\n  \"original_line_type\": \"mobile\",\n  \"current_carrier\": \"Sandbox Wireless\",\n  \"current_mccmnc\": \"310410\",\n  \"current_line_type\": \"mobile\",\n  \"ported\": false,\n  \"carrier_data_source\": \"registry\",\n  \"level\": \"current_carrier\",\n  \"cost\": \"0.000000\",\n  \"currency\": \"USD\",\n  \"signals\": {\n    \"line_type\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\"\n    },\n    \"current_carrier\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\"\n    }\n  }\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Compatibility: the same call, the parameters in a form body",
+          "request": {
+            "name": "Compatibility: the same call, the parameters in a form body",
+            "description": "`GET /v3/verify` with its parameters in an `application/x-www-form-urlencoded` body, the way both APIs\ndocument the call. A parameter in the query string wins over the same one in the body.\n",
+            "url": {
+              "path": [
+                "v3",
+                "verify"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [],
+              "raw": "{{base_url}}/v3/verify"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "description": "Veriphone's call: the number, E.164, or national with `default_country`.",
+                  "key": "phone",
+                  "value": "+447700900123"
+                },
+                {
+                  "disabled": false,
+                  "description": "ISO 3166-1 alpha-2, for a number in national format; without it (or with a value that is not a country), the country of the address the call comes from.",
+                  "key": "default_country",
+                  "value": "GB"
+                },
+                {
+                  "disabled": false,
+                  "description": "The phone level.",
+                  "key": "mode",
+                  "value": "static"
+                },
+                {
+                  "disabled": true,
+                  "description": "Verimail's call: the address.",
+                  "key": "email",
+                  "value": ""
+                },
+                {
+                  "disabled": true,
+                  "description": "Milliseconds for the SMTP dialogue, as on `/v1/email`.",
+                  "key": "timeout",
+                  "value": ""
+                },
+                {
+                  "disabled": true,
+                  "description": "The API key, when it is not sent as the bearer.",
+                  "key": "key",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Sandbox (200)",
+              "originalRequest": {
+                "name": "Compatibility: the same call, the parameters in a form body",
+                "description": "`GET /v3/verify` with its parameters in an `application/x-www-form-urlencoded` body, the way both APIs\ndocument the call. A parameter in the query string wins over the same one in the body.\n",
+                "url": {
+                  "path": [
+                    "v3",
+                    "verify"
+                  ],
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "query": [],
+                  "variable": [],
+                  "raw": "{{base_url}}/v3/verify"
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": "Veriphone's call: the number, E.164, or national with `default_country`.",
+                      "key": "phone",
+                      "value": "+447700900123"
+                    },
+                    {
+                      "disabled": false,
+                      "description": "ISO 3166-1 alpha-2, for a number in national format; without it (or with a value that is not a country), the country of the address the call comes from.",
+                      "key": "default_country",
+                      "value": "GB"
+                    },
+                    {
+                      "disabled": false,
+                      "description": "The phone level.",
+                      "key": "mode",
+                      "value": "static"
+                    },
+                    {
+                      "disabled": true,
+                      "description": "Verimail's call: the address.",
+                      "key": "email",
+                      "value": ""
+                    },
+                    {
+                      "disabled": true,
+                      "description": "Milliseconds for the SMTP dialogue, as on `/v1/email`.",
+                      "key": "timeout",
+                      "value": ""
+                    },
+                    {
+                      "disabled": true,
+                      "description": "The API key, when it is not sent as the bearer.",
+                      "key": "key",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"success\",\n  \"phone\": \"+447700900123\",\n  \"phone_valid\": true,\n  \"phone_type\": \"mobile\",\n  \"phone_region\": \"Sandbox\",\n  \"country\": \"United Kingdom\",\n  \"country_code\": \"GB\",\n  \"country_prefix\": \"44\",\n  \"international_number\": \"+44 7700 900123\",\n  \"local_number\": \"07700 900123\",\n  \"e164\": \"+447700900123\",\n  \"carrier\": \"Sandbox Wireless\",\n  \"mode\": \"static\",\n  \"timezone\": [\n    \"Europe/London\"\n  ],\n  \"geographical\": false,\n  \"cost\": \"0.000000\",\n  \"currency\": \"USD\",\n  \"signals\": {\n    \"line_type\": {\n      \"status\": \"ok\",\n      \"cost\": \"0.000000\"\n    }\n  },\n  \"level\": \"line_type\"\n}"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{api_key}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test(\"answered 2xx\", function () {",
+          "  if (pm.response.code >= 200 && pm.response.code < 300) { return; }",
+          "  let e; try { e = pm.response.json().error; } catch (_) { }",
+          "  pm.expect.fail(e ? e.code + \": \" + e.message : pm.response.code + \" \" + pm.response.status);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.prooftell.com",
+      "type": "string",
+      "description": "The API; sandbox keys work here too."
+    },
+    {
+      "key": "api_key",
+      "value": "",
+      "type": "string",
+      "description": "Your ProofTell API key. Create a key in the ProofTell dashboard (Developers → Integrations), named after this platform (Postman). A `pt_test_` key is the free sandbox: simulated, deterministic answers. A `pt_live_` key spends the account's balance."
+    },
+    {
+      "key": "file_id",
+      "value": "",
+      "type": "string",
+      "description": "Set by Start a file job: the new file's id, which the other Files requests use."
+    }
+  ]
+}

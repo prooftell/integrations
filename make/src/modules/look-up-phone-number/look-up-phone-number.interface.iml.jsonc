@@ -1,0 +1,169 @@
+[
+  { "name": "status", "type": "text", "label": "Status" },
+  { "name": "phone", "type": "text", "label": "Phone number" },
+  { "name": "valid", "type": "boolean", "label": "Valid" },
+  { "name": "reason", "type": "text", "label": "Reason (when not valid)" },
+  { "name": "line_type", "type": "text", "label": "Line type" },
+  { "name": "shortcode_cost", "type": "text", "label": "Short code cost" },
+  { "name": "e164", "type": "text", "label": "E.164" },
+  { "name": "international_format", "type": "text", "label": "International format" },
+  { "name": "national_format", "type": "text", "label": "National format" },
+  { "name": "country", "type": "text", "label": "Country" },
+  { "name": "country_code", "type": "text", "label": "Country code" },
+  { "name": "country_prefix", "type": "text", "label": "Calling code" },
+  { "name": "region", "type": "text", "label": "Region" },
+  { "name": "original_carrier", "type": "text", "label": "Original carrier" },
+  { "name": "timezone", "type": "array", "label": "Time zones", "spec": { "type": "text", "label": "Time zone" } },
+  { "name": "geographical", "type": "boolean", "label": "Geographical" },
+  { "name": "level", "type": "text", "label": "Level" },
+  {
+    "name": "current_carrier",
+    "type": "collection",
+    "label": "Current carrier",
+    "spec": [
+      { "name": "status", "type": "text", "label": "Status" },
+      { "name": "carrier", "type": "text", "label": "Carrier" },
+      { "name": "ported", "type": "boolean", "label": "Ported" },
+      { "name": "ported_date", "type": "text", "label": "Ported date" },
+      { "name": "line_type", "type": "text", "label": "Line type (USA and Canada)" },
+      { "name": "mcc", "type": "text", "label": "MCC" },
+      { "name": "mnc", "type": "text", "label": "MNC" },
+      { "name": "lrn", "type": "text", "label": "LRN (USA and Canada)" },
+      { "name": "ocn", "type": "text", "label": "OCN (USA and Canada)" },
+      {
+        "name": "original_carrier",
+        "type": "collection",
+        "label": "Original carrier",
+        "spec": [
+          { "name": "carrier", "type": "text", "label": "Carrier" },
+          { "name": "mcc", "type": "text", "label": "MCC" },
+          { "name": "mnc", "type": "text", "label": "MNC" },
+          { "name": "ocn", "type": "text", "label": "OCN" }
+        ]
+      },
+      { "name": "country_code", "type": "text", "label": "Country code" },
+      { "name": "source", "type": "text", "label": "Source" }
+    ]
+  },
+  {
+    "name": "line_status",
+    "type": "collection",
+    "label": "Line status",
+    "spec": [
+      { "name": "status", "type": "text", "label": "Status" },
+      { "name": "present", "type": "text", "label": "Present" },
+      { "name": "reachable", "type": "boolean", "label": "Reachable" },
+      { "name": "reason", "type": "text", "label": "Reason" },
+      { "name": "covered", "type": "boolean", "label": "Covered" },
+      { "name": "ported", "type": "boolean", "label": "Ported" },
+      { "name": "network", "type": "text", "label": "Network" },
+      { "name": "mcc", "type": "text", "label": "MCC" },
+      { "name": "mnc", "type": "text", "label": "MNC" },
+      {
+        "name": "original_carrier",
+        "type": "collection",
+        "label": "Original carrier",
+        "spec": [
+          { "name": "carrier", "type": "text", "label": "Carrier" },
+          { "name": "mcc", "type": "text", "label": "MCC" },
+          { "name": "mnc", "type": "text", "label": "MNC" }
+        ]
+      },
+      { "name": "line_type", "type": "text", "label": "Line type" },
+      { "name": "country_code", "type": "text", "label": "Country code" },
+      { "name": "source", "type": "text", "label": "Source" }
+    ]
+  },
+  {
+    "name": "fraud_score",
+    "type": "collection",
+    "label": "Fraud score",
+    "spec": [
+      { "name": "status", "type": "text", "label": "Status" },
+      { "name": "reason", "type": "text", "label": "Reason" },
+      { "name": "score", "type": "uinteger", "label": "Score (0 to 100)" },
+      { "name": "risk_level", "type": "text", "label": "Risk level" },
+      { "name": "service_type", "type": "text", "label": "Service type" },
+      { "name": "service_type_code", "type": "uinteger", "label": "Service type code" },
+      { "name": "line_type", "type": "text", "label": "Line type" },
+      { "name": "premium_rate", "type": "boolean", "label": "Premium rate" },
+      { "name": "voip", "type": "boolean", "label": "VoIP" },
+      { "name": "iprn", "type": "boolean", "label": "IPRN" },
+      { "name": "iprn_first_seen", "type": "text", "label": "IPRN first seen" },
+      { "name": "iprn_last_seen", "type": "text", "label": "IPRN last seen" },
+      { "name": "iprn_range", "type": "boolean", "label": "IPRN range" },
+      { "name": "iprn_range_first_seen", "type": "text", "label": "IPRN range first seen" },
+      { "name": "iprn_range_last_seen", "type": "text", "label": "IPRN range last seen" },
+      { "name": "msrn", "type": "boolean", "label": "MSRN" },
+      { "name": "msrn_first_seen", "type": "text", "label": "MSRN first seen" },
+      { "name": "msrn_last_seen", "type": "text", "label": "MSRN last seen" },
+      { "name": "present", "type": "text", "label": "Present" },
+      { "name": "ported", "type": "boolean", "label": "Ported" },
+      { "name": "ported_date", "type": "text", "label": "Ported date" },
+      { "name": "network", "type": "text", "label": "Network" },
+      { "name": "mcc", "type": "text", "label": "MCC" },
+      { "name": "mnc", "type": "text", "label": "MNC" },
+      { "name": "original_network", "type": "text", "label": "Original network" },
+      { "name": "country_code", "type": "text", "label": "Country code" }
+    ]
+  },
+  { "name": "cost", "type": "text", "label": "Cost (USD)" },
+  { "name": "currency", "type": "text", "label": "Currency" },
+  {
+    "name": "signals",
+    "type": "collection",
+    "label": "Signals",
+    "spec": [
+      {
+        "name": "basic",
+        "type": "collection",
+        "label": "Basic",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" }
+        ]
+      },
+      {
+        "name": "line_type",
+        "type": "collection",
+        "label": "Line type",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" }
+        ]
+      },
+      {
+        "name": "current_carrier",
+        "type": "collection",
+        "label": "Current carrier",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" }
+        ]
+      },
+      {
+        "name": "line_status",
+        "type": "collection",
+        "label": "Line status",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" }
+        ]
+      },
+      {
+        "name": "fraud_score",
+        "type": "collection",
+        "label": "Fraud score",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" }
+        ]
+      }
+    ]
+  }
+]

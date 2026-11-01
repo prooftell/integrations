@@ -1,0 +1,60 @@
+{
+	"name": "n8n-nodes-prooftell",
+	"version": "1.0.0",
+	"description": "ProofTell for n8n: look up a phone number, verify an email address, look up an IP address, or assess the risk of an identity, with one API key.",
+	"license": "MIT",
+	"homepage": "https://prooftell.com/integrations?utm_source=n8n&utm_medium=integration",
+	"keywords": [
+		"n8n-community-node-package",
+		"prooftell",
+		"phone-validation",
+		"email-verification",
+		"ip-intelligence",
+		"fraud"
+	],
+	"author": {
+		"name": "ProofTell",
+		"email": "support@prooftell.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/prooftell/integrations.git",
+		"directory": "n8n-nodes-prooftell"
+	},
+	"bugs": {
+		"url": "https://github.com/prooftell/integrations/issues",
+		"email": "support@prooftell.com"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"test": "node --test",
+		"prepublishOnly": "n8n-node prerelease"
+	},
+	"files": [
+		"dist",
+		"!dist/tsconfig.tsbuildinfo"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/ProoftellApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Prooftell/Prooftell.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "^0.54.6",
+		"eslint": "9.32.0",
+		"prettier": "3.6.2",
+		"typescript": "5.9.2"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
+}

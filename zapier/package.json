@@ -1,0 +1,18 @@
+{
+  "name": "prooftell-zapier",
+  "version": "1.0.0",
+  "description": "ProofTell for Zapier: look up a phone number, verify an email address, look up an IP address, assess the risk of an identity.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "jest --testTimeout 30000",
+    "validate": "zapier-platform validate"
+  },
+  "dependencies": {
+    "zapier-platform-core": "19.3.0"
+  },
+  "devDependencies": {
+    "jest": "^29.6.0",
+    "zapier-platform-cli": "19.3.0"
+  }
+}

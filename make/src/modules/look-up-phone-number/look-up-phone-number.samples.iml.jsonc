@@ -1,0 +1,48 @@
+{
+  "status": "success",
+  "phone": "+447700900123",
+  "valid": true,
+  "line_type": "mobile",
+  "region": "Sandbox",
+  "country": "United Kingdom",
+  "country_code": "GB",
+  "country_prefix": "44",
+  "international_format": "+44 7700 900123",
+  "national_format": "07700 900123",
+  "e164": "+447700900123",
+  "original_carrier": "Sandbox Wireless",
+  "timezone": [
+    "Europe/London"
+  ],
+  "geographical": false,
+  "level": "line_status",
+  "line_status": {
+    "status": "success",
+    "present": "yes",
+    "reachable": true,
+    "covered": true,
+    "ported": false,
+    "network": "Sandbox Wireless",
+    "line_type": "mobile",
+    "country_code": "GB"
+  },
+  "current_carrier": {
+    "status": "success",
+    "carrier": "Sandbox Wireless",
+    "ported": false,
+    "country_code": "GB",
+    "source": "line_status"
+  },
+  "cost": "0.000000",
+  "currency": "USD",
+  "signals": {
+    "line_type": {
+      "status": "ok",
+      "cost": "0.000000"
+    },
+    "line_status": {
+      "status": "ok",
+      "cost": "0.000000"
+    }
+  }
+}

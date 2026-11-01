@@ -1,0 +1,101 @@
+{
+  "fileVersion": 1,
+  "generalCodeFiles": {
+    "base": "general/base.iml.jsonc",
+    "common": "general/common.json",
+    "readme": "README.md",
+    "groups": "modules/groups.json"
+  },
+  "components": {
+    "connection": {
+      "prooftell": {
+        "label": "ProofTell",
+        "connectionType": "basic",
+        "codeFiles": {
+          "communication": "connections/prooftell/prooftell.communication.iml.jsonc",
+          "params": "connections/prooftell/prooftell.params.iml.jsonc",
+          "common": null
+        }
+      }
+    },
+    "webhook": {},
+    "module": {
+      "lookUpPhoneNumber": {
+        "label": "Look up a phone number",
+        "description": "Checks a phone number: whether it is valid, its formats and its country and, by level, its line type, the carrier it is on today, whether it is on the network right now, or its fraud score. Charged per check from your balance; the sandbox is free.",
+        "moduleType": "action",
+        "actionCrud": "create",
+        "connection": "prooftell",
+        "altConnection": null,
+        "codeFiles": {
+          "communication": "modules/look-up-phone-number/look-up-phone-number.communication.iml.jsonc",
+          "staticParams": "modules/look-up-phone-number/look-up-phone-number.static-params.iml.jsonc",
+          "mappableParams": "modules/look-up-phone-number/look-up-phone-number.mappable-params.iml.jsonc",
+          "interface": "modules/look-up-phone-number/look-up-phone-number.interface.iml.jsonc",
+          "samples": "modules/look-up-phone-number/look-up-phone-number.samples.iml.jsonc",
+          "scope": null
+        }
+      },
+      "verifyEmailAddress": {
+        "label": "Verify an email address",
+        "description": "Verifies an email address: whether its mailbox exists and accepts mail, with the reason and the flags (disposable, role account, free provider, catch-all). Charged per check from your balance; the sandbox is free.",
+        "moduleType": "action",
+        "actionCrud": "create",
+        "connection": "prooftell",
+        "altConnection": null,
+        "codeFiles": {
+          "communication": "modules/verify-email-address/verify-email-address.communication.iml.jsonc",
+          "staticParams": "modules/verify-email-address/verify-email-address.static-params.iml.jsonc",
+          "mappableParams": "modules/verify-email-address/verify-email-address.mappable-params.iml.jsonc",
+          "interface": "modules/verify-email-address/verify-email-address.interface.iml.jsonc",
+          "samples": "modules/verify-email-address/verify-email-address.samples.iml.jsonc",
+          "scope": null
+        }
+      },
+      "lookUpIpAddress": {
+        "label": "Look up an IP address",
+        "description": "Looks up an IP address: whether it is a Tor exit, a VPN or a datacenter address, and its country, city and network. Charged per check from your balance; the sandbox is free.",
+        "moduleType": "action",
+        "actionCrud": "create",
+        "connection": "prooftell",
+        "altConnection": null,
+        "codeFiles": {
+          "communication": "modules/look-up-ip-address/look-up-ip-address.communication.iml.jsonc",
+          "staticParams": "modules/look-up-ip-address/look-up-ip-address.static-params.iml.jsonc",
+          "mappableParams": "modules/look-up-ip-address/look-up-ip-address.mappable-params.iml.jsonc",
+          "interface": "modules/look-up-ip-address/look-up-ip-address.interface.iml.jsonc",
+          "samples": "modules/look-up-ip-address/look-up-ip-address.samples.iml.jsonc",
+          "scope": null
+        }
+      },
+      "assessRisk": {
+        "label": "Assess the risk of an identity",
+        "description": "Scores a phone number, an email address and an IP address together, any one of the three at least: a 0 to 100 score, a verdict (allow, review, deny) and its reasons. Charged from your balance per signal that returns a result; the sandbox is free.",
+        "moduleType": "action",
+        "actionCrud": "create",
+        "connection": "prooftell",
+        "altConnection": null,
+        "codeFiles": {
+          "communication": "modules/assess-risk/assess-risk.communication.iml.jsonc",
+          "staticParams": "modules/assess-risk/assess-risk.static-params.iml.jsonc",
+          "mappableParams": "modules/assess-risk/assess-risk.mappable-params.iml.jsonc",
+          "interface": "modules/assess-risk/assess-risk.interface.iml.jsonc",
+          "samples": "modules/assess-risk/assess-risk.samples.iml.jsonc",
+          "scope": null
+        }
+      }
+    },
+    "rpc": {},
+    "function": {},
+    "endpoint": {}
+  },
+  "origins": [
+    {
+      "label": "ProofTell on Make (EU1)",
+      "baseUrl": "https://eu1.make.com/api",
+      "appId": "prooftell",
+      "appVersion": 1,
+      "apikeyFile": "../.secrets/apikey"
+    }
+  ]
+}

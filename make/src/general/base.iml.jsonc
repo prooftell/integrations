@@ -1,0 +1,33 @@
+{
+  "baseUrl": "https://api.prooftell.com",
+  "headers": {
+    "Authorization": "Bearer {{connection.apiKey}}",
+    "Content-Type": "application/json",
+    "User-Agent": "prooftell-make/1.0"
+  },
+  "response": {
+    "error": {
+      "message": "[{{statusCode}} {{ifempty(body.error.code, 'error')}}] {{ifempty(body.error.message, 'No message came back from ProofTell.')}}",
+      "400": {
+        "type": "DataError",
+        "message": "[{{statusCode}} {{ifempty(body.error.code, 'error')}}] {{ifempty(body.error.message, 'No message came back from ProofTell.')}}"
+      },
+      "402": {
+        "message": "[{{statusCode}} {{ifempty(body.error.code, 'error')}}] {{ifempty(body.error.message, 'No message came back from ProofTell.')}} Missing {{body.error.cost_missing}} USD of the {{body.error.cost_required}} USD this check needs ({{body.error.cost_available}} USD available); top up at {{body.error.topup_url}}"
+      },
+      "401": {
+        "type": "InvalidConfigurationError",
+        "message": "[{{statusCode}} {{ifempty(body.error.code, 'error')}}] {{ifempty(body.error.message, 'No message came back from ProofTell.')}}"
+      },
+      "403": {
+        "type": "InvalidConfigurationError",
+        "message": "[{{statusCode}} {{ifempty(body.error.code, 'error')}}] {{ifempty(body.error.message, 'No message came back from ProofTell.')}}"
+      }
+    }
+  },
+  "log": {
+    "sanitize": [
+      "request.headers.authorization"
+    ]
+  }
+}

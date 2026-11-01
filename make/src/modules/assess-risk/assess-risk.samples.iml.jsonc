@@ -1,0 +1,92 @@
+{
+  "id": "asm_4ceu7cr3cm7nah6r",
+  "mode": "test",
+  "score": 15,
+  "verdict": "allow",
+  "reasons": [
+    {
+      "code": "geo_mismatch",
+      "points": 15,
+      "message": "The phone number's country (GB) differs from the IP address's (US)."
+    }
+  ],
+  "signals": {
+    "phone": {
+      "status": "ok",
+      "cost": "0.000000",
+      "result": {
+        "status": "success",
+        "phone": "+447700900123",
+        "valid": true,
+        "line_type": "mobile",
+        "region": "Sandbox",
+        "country": "United Kingdom",
+        "country_code": "GB",
+        "country_prefix": "44",
+        "international_format": "+44 7700 900123",
+        "national_format": "07700 900123",
+        "e164": "+447700900123",
+        "original_carrier": "Sandbox Wireless",
+        "timezone": [
+          "Europe/London"
+        ],
+        "geographical": false
+      }
+    },
+    "email": {
+      "status": "ok",
+      "cost": "0.000000",
+      "result": {
+        "status": "success",
+        "email": "jane@example.com",
+        "result": "deliverable",
+        "deliverable": true,
+        "did_you_mean": "",
+        "user": "jane",
+        "domain": "example.com",
+        "code": 200,
+        "verdict": "deliverable",
+        "reason": "mailbox_exists",
+        "suggested_action": "accept",
+        "flags": {
+          "disposable": false,
+          "role_account": false,
+          "free_provider": false,
+          "catch_all": false
+        },
+        "provider": "",
+        "latency_ms": 12
+      }
+    },
+    "ip": {
+      "status": "ok",
+      "cost": "0.000000",
+      "result": {
+        "ip": "203.0.113.1",
+        "status": "success",
+        "version": 4,
+        "routable": true,
+        "country_code": "US",
+        "country": "United States",
+        "region": "New York",
+        "city": "Sandbox City",
+        "latitude": 40.7128,
+        "longitude": -74.006,
+        "accuracy_km": 20,
+        "timezone": "America/New_York",
+        "asn": 64500,
+        "as_org": "SANDBOX-NET",
+        "is_tor": false,
+        "is_vpn": false,
+        "is_datacenter": false,
+        "is_anonymous": false,
+        "anycast": false,
+        "data_version": "sandbox"
+      }
+    }
+  },
+  "ruleset": "2026-10-07",
+  "cost": "0.000000",
+  "currency": "USD",
+  "createdAt": "2026-10-27T15:59:50.195198859Z"
+}

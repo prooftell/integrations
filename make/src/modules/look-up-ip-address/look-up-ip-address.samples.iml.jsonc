@@ -1,0 +1,30 @@
+{
+  "ip": "203.0.113.66",
+  "status": "success",
+  "version": 4,
+  "routable": true,
+  "country_code": "US",
+  "country": "United States",
+  "region": "New York",
+  "city": "Sandbox City",
+  "latitude": 40.7128,
+  "longitude": -74.006,
+  "accuracy_km": 20,
+  "timezone": "America/New_York",
+  "asn": 64500,
+  "as_org": "SANDBOX-NET",
+  "is_tor": true,
+  "is_vpn": false,
+  "is_datacenter": true,
+  "is_anonymous": true,
+  "anycast": false,
+  "data_version": "sandbox",
+  "cost": "0.000000",
+  "currency": "USD",
+  "signals": {
+    "ip": {
+      "status": "ok",
+      "cost": "0.000000"
+    }
+  }
+}

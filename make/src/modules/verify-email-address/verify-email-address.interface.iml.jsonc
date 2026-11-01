@@ -1,0 +1,46 @@
+[
+  { "name": "status", "type": "text", "label": "Status" },
+  { "name": "email", "type": "text", "label": "Email address" },
+  { "name": "result", "type": "text", "label": "Result" },
+  { "name": "deliverable", "type": "boolean", "label": "Deliverable" },
+  { "name": "verdict", "type": "text", "label": "Verdict" },
+  { "name": "reason", "type": "text", "label": "Reason" },
+  { "name": "did_you_mean", "type": "text", "label": "Did you mean" },
+  { "name": "user", "type": "text", "label": "User (before the @)" },
+  { "name": "domain", "type": "text", "label": "Domain" },
+  { "name": "code", "type": "uinteger", "label": "Result code" },
+  { "name": "billed", "type": "boolean", "label": "Billed" },
+  { "name": "suggested_action", "type": "text", "label": "Suggested action" },
+  {
+    "name": "flags",
+    "type": "collection",
+    "label": "Flags",
+    "spec": [
+      { "name": "disposable", "type": "boolean", "label": "Disposable" },
+      { "name": "role_account", "type": "boolean", "label": "Role account" },
+      { "name": "free_provider", "type": "boolean", "label": "Free provider" },
+      { "name": "catch_all", "type": "boolean", "label": "Catch-all" }
+    ]
+  },
+  { "name": "provider", "type": "text", "label": "Mail provider" },
+  { "name": "latency_ms", "type": "uinteger", "label": "Latency (ms)" },
+  { "name": "cost", "type": "text", "label": "Cost (USD)" },
+  { "name": "currency", "type": "text", "label": "Currency" },
+  {
+    "name": "signals",
+    "type": "collection",
+    "label": "Signals",
+    "spec": [
+      {
+        "name": "email",
+        "type": "collection",
+        "label": "Email",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" }
+        ]
+      }
+    ]
+  }
+]

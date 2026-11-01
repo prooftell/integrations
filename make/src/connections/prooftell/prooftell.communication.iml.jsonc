@@ -1,0 +1,25 @@
+{
+  "url": "https://api.prooftell.com/v1/balance",
+  "method": "GET",
+  "headers": {
+    "Authorization": "Bearer {{parameters.apiKey}}",
+    "User-Agent": "prooftell-make/1.0"
+  },
+  "response": {
+    "valid": {
+      "condition": "{{!body.error}}"
+    },
+    "error": {
+      "message": "[{{statusCode}} {{ifempty(body.error.code, 'error')}}] {{ifempty(body.error.message, 'No message came back from ProofTell.')}}"
+    },
+    "metadata": {
+      "type": "text",
+      "value": "{{if(contains(parameters.apiKey, 'pt_test_'), 'Sandbox', 'Live')}}"
+    }
+  },
+  "log": {
+    "sanitize": [
+      "request.headers.authorization"
+    ]
+  }
+}

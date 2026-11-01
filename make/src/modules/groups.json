@@ -1,0 +1,11 @@
+[
+  {
+    "label": "Checks",
+    "modules": [
+      "lookUpPhoneNumber",
+      "verifyEmailAddress",
+      "lookUpIpAddress",
+      "assessRisk"
+    ]
+  }
+]

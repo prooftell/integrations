@@ -1,0 +1,20 @@
+[
+  {
+    "name": "email",
+    "type": "text",
+    "label": "Email address",
+    "help": "The address to verify. Text that is not an address comes back as a syntax error, free.",
+    "required": true
+  },
+  {
+    "name": "timeout",
+    "type": "uinteger",
+    "label": "Timeout (ms)",
+    "help": "The budget for the mailbox check, in milliseconds: 1000 to 45000. Past it the address comes back unknown, free.",
+    "advanced": true,
+    "validate": {
+      "min": 1000,
+      "max": 45000
+    }
+  }
+]

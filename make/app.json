@@ -1,0 +1,10 @@
+{
+  "name": "prooftell",
+  "label": "ProofTell",
+  "version": 1,
+  "description": "Look up a phone number, verify an email address, look up an IP address, or assess the risk of an identity from any of the three. Charged per check from your ProofTell balance; the sandbox is free.",
+  "theme": "#2458e6",
+  "language": "en",
+  "audience": "global",
+  "countries": []
+}

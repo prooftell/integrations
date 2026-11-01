@@ -1,0 +1,19 @@
+{
+	"node": "n8n-nodes-prooftell",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Development", "Sales"],
+	"alias": ["phone", "email", "ip", "verification", "validation", "fraud", "risk", "lookup"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://prooftell.com/integrations#n8n"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://prooftell.com/integrations#n8n"
+			}
+		]
+	}
+}

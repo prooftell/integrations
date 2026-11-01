@@ -1,0 +1,66 @@
+# Publishes n8n-nodes-prooftell to npm with provenance when a tag n8n-v<version> is pushed: n8n's rule for verified
+# community nodes (since May 2026) is a GitHub Actions publish, never one from a machine. Authenticates with the
+# repository secret NPM_TOKEN (a granular npm token with publish rights on the package) when it is set, and through
+# npm's trusted publishing (GitHub's OIDC token; the publisher registered on npmjs.com for this workflow) when it is
+# not. Needs a public repository. The tag must name the version in n8n-nodes-prooftell/package.json, or the run
+# stops before publishing.
+name: Release the n8n node
+
+on:
+  push:
+    tags:
+      - 'n8n-v*'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    name: Build, check and publish n8n-nodes-prooftell
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: n8n-nodes-prooftell
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: n8n-nodes-prooftell/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: The tag names the package's version
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          test "n8n-v${version}" = "${GITHUB_REF_NAME}" || {
+            echo "The tag ${GITHUB_REF_NAME} does not name package.json's version ${version}"
+            exit 1
+          }
+
+      - name: Publish with provenance
+        # With NPM_TOKEN set, the token goes into the runner's ~/.npmrc; without it nothing is written and npm
+        # falls back to trusted publishing (OIDC). An empty _authToken would break that fallback.
+        run: |
+          if [ -n "${NPM_TOKEN}" ]; then
+            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > "${HOME}/.npmrc"
+          fi
+          npm publish --provenance --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # prepublishOnly runs `n8n-node prerelease`, which refuses a publish without this: a publish from a
+          # machine stays blocked, the workflow's is let through.
+          RELEASE_MODE: 'true'

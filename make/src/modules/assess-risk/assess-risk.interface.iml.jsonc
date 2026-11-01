@@ -1,0 +1,139 @@
+[
+  { "name": "id", "type": "text", "label": "Assessment ID" },
+  { "name": "mode", "type": "text", "label": "Mode (live or test)" },
+  { "name": "reference", "type": "text", "label": "Reference" },
+  { "name": "score", "type": "uinteger", "label": "Score (0 to 100)" },
+  { "name": "verdict", "type": "text", "label": "Verdict" },
+  {
+    "name": "reasons",
+    "type": "array",
+    "label": "Reasons",
+    "spec": [
+      { "name": "code", "type": "text", "label": "Code" },
+      { "name": "points", "type": "integer", "label": "Points" },
+      { "name": "message", "type": "text", "label": "Message" }
+    ]
+  },
+  {
+    "name": "signals",
+    "type": "collection",
+    "label": "Signals",
+    "spec": [
+      {
+        "name": "phone",
+        "type": "collection",
+        "label": "Phone",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" },
+          {
+            "name": "result",
+            "type": "collection",
+            "label": "Result",
+            "spec": [
+              { "name": "status", "type": "text", "label": "Status" },
+              { "name": "phone", "type": "text", "label": "Phone number" },
+              { "name": "valid", "type": "boolean", "label": "Valid" },
+              { "name": "reason", "type": "text", "label": "Reason (when not valid)" },
+              { "name": "line_type", "type": "text", "label": "Line type" },
+              { "name": "shortcode_cost", "type": "text", "label": "Short code cost" },
+              { "name": "region", "type": "text", "label": "Region" },
+              { "name": "country", "type": "text", "label": "Country" },
+              { "name": "country_code", "type": "text", "label": "Country code" },
+              { "name": "country_prefix", "type": "text", "label": "Calling code" },
+              { "name": "international_format", "type": "text", "label": "International format" },
+              { "name": "national_format", "type": "text", "label": "National format" },
+              { "name": "e164", "type": "text", "label": "E.164" },
+              { "name": "original_carrier", "type": "text", "label": "Original carrier" },
+              { "name": "timezone", "type": "array", "label": "Time zones", "spec": { "type": "text", "label": "Time zone" } },
+              { "name": "geographical", "type": "boolean", "label": "Geographical" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "email",
+        "type": "collection",
+        "label": "Email",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" },
+          {
+            "name": "result",
+            "type": "collection",
+            "label": "Result",
+            "spec": [
+              { "name": "status", "type": "text", "label": "Status" },
+              { "name": "email", "type": "text", "label": "Email address" },
+              { "name": "result", "type": "text", "label": "Result" },
+              { "name": "deliverable", "type": "boolean", "label": "Deliverable" },
+              { "name": "did_you_mean", "type": "text", "label": "Did you mean" },
+              { "name": "user", "type": "text", "label": "User (before the @)" },
+              { "name": "domain", "type": "text", "label": "Domain" },
+              { "name": "code", "type": "uinteger", "label": "Result code" },
+              { "name": "verdict", "type": "text", "label": "Verdict" },
+              { "name": "reason", "type": "text", "label": "Reason" },
+              { "name": "suggested_action", "type": "text", "label": "Suggested action" },
+              {
+                "name": "flags",
+                "type": "collection",
+                "label": "Flags",
+                "spec": [
+                  { "name": "disposable", "type": "boolean", "label": "Disposable" },
+                  { "name": "role_account", "type": "boolean", "label": "Role account" },
+                  { "name": "free_provider", "type": "boolean", "label": "Free provider" },
+                  { "name": "catch_all", "type": "boolean", "label": "Catch-all" }
+                ]
+              },
+              { "name": "provider", "type": "text", "label": "Mail provider" },
+              { "name": "latency_ms", "type": "uinteger", "label": "Latency (ms)" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "ip",
+        "type": "collection",
+        "label": "IP",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" },
+          {
+            "name": "result",
+            "type": "collection",
+            "label": "Result",
+            "spec": [
+              { "name": "ip", "type": "text", "label": "IP address" },
+              { "name": "status", "type": "text", "label": "Status" },
+              { "name": "version", "type": "uinteger", "label": "IP version" },
+              { "name": "routable", "type": "boolean", "label": "Routable" },
+              { "name": "country_code", "type": "text", "label": "Country code" },
+              { "name": "country", "type": "text", "label": "Country" },
+              { "name": "region", "type": "text", "label": "Region" },
+              { "name": "city", "type": "text", "label": "City" },
+              { "name": "latitude", "type": "number", "label": "Latitude" },
+              { "name": "longitude", "type": "number", "label": "Longitude" },
+              { "name": "accuracy_km", "type": "uinteger", "label": "Accuracy (km)" },
+              { "name": "timezone", "type": "text", "label": "Time zone" },
+              { "name": "asn", "type": "uinteger", "label": "ASN" },
+              { "name": "as_org", "type": "text", "label": "Network (AS organization)" },
+              { "name": "is_tor", "type": "boolean", "label": "Tor" },
+              { "name": "is_vpn", "type": "boolean", "label": "VPN" },
+              { "name": "is_datacenter", "type": "boolean", "label": "Datacenter" },
+              { "name": "is_anonymous", "type": "boolean", "label": "Anonymous (Tor or VPN)" },
+              { "name": "anycast", "type": "boolean", "label": "Anycast" },
+              { "name": "data_version", "type": "text", "label": "Data version" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  { "name": "ruleset", "type": "text", "label": "Rule set version" },
+  { "name": "cost", "type": "text", "label": "Cost (USD)" },
+  { "name": "currency", "type": "text", "label": "Currency" },
+  { "name": "createdAt", "type": "date", "label": "Created at" }
+]

@@ -1,0 +1,41 @@
+[
+  { "name": "ip", "type": "text", "label": "IP address" },
+  { "name": "status", "type": "text", "label": "Status" },
+  { "name": "version", "type": "uinteger", "label": "IP version" },
+  { "name": "routable", "type": "boolean", "label": "Routable" },
+  { "name": "country_code", "type": "text", "label": "Country code" },
+  { "name": "country", "type": "text", "label": "Country" },
+  { "name": "region", "type": "text", "label": "Region" },
+  { "name": "city", "type": "text", "label": "City" },
+  { "name": "latitude", "type": "number", "label": "Latitude" },
+  { "name": "longitude", "type": "number", "label": "Longitude" },
+  { "name": "accuracy_km", "type": "uinteger", "label": "Accuracy (km)" },
+  { "name": "timezone", "type": "text", "label": "Time zone" },
+  { "name": "asn", "type": "uinteger", "label": "ASN" },
+  { "name": "as_org", "type": "text", "label": "Network (AS organization)" },
+  { "name": "is_tor", "type": "boolean", "label": "Tor" },
+  { "name": "is_vpn", "type": "boolean", "label": "VPN" },
+  { "name": "is_datacenter", "type": "boolean", "label": "Datacenter" },
+  { "name": "is_anonymous", "type": "boolean", "label": "Anonymous (Tor or VPN)" },
+  { "name": "anycast", "type": "boolean", "label": "Anycast" },
+  { "name": "data_version", "type": "text", "label": "Data version" },
+  { "name": "cost", "type": "text", "label": "Cost (USD)" },
+  { "name": "currency", "type": "text", "label": "Currency" },
+  {
+    "name": "signals",
+    "type": "collection",
+    "label": "Signals",
+    "spec": [
+      {
+        "name": "ip",
+        "type": "collection",
+        "label": "IP",
+        "spec": [
+          { "name": "status", "type": "text", "label": "Status" },
+          { "name": "reason", "type": "text", "label": "Reason" },
+          { "name": "cost", "type": "text", "label": "Cost (USD)" }
+        ]
+      }
+    ]
+  }
+]

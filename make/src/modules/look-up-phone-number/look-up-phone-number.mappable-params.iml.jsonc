@@ -1,0 +1,30 @@
+[
+  {
+    "name": "phone",
+    "type": "text",
+    "label": "Phone number",
+    "help": "E.164 preferred, like +447700900123. A number in national format needs the country.",
+    "required": true
+  },
+  {
+    "name": "country",
+    "type": "text",
+    "label": "Country",
+    "help": "ISO 3166-1 alpha-2, like GB, for a number in national format."
+  },
+  {
+    "name": "level",
+    "type": "select",
+    "label": "Level",
+    "help": "How far to look; each level includes the ones before it. Basic is free (whether the number is valid, its formats, its country). Line type adds the line type and the carrier the range was allocated to. Current carrier adds the carrier the number is on today. Line status adds whether it is on the network right now. Fraud score adds a 0 to 100 score with its flags. Charged per check from your balance at the level's price; the sandbox is free.",
+    "required": true,
+    "default": "line_type",
+    "options": [
+      { "label": "Basic", "value": "basic" },
+      { "label": "Line type", "value": "line_type" },
+      { "label": "Current carrier", "value": "current_carrier" },
+      { "label": "Line status", "value": "line_status" },
+      { "label": "Fraud score", "value": "fraud_score" }
+    ]
+  }
+]

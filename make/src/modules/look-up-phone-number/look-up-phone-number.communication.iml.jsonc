@@ -1,0 +1,8 @@
+{
+  "url": "/v1/phone",
+  "method": "POST",
+  "body": "{{parameters}}",
+  "response": {
+    "output": "{{body}}"
+  }
+}

@@ -1,0 +1,36 @@
+[
+  {
+    "name": "phone",
+    "type": "text",
+    "label": "Phone number",
+    "help": "E.164 preferred, like +447700900123; a number in national format needs the country. Send at least one of the phone number, the email address and the IP address."
+  },
+  {
+    "name": "email",
+    "type": "text",
+    "label": "Email address",
+    "help": "Any text: one that is not an address is scored, not refused."
+  },
+  {
+    "name": "ip",
+    "type": "text",
+    "label": "IP address",
+    "help": "IPv4 or IPv6 of the end user."
+  },
+  {
+    "name": "country",
+    "type": "text",
+    "label": "Country",
+    "help": "ISO 3166-1 alpha-2, like GB, for a phone number in national format."
+  },
+  {
+    "name": "reference",
+    "type": "text",
+    "label": "Reference",
+    "help": "Your own id for this check, up to 128 characters, echoed back.",
+    "advanced": true,
+    "validate": {
+      "max": 128
+    }
+  }
+]

@@ -1,0 +1,43 @@
+# CLAUDE.md — ProofTell integrations
+
+The connectors that put ProofTell's checks inside the platforms teams already use (D188), one folder each. Injected
+whole at the first read of any file here: at most 80 lines. Read `../CLAUDE.md` first; how an integration works is
+`../ARCHITECTURE.md` → Integrations, the operations `../RUNBOOK.md` → Integrations, reasons `../DECISIONS.md`. **A
+folder's `README.md` is its reference**: its commands, its tests, and the steps that publish it.
+
+## The surface: one set of actions, the same names on every platform
+
+| Action (its name everywhere; a platform that forces Title Case keeps it in the description) | Call | Inputs |
+|---|---|---|
+| **Look up a phone number** | `POST /v1/phone` | `phone`; `country` (ISO 3166-1 alpha-2, for a national format); `level`: `basic`, `line_type` (default), `current_carrier`, `line_status`, `fraud_score` — labelled Basic, Line type, Current carrier, Line status, Fraud score |
+| **Verify an email address** | `POST /v1/email` | `email`; `timeout` (ms, at most 45000) |
+| **Look up an IP address** | `POST /v1/ip` | `ip` |
+| **Assess the risk of an identity** | `POST /v1/assess` | any of `phone`, `email`, `ip` (one at least); `country`; `reference` |
+| **File completed** (a trigger, where the platform has them) | `GET /v1/files`, polled | the rows whose `status` is `complete`, newest first, deduplicated by `id` |
+| The connection's test | `GET /v1/balance` | — |
+
+- **Auth**: `Authorization: Bearer <key>`. The field's help everywhere: "Create a key in the ProofTell dashboard
+  (Developers → Integrations), named after this platform. A `pt_test_` key is the free sandbox: simulated,
+  deterministic answers. A `pt_live_` key spends the account's balance." Live or Sandbox from the prefix where a
+  connection has a label. The base URL `https://api.prooftell.com`; tests override it only through the environment.
+- **Errors**: the api's `{error: {code, message}}` is shown as its message; 429 is left to the platform's retry.
+  **Never log an input** (a phone, an email, an IP) nor a key; nothing secret is committed (`.env`, `.secrets/`).
+- **Words**: ProofTell; sentence case (except where a platform's linter forces Title Case); the levels named as on the
+  site; the levels' provider never named (D68); no emoji; "charged per check from your balance; the sandbox is free",
+  never a price (D38). Samples are the spec's examples (`../api/openapi.yaml`); the sandbox's inputs are documented there.
+- **Links**: the listing's homepage `https://prooftell.com/integrations?utm_source=<platform>&utm_medium=integration`
+  (the channel's measurement, D60, D64); help `https://prooftell.com/integrations#<slug>`; `support@prooftell.com`.
+- **Tests** run against staging with the smoke organization's sandbox key, read into a variable inside the command
+  (`../RUNBOOK.md` → Integrations), never printed or written; a live test on a platform takes a production account's key.
+
+## The connectors
+
+| Folder | The account and its key | How it is published | Listed | Today |
+|--------|------------------------|---------------------|--------|-------|
+| `zapier/` (zapier-platform-cli 19) | A developer account on `support@prooftell.com`; the deploy key in `../keys/` (zapier.txt) | `npx zapier-platform login`, `register`, `push`, `users:add <email>` and `users:links` (the invite link), `promote`; the review with `LISTING.md`; `.zapierapprc` committed after `register` | Beta after review (about a week), public after 90 days | Built, validated, tested; not registered |
+| `n8n-nodes-prooftell/` (an npm package) | npm; the repo public; the secret `NPM_TOKEN` for the first release, then npm's Trusted Publishers on `release-n8n.yml` | A tag `n8n-v<version>` pushed: `.github/workflows/release-n8n.yml` publishes with provenance; then creators.n8n.io/nodes with `SUBMISSION.md` | Verified after n8n's review (up to four weeks); installable in a self-hosted n8n from the publish | Built, linted, tested; not published |
+| `make/` (the Apps SDK layout) | A Make account on eu1.make.com; the API token in `../keys/` (make.txt); the app created from `app.json`; Make's Partnership Agreement before the partner form | The VS Code extension deploys `src/`; Publish gives the invite link; the partner form (f.make.com/submit-your-app) with `LISTING.md` | On Make's integrations page after its business review (2–3 days) | Built and validated; no app in Make yet |
+| `power-platform/` (independent publisher; the route is Adil's call: the plan's §8.7) | A work or school account on the Power Apps Developer Plan: `paconn login`, `paconn validate`, the solution export and `package.zip` the PR carries; Microsoft verifies the author after the PR (AU10TIX, 15 min, within 30 days) | The branch `prooftell-independent-publisher` on the fork `adbek/PowerPlatformConnectors`; `PR.md` | Certified 3–5 business days after the verification, every region 7–10 days later; importable as a custom connector now (`IMPORT.md`) | Branch ready; PR not opened |
+| `activepieces/` | None | The branch `feat/piece-prooftell` on the fork `adbek/activepieces`; `PR.md`. Outside PRs are auto-closed unless a maintainer keeps them: the fallback is our own npm package | On merge | Branch ready; PR not opened |
+| `postman/` | A Postman account; a public workspace "ProofTell" | Import `prooftell.postman_collection.json` (`build.sh` rebuilds it from the spec), publish to the API Network | At once | Built, run with newman; no workspace |
+| Clay, Pipedream (recipes on `/integrations`) | Clay's partner form; Pipedream's support contact; an account on each to run the recipe | Nothing to publish: the recipes work on the public API | Their own listings when they build them | On the page; applications not sent |

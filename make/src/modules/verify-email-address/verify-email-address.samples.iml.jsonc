@@ -1,0 +1,30 @@
+{
+  "status": "success",
+  "email": "jane@example.com",
+  "result": "deliverable",
+  "deliverable": true,
+  "did_you_mean": "",
+  "user": "jane",
+  "domain": "example.com",
+  "code": 200,
+  "verdict": "deliverable",
+  "reason": "mailbox_exists",
+  "billed": true,
+  "suggested_action": "accept",
+  "flags": {
+    "disposable": false,
+    "role_account": false,
+    "free_provider": false,
+    "catch_all": false
+  },
+  "provider": "",
+  "latency_ms": 12,
+  "cost": "0.000000",
+  "currency": "USD",
+  "signals": {
+    "email": {
+      "status": "ok",
+      "cost": "0.000000"
+    }
+  }
+}
