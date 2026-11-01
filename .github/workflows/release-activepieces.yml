@@ -1,0 +1,98 @@
+# Publishes @prooftell/piece-prooftell to npm with provenance when a tag activepieces-v<version> is pushed.
+# Activepieces takes no outside pull request today (their bot closed #17117), so the piece ships as our own package,
+# which a self-hosted or platform-plan Activepieces installs from Settings → My pieces. Their tooling builds it: a
+# shallow, blobless clone of activepieces/activepieces at the commit the piece was built against, our source
+# copied in as a community piece, `npm run build-piece`, which compiles the piece and bundles it into one
+# self-contained artifact under dist/ (it inlines @activepieces/*, which are never on npm) and rewrites
+# dist/package.json for publishing (`main`, `files`, no workspace dependency). Authenticates with the repository
+# secret NPM_TOKEN when it is set, and through npm's trusted publishing (GitHub's OIDC token; the publisher
+# registered on npmjs.com for this workflow) when it is not. Needs a public repository. The tag must name the
+# version in activepieces/piece/package.json, or the run stops before publishing.
+name: Release the Activepieces piece
+
+on:
+  push:
+    tags:
+      - 'activepieces-v*'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  # The upstream commit the piece was built and tested against (2026-10-31); bump it deliberately, then rebuild.
+  ACTIVEPIECES_COMMIT: 2c28ed8943621b233fe68e78ee59a896db564ae4
+  PIECE_DIR: upstream/packages/pieces/community/prooftell
+
+jobs:
+  publish:
+    name: Build, check and publish @prooftell/piece-prooftell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          # The monorepo's packageManager (its root package.json); bun installs its workspaces, npm runs its scripts.
+          bun-version: 1.4.4
+
+      - name: The tag names the package's version
+        run: |
+          version="$(node -p "require('./activepieces/piece/package.json').version")"
+          test "activepieces-v${version}" = "${GITHUB_REF_NAME}" || {
+            echo "The tag ${GITHUB_REF_NAME} does not name package.json's version ${version}"
+            exit 1
+          }
+
+      - name: Clone activepieces at the pinned commit
+        run: |
+          git init --quiet upstream
+          git -C upstream remote add origin https://github.com/activepieces/activepieces.git
+          git -C upstream fetch --quiet --depth 1 --filter=blob:none origin "${ACTIVEPIECES_COMMIT}"
+          git -C upstream checkout --quiet FETCH_HEAD
+
+      - name: Put the piece in as a community piece
+        run: |
+          rm -rf "${PIECE_DIR}"
+          cp -R activepieces/piece "${PIECE_DIR}"
+
+      - name: Install the monorepo
+        working-directory: upstream
+        run: bun install
+
+      - name: Build and bundle
+        working-directory: upstream
+        run: npm run build-piece prooftell
+
+      - name: Lint
+        working-directory: upstream
+        run: npx turbo run lint --filter=@prooftell/piece-prooftell
+
+      - name: The bundle loads on its own
+        working-directory: ${{ env.PIECE_DIR }}/dist
+        run: |
+          node -e "
+            const { prooftell } = require('./src/index.js');
+            const actions = Object.keys(prooftell.actions());
+            if (prooftell.displayName !== 'ProofTell' || actions.length !== 5) {
+              throw new Error('unexpected piece: ' + prooftell.displayName + ' ' + actions.join(','));
+            }
+            console.log(prooftell.displayName + ': ' + actions.join(', '));
+          "
+
+      - name: Publish with provenance
+        # With NPM_TOKEN set, the token goes into the runner's ~/.npmrc; without it nothing is written and npm
+        # falls back to trusted publishing (OIDC). An empty _authToken would break that fallback. Published from
+        # dist/, the bundled artifact whose manifest's `files` names exactly what ships.
+        working-directory: ${{ env.PIECE_DIR }}/dist
+        run: |
+          if [ -n "${NPM_TOKEN}" ]; then
+            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > "${HOME}/.npmrc"
+          fi
+          npm publish --provenance --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

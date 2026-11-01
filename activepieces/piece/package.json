@@ -1,6 +1,14 @@
 {
-  "name": "@activepieces/piece-prooftell",
-  "version": "0.0.1",
+  "name": "@prooftell/piece-prooftell",
+  "version": "1.0.0",
+  "description": "ProofTell for Activepieces: phone, email and IP checks and a risk score on top, charged per check from your balance; the sandbox is free.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prooftell/integrations.git",
+    "directory": "activepieces/piece"
+  },
+  "homepage": "https://prooftell.com/integrations?utm_source=activepieces&utm_medium=integration",
   "type": "commonjs",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
