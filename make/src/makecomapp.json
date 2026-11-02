@@ -93,9 +93,24 @@
     {
       "label": "ProofTell on Make (EU1)",
       "baseUrl": "https://eu1.make.com/api",
-      "appId": "prooftell",
+      "appId": "prooftell-pu2f1x",
       "appVersion": 1,
-      "apikeyFile": "../.secrets/apikey"
+      "apikeyFile": "../.secrets/apikey",
+      "idMapping": {
+        "connection": [
+          { "local": "prooftell", "remote": "prooftell-pu2f1x" }
+        ],
+        "module": [
+          { "local": "lookUpPhoneNumber", "remote": "lookUpPhoneNumber" },
+          { "local": "verifyEmailAddress", "remote": "verifyEmailAddress" },
+          { "local": "lookUpIpAddress", "remote": "lookUpIpAddress" },
+          { "local": "assessRisk", "remote": "assessRisk" }
+        ],
+        "webhook": [],
+        "rpc": [],
+        "function": [],
+        "endpoint": []
+      }
     }
   ]
 }

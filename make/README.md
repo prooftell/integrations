@@ -14,7 +14,7 @@ extension's source (`integromat/vscode-apps-sdk`); the pages followed are listed
 | File | What it is | Its place in Make (Custom apps → the app) |
 |------|-----------|--------------------------------------------|
 | `app.json` | name `prooftell`, label ProofTell, description, theme `#2458e6` (the design system's `primary`), language, audience | The "Create app" form; the CLI's `sdk-apps create`; or the body of `POST /api/v2/sdk/apps` (`global: true` there) |
-| `scripts/logo.cjs`, `assets/logo-1024.png` | The app's logo: the single-ink mark rendered black on a transparent 1024 × 1024 canvas, the way Make tints a logo (white or transparent shows in the theme colour, black white, semi-transparent a tint). PNG, square, 512 to 2048 px, under 500 kB | The form's App logo; later Options → Edit on the app's page |
+| `scripts/logo.cjs`, `assets/logo-512.png` | The app's logo: the single-ink mark rendered black on a transparent 512 × 512 canvas, the way Make tints a logo (white or transparent shows in the theme colour, black white, semi-transparent a tint). Make's page says PNG, square, 512 to 2048 px, under 500 kB; its API takes exactly 512 × 512 | `make-cli sdk-apps set-icon`; the form's App logo; later Options → Edit on the app's page |
 | `src/makecomapp.json` | The extension's manifest: the components, their files, the origin (zone `eu1`, app `prooftell`, version 1, the token's file) | Nothing to paste: it drives the deploy |
 | `src/general/base.iml.jsonc` | `baseUrl` `https://api.prooftell.com`; the headers `Authorization: Bearer {{connection.apiKey}}`, `Content-Type`, `User-Agent prooftell-make/1.0`; `response.error` showing the api's `{error: {code, message}}` after its status, a 400 as a `DataError`, a 402 with the amounts and the top-up link the api sends beside its message (`cost_missing`, `cost_required`, `cost_available`, `topup_url`), a 401 or 403 as an `InvalidConfigurationError`, a 429 and a 5xx left to Make's defaults (`RateLimitError`, `ConnectionError`: it retries); `log.sanitize` of the Authorization header | Base |
 | `src/general/common.json` | Empty: the app has no secret of its own | Common data |
@@ -31,7 +31,8 @@ extension's source (`integromat/vscode-apps-sdk`); the pages followed are listed
 The four modules, their ids in Make and their endpoints: `lookUpPhoneNumber` "Look up a phone number"
 (`/v1/phone`), `verifyEmailAddress` "Verify an email address" (`/v1/email`), `lookUpIpAddress` "Look up an IP
 address" (`/v1/ip`), `assessRisk` "Assess the risk of an identity" (`/v1/assess`). All are action modules of CRUD
-type create (a check runs and is charged; an assessment gets an id), on the connection `prooftell`.
+type create (a check runs and is charged; an assessment gets an id), on the connection `prooftell` — named
+`prooftell-pu2f1x` in Make, like the app: the manifest's `idMapping` pairs the two.
 
 ## Validate
 
@@ -54,8 +55,8 @@ Three ways; the first is the one the layout is made for.
    lists the account's custom apps under "Make apps".
 3. The app must exist in Make first, empty: Make → Custom apps → "+ Create app" with `app.json`'s values
    (Name `prooftell`, Label `ProofTell`, the Description, Theme `#2458e6`, Language English, Audience Global) and
-   the logo (`assets/logo-1024.png`, rendered by `scripts/logo.cjs`; `LISTING.md` says how Make tints it). The name
-   cannot change later.
+   the logo (`assets/logo-512.png`, rendered by `scripts/logo.cjs`; `LISTING.md` says how Make tints it). Make
+   appends a random suffix to the name (ours became `prooftell-pu2f1x`), and the name cannot change later.
 4. Put the token where the manifest's origin expects it, without printing it:
    `mkdir -p .secrets && sed -n 2p ../../keys/make.txt > .secrets/apikey` (`.secrets/` is gitignored).
 5. Right-click `src/makecomapp.json` → "Deploy to Make (beta)", pick the origin "ProofTell on Make (EU1)", and for
@@ -77,51 +78,92 @@ in Make's terms) with Parameters and Communication; four action modules created 
 descriptions of `makecomapp.json`, each with Communication, Mappable parameters, Interface and Samples. The
 `.iml.jsonc` files hold plain JSON.
 
-**3. The Make CLI** (`npm install -g @makehq/cli`, then `make-cli login` with the zone EU1 and the token, or
-`MAKE_API_KEY` and `MAKE_ZONE` in the environment): `make-cli sdk-apps create --name prooftell --label ProofTell
---theme '#2458e6' --language en --audience global --description "…"`, `sdk-connections create --app-name prooftell
---type apikey --label ProofTell`, `sdk-modules create --app-name prooftell --app-version 1 --name lookUpPhoneNumber
---type-id 4 --label "Look up a phone number" --description "…"` (type 4 is an action) for each module, then
-`set-section` per file: the app's `base` (and `set-docs` for `README.md`); the connection's `api` (communication) and
-`parameters`; each module's `api`, `expect` (the mappable parameters), `interface` and `samples`. The section names
-are the Make API's (`developers.make.com/api-documentation/api-reference/sdk-apps`, `…/connections`, `…/modules`);
-the CLI's reference is `developers.make.com/make-cli/make-cli-reference/custom-app-development`.
+**3. The Make CLI** (`npm install @makehq/cli` somewhere outside the repo, or `npx @makehq/cli`; the token through
+`MAKE_API_KEY="$(sed -n 2p ../../keys/make.txt)" MAKE_ZONE=eu1.make.com` in the command's environment, never
+printed; `make-cli login` is the interactive way). This is how the app was first put into Make, headlessly, from
+this folder:
+
+1. `make-cli sdk-apps create --name=prooftell --label='ProofTell' --theme='#2458e6' --language=en --audience=global
+   --description="…"` (`app.json`'s values). Make answered with the name `prooftell-pu2f1x`: it appends a random
+   suffix, and every later command takes that name (`APP`).
+2. `make-cli sdk-apps set-section --name=$APP --version=1 --section=base --body="$(cat src/general/base.iml.jsonc)"`;
+   `set-docs --docs="$(cat src/README.md)"`; `set-icon --data-base64="$(base64 -w0 assets/logo-512.png)"`.
+3. `make-cli sdk-connections create --app-name=$APP --type=apikey --label='ProofTell'` — Make stores the type as
+   `basic` and names the connection after the app, `prooftell-pu2f1x`; then `set-section --connection-name=$APP`
+   for `api` (the communication file) and `parameters` (the params file).
+4. The modules through the API, because the CLI's `sdk-modules create` has no `crud` and no `connection`:
+   `POST https://eu1.make.com/api/v2/sdk/apps/$APP/1/modules` (header `Authorization: Token …`) with
+   `{"name","typeId":4,"label","description","connection":"$APP","crud":"create","moduleInitMode":"blank"}` from
+   `makecomapp.json`, for each of the four; then `make-cli sdk-modules set-section --app-name=$APP --app-version=1
+   --module-name=<id> --section=<api|expect|interface|samples> --body="$(cat <file>)"` (`api` is the communication
+   file, `expect` the mappable parameters).
+5. `make-cli sdk-apps set-section --section=groups --body="$(cat src/modules/groups.json)"`.
+6. Read back: `sdk-modules list`, `sdk-connections get`, `sdk-apps get-section --section=base`.
+7. `make-cli sdk-apps set-public --name=$APP --version=1`: the app is published and the answer carries the invite
+   token (`POST /sdk/apps/{name}/{version}/public` in the API). Irreversible: see "Publishing" below.
+
+The section names are the Make API's (`developers.make.com/api-documentation/api-reference/sdk-apps`,
+`…/connections`, `…/modules`); the CLI's reference is `developers.make.com/make-cli/make-cli-reference/custom-app-development`.
+A later change is the same `set-section` with the edited file (or way 1, now that the manifest's origin and
+`idMapping` name the app in Make).
 
 ## The connection's test
 
-The app calls production, `api.prooftell.com`, so the connection takes a key of a production organization — a
-`pt_test_` key of Adil's own account, named for Make, created in the dashboard (Developers → Integrations): the
-sandbox is free. (The smoke organization's key is a test organization's: production refuses it with 403
-`test_organization`.) In a scenario, add "Look up a phone number", click "Add" on the connection, paste the key:
+The app calls production, `api.prooftell.com`. A `pt_test_` key of any organization works there, the smoke
+organization's included (D31: the sandbox is free and simulated; what production refuses is a test organization's
+*live* key), so the test may take line 7 of `keys/smoke-accounts.txt`, read inline and never printed — or a
+`pt_test_` key of Adil's own account, named for Make, created in the dashboard (Developers → Integrations). In a
+scenario, add "Look up a phone number", click "Add" on the connection, paste the key:
 Make calls `GET /v1/balance`; a 200 saves the connection and labels it "(Sandbox)"; a wrong key shows
-`[401 invalid_api_key] The API key is missing, unknown or revoked.` Then one run per module with the sandbox's
-documented inputs — `+447700900123` at Line status, `jane@example.com`, `203.0.113.66`, and the three together in
-"Assess the risk of an identity" (`203.0.113.1` as the IP: a `geo_mismatch`, score 15) — and the output panel
-should show the sample's fields. Two things to confirm in that first run, since only Make evaluates IML: the
-connection's label expression (`contains(parameters.apiKey, 'pt_test_')`) and the error message's `ifempty`
-fallback (force a 400 by sending `phone` empty in the risk module with nothing else).
+`[401 invalid_api_key] The API key is missing, unknown or revoked.`
 
-## Tomorrow: Adil's part, then the deploy
+Proven through Make's API with the smoke organization's sandbox key (the connection 12620373 "ProofTell sandbox
+(smoke organization)" in the team "My Team", kept for Adil's look): `POST /connections/{id}/test` answers
+`verified: true`, its debug line shows the call to `https://api.prooftell.com/v1/balance` with the authorization
+header as `***` (the sanitize works), and the connection's `metadata.value` is `Sandbox` (the label expression
+works). The scenario 8321436 "ProofTell test: Look up a phone number" (`+447700900123` at Line type, stopped after
+the test, its history kept) ran once through `POST /scenarios/{id}/run`: `status 1`, SUCCESS, 1 operation, 441
+bytes back — the phone answer. Still to see in Make's editor, where the output panel shows the bundle: one run each
+of the three other modules with the sandbox's documented inputs — `jane@example.com`, `203.0.113.66`, and the three
+together in "Assess the risk of an identity" (`203.0.113.1` as the IP: a `geo_mismatch`, score 15) — and the error
+message's `ifempty` fallback (force a 400 by sending `phone` empty in the risk module with nothing else).
 
-1. A Make account in the EU zone (`eu1.make.com`) on `support@prooftell.com`; the organization's name ProofTell.
-2. Profile → API access → "+ Add token" with the scopes `sdk-apps:read` and `sdk-apps:write` (shown once) →
-   `keys/make.txt` (a date line, the token on line 2, the `.gitattributes` entry, `git-crypt status` says
-   encrypted). The token is also what the extension and the CLI take.
-3. Custom apps → "+ Create app" with `app.json` and the logo (step 3 above).
-4. Claude deploys the files (way 1), then builds one scenario per module on a sandbox key of Adil's account and
-   runs it; Adil checks the four outputs and the connection's label.
-5. Publish: the app's page → "Publish" generates the invite link (the app cannot be made private again after
-   that, nor a component deleted: rename and hide instead). The link goes on the site's and the dashboard's
-   integration pages (`available: true` on both lists, the same hour).
-6. Make's partner programme first: the Make Partnership Agreement, signed on the support@prooftell.com account —
+Two traps of Make's API, for the next test: a custom app's modules and connection type carry the prefix `app#` —
+the blueprint's module is `app#prooftell-pu2f1x:lookUpPhoneNumber`, a connection's `accountType` is
+`app#prooftell-pu2f1x` (without it: "Module not found", "Failed to load manifest"); and `POST /connections`
+answers a 307 to its own `…/test?formula=1`, which must be followed (or called) for the connection to be verified.
+An on-demand scenario must be started (`POST /scenarios/{id}/start`) before `run` accepts it (IM325).
+
+## Where it stands, and what remains
+
+In Make (eu1, Adil's account, the organization "My Organization", 9496520): the app `prooftell-pu2f1x` version 1,
+label ProofTell, every section and the icon deployed from these files through way 3, **published** (`public:
+true`, not approved — approval is Make's review, not sought). The invite link, from the app's `inviteToken`:
+
+https://www.make.com/en/hq/app-invitation/711be10b6633929513d0180ed0b31208
+
+Publishing's facts: `make-cli sdk-apps set-public` prints no token, and a second `POST …/public` answers IM005
+"already being published"; the token is read with `GET /sdk/apps/prooftell-pu2f1x/1?cols[]=inviteToken`. The
+app cannot be made private again, nor a component deleted (rename and hide instead). The link is what another
+organization installs the app by, in a browser: the API's "Accept App Invite" refuses an API token (SC403
+"Organization-bound request can't be used outside of the Organization Context"), and the author's own
+organization needed no install — a connection and a scenario on the app worked there at once.
+
+What remains, Adil's part:
+
+1. The link on the site's and the dashboard's integration pages (`available: true` on both lists, the same hour).
+2. In Make's editor, the three runs still to see and the fallback above ("The connection's test"), on a `pt_test_`
+   key of his own account or the kept connection.
+3. Make's partner programme first: the Make Partnership Agreement, signed on the support@prooftell.com account —
    the partner form requires an active one. Then the partner form at https://f.make.com/submit-your-app with
    `LISTING.md`, the invite link and the logo. Make's business review takes 2–3 days; then the app is on Make's
    integrations page. ("Request review" on the app's page, the route to an approved app for every Maker, needs a
    universal module the app does not have: not this one.)
 
-Afterwards, a change is a file edited here, `node validate.js`, and "Deploy to Make"; a published app's modules
-cannot be removed, only hidden. The token, the invite link and the review's state are operated from the
-workspace's `RUNBOOK.md` → Integrations.
+A change is a file edited here, `node validate.js`, then `make-cli … set-section` with the file (way 3) or "Deploy
+to Make" (way 1, the manifest's origin and `idMapping` name the app); a published app's modules cannot be removed,
+only hidden. The token, the invite link and the review's state are operated from the workspace's `RUNBOOK.md` →
+Integrations.
 
 ## Choices worth knowing
 

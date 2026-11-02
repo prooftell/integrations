@@ -1,7 +1,8 @@
-// Renders the app's logo, assets/logo-1024.png, the way web/scripts/icons.cjs renders the site's bitmap icons:
+// Renders the app's logo, assets/logo-512.png, the way web/scripts/icons.cjs renders the site's bitmap icons:
 // the single-ink ProofTell mark (design/system/assets/Logos/prooftell-mark-ink.svg, 140 x 160) in pure black,
-// centred on a square 1024 x 1024 transparent canvas with a 12 % margin. Make's App logo page asks for a PNG,
-// square, 512 to 2048 px, under 500 kB, and tints it: white or transparent areas show in the app's theme colour,
+// centred on a square 512 x 512 transparent canvas with a 12 % margin. Make's App logo page says a PNG, square,
+// 512 to 2048 px, under 500 kB; its API takes exactly 512 x 512 ("App icon must be 512x512 PNG"). Make tints the
+// logo: white or transparent areas show in the app's theme colour,
 // black ones white, semi-transparent ones a tint between the two. So the stem comes out white on the ProofTell
 // blue and the bowl, at 50 % opacity in the source, a lighter blue. The ink (#0e1530) is swapped for #000000 so
 // that Make's "black" rule applies exactly.
@@ -13,12 +14,12 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-const SIZE = 1024;
+const SIZE = 512;
 const MARGIN = Math.round(SIZE * 0.12);
 const LIMIT = 500 * 1024;
 const root = path.join(__dirname, '..', '..', '..');
 const source = process.env.MARK || path.join(root, 'design/system/assets/Logos/prooftell-mark-ink.svg');
-const target = path.join(__dirname, '..', 'assets', 'logo-1024.png');
+const target = path.join(__dirname, '..', 'assets', 'logo-512.png');
 
 async function main() {
   const svg = fs

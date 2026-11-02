@@ -7,7 +7,8 @@ system.
 | Field | Value |
 |-------|-------|
 | App name | ProofTell |
-| App id (name in Make) | `prooftell` |
+| App id (name in Make) | `prooftell-pu2f1x` (`prooftell` was asked for; Make appends a random suffix to a custom app's name) |
+| Invite link | https://www.make.com/en/hq/app-invitation/711be10b6633929513d0180ed0b31208 |
 | Category | Developer tools (if a second is allowed: Security) |
 | Website | https://prooftell.com/integrations?utm_source=make&utm_medium=integration |
 | Help page | https://prooftell.com/integrations#make |
@@ -15,7 +16,7 @@ system.
 | Theme colour | `#2458e6` (the design system's `primary`) |
 | Language | English |
 | Audience | Global (every country) |
-| Logo | `assets/logo-1024.png`: the single-ink mark (`design/system/assets/Logos/prooftell-mark-ink.svg`) rendered black on a transparent 1024 × 1024 canvas by `scripts/logo.cjs`. Make's rule (its App logo page): PNG, square, 512 to 2048 px, under 500 kB; white or transparent areas show in the theme colour, black ones white, semi-transparent ones a tint between the two — so the mark comes out white on the ProofTell blue, its bowl a lighter blue |
+| Logo | `assets/logo-512.png`: the single-ink mark (`design/system/assets/Logos/prooftell-mark-ink.svg`) rendered black on a transparent 512 × 512 canvas by `scripts/logo.cjs`. Make's App logo page says PNG, square, 512 to 2048 px, under 500 kB; its API takes exactly 512 × 512. White or transparent areas show in the theme colour, black ones white, semi-transparent ones a tint between the two — so the mark comes out white on the ProofTell blue, its bowl a lighter blue |
 
 ## One-line description
 

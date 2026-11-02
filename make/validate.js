@@ -289,7 +289,8 @@ if (app) {
   if (!/^#[0-9a-f]{6}$/i.test(app.theme || '')) err('app.json: theme must be a hex colour');
   if (app.language !== 'en') err('app.json: language must be en');
   if (!app.description || !app.description.includes('the sandbox is free')) err('app.json: the description must say what it costs');
-  for (const o of manifest.origins || []) if (o.appId !== app.name) err(`app.json: name "${app.name}" differs from the origin's appId "${o.appId}"`);
+  // Make appends a random suffix to a new app's name (prooftell → prooftell-pu2f1x): the origin carries the suffixed one.
+  for (const o of manifest.origins || []) if (!(o.appId === app.name || o.appId.startsWith(app.name + '-'))) err(`app.json: name "${app.name}" is not the origin's appId "${o.appId}" nor its stem`);
 }
 
 // ---- words -------------------------------------------------------------------------------------------------
