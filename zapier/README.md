@@ -65,9 +65,12 @@ entry), and, in his production ProofTell account, an organization "Zapier review
    for Zapier's reviewers), or `npx zapier-platform users:links` for the invite link.
 5. In Zapier, with a key of the "Zapier review" organization: one Zap per action, turned on, with at least one
    run each (the review requires it); for the trigger, one 3-row file uploaded in the dashboard and run to
-   completion, then the Zap turned on.
-6. `npx zapier-platform promote 1.0.0`, then the publishing request in developer.zapier.com with `LISTING.md`'s copy,
-   the logo and the test Zaps. Zapier lists the app in beta about a week later; public after 90 days.
+   completion, then the Zap turned on. Zapier's publishing checks also count users: at least three Zapier accounts
+   each with a live Zap on the app (S001; live means on, with a recent successful run), so two more accounts take
+   the invite link and turn one on. And the logo, `assets/logo-512.png`, is uploaded in developer.zapier.com (M004).
+   `npx zapier-platform validate` lists every publishing task still open; none may remain.
+6. `npx zapier-platform promote 1.0.0`, then the publishing request in developer.zapier.com with `LISTING.md`'s copy
+   and the test Zaps. Zapier lists the app in beta about a week later; public after 90 days.
 
 A new version is a bump of `version` in `package.json`, `npx zapier-platform push`, then `npx zapier-platform promote` and, once
 users are on it, `npx zapier-platform migrate <old> <new>`. The deploy key, the app id and each review's state are
