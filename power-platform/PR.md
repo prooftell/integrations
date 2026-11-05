@@ -7,7 +7,7 @@ The connector is submitted as an independent-publisher connector: a PR against t
 [independent publisher certification](https://learn.microsoft.com/en-us/connectors/custom-connectors/certification-submission-ip)):
 
 1. A PR titled `Proposal - ProofTell (Independent Publisher)` with the files, from `adbek`. Microsoft's bot asks the
-   author to sign the CLA. Then the certification team emails the GitHub account's address the verified-credentials
+   author to sign the CLA (signed for Epic Grove Ltd, the company, in the PR's comments). Then the certification team emails the GitHub account's address the verified-credentials
    form (the one-time identity check of the plan's §6: the GitHub profile's name must match the ID), to complete within
    30 days.
 2. Once verified, the author adds to the folder the `package.zip` below and to the PR's description the screenshots
