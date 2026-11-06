@@ -1,0 +1,31 @@
+{
+  "uid": "prooftell",
+  "type": "app",
+  "config": {
+    "name": "ProofTell",
+    "description": "ProofTell checks the people in your CRM: a phone number, an email address and an IP address, one at a time from a workflow or scored together as one risk score. Connect your HubSpot account to a ProofTell organization; each check is charged to its balance, and its sandbox is free.",
+    "logo": "/app/app-logo.png",
+    "distribution": "marketplace",
+    "auth": {
+      "type": "oauth",
+      "redirectUrls": [
+        "https://app.prooftell.com/integrations/hubspot/callback"
+      ],
+      "requiredScopes": [
+        "oauth",
+        "crm.objects.contacts.read",
+        "crm.objects.contacts.write",
+        "crm.schemas.contacts.read",
+        "crm.schemas.contacts.write",
+        "automation"
+      ],
+      "optionalScopes": [],
+      "conditionallyRequiredScopes": []
+    },
+    "support": {
+      "supportEmail": "support@prooftell.com",
+      "documentationUrl": "https://prooftell.com/integrations#hubspot",
+      "supportUrl": "https://prooftell.com/contact"
+    }
+  }
+}

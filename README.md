@@ -2,7 +2,8 @@
 
 The connectors that put ProofTell's checks inside the platforms teams already use. Each one runs on its platform
 and takes a ProofTell API key (`pt_live_…`, or `pt_test_…` for the free sandbox); nothing of a customer's is stored
-here or by us. The four actions are the same everywhere — look up a phone number, verify an email address, look up an
+here or by us. HubSpot and GoHighLevel are the exception (D190): OAuth apps whose backend is ProofTell's api, which keeps
+each connected account's tokens, encrypted (D192). The four actions are the same everywhere — look up a phone number, verify an email address, look up an
 IP address, assess the risk of an identity — on the public API (https://prooftell.com/docs). How each is published,
 re-published and reviewed: the workspace's `RUNBOOK.md` → Integrations; why: `DECISIONS.md` D188.
 
@@ -14,3 +15,4 @@ re-published and reviewed: the workspace's `RUNBOOK.md` → Integrations; why: `
 | `power-platform/` | The Power Platform independent-publisher connector | `microsoft/PowerPlatformConnectors` by PR |
 | `activepieces/` | The Activepieces piece | `activepieces/activepieces` by PR |
 | `postman/` | The Postman collection, generated from the api's OpenAPI | Postman's API Network |
+| `hubspot/` | The HubSpot app, two developer projects (production, staging) generated from one definition: OAuth and four workflow actions on ProofTell's own backend | HubSpot's marketplace |

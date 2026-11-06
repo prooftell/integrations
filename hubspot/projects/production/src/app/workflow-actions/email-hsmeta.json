@@ -1,0 +1,192 @@
+{
+  "uid": "prooftell_email",
+  "type": "workflow-action",
+  "config": {
+    "actionUrl": "https://api.prooftell.com/integrations/hubspot/actions/email",
+    "isPublished": true,
+    "supportedClients": [
+      {
+        "client": "WORKFLOWS"
+      }
+    ],
+    "objectTypes": [
+      "CONTACT"
+    ],
+    "inputFields": [
+      {
+        "typeDefinition": {
+          "name": "email",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": [
+          "OBJECT_PROPERTY",
+          "STATIC_VALUE"
+        ],
+        "isRequired": true
+      }
+    ],
+    "outputFields": [
+      {
+        "typeDefinition": {
+          "name": "result",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "deliverable",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "verdict",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "reason",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "did_you_mean",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "cost",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "prooftell_error",
+          "type": "string",
+          "fieldType": "text"
+        }
+      }
+    ],
+    "executionRules": [
+      {
+        "labelName": "not_connected",
+        "conditions": {
+          "prooftell_error": "not_connected"
+        }
+      },
+      {
+        "labelName": "insufficient_balance",
+        "conditions": {
+          "prooftell_error": "insufficient_balance"
+        }
+      },
+      {
+        "labelName": "organization_suspended",
+        "conditions": {
+          "prooftell_error": "organization_suspended"
+        }
+      },
+      {
+        "labelName": "payment_disputed",
+        "conditions": {
+          "prooftell_error": "payment_disputed"
+        }
+      },
+      {
+        "labelName": "staging_restricted",
+        "conditions": {
+          "prooftell_error": "staging_restricted"
+        }
+      },
+      {
+        "labelName": "invalid_phone",
+        "conditions": {
+          "prooftell_error": "invalid_phone"
+        }
+      },
+      {
+        "labelName": "invalid_email",
+        "conditions": {
+          "prooftell_error": "invalid_email"
+        }
+      },
+      {
+        "labelName": "invalid_ip",
+        "conditions": {
+          "prooftell_error": "invalid_ip"
+        }
+      },
+      {
+        "labelName": "invalid_country",
+        "conditions": {
+          "prooftell_error": "invalid_country"
+        }
+      },
+      {
+        "labelName": "invalid_level",
+        "conditions": {
+          "prooftell_error": "invalid_level"
+        }
+      },
+      {
+        "labelName": "invalid_reference",
+        "conditions": {
+          "prooftell_error": "invalid_reference"
+        }
+      },
+      {
+        "labelName": "bad_request",
+        "conditions": {
+          "prooftell_error": "bad_request"
+        }
+      }
+    ],
+    "labels": {
+      "en": {
+        "actionName": "Verify an email address",
+        "actionDescription": "Verifies an email address with ProofTell: deliverable or not, disposable, catch-all, a misspelt domain. Charged per check from your balance; the sandbox is free.",
+        "actionCardContent": "Verify an email address with ProofTell",
+        "appDisplayName": "ProofTell",
+        "inputFieldLabels": {
+          "email": "Email address"
+        },
+        "inputFieldDescriptions": {
+          "email": "The address to verify."
+        },
+        "outputFieldLabels": {
+          "result": "Result",
+          "deliverable": "Deliverable",
+          "verdict": "Verdict",
+          "reason": "Reason",
+          "did_you_mean": "Did you mean",
+          "cost": "Cost (USD)",
+          "prooftell_error": "ProofTell error code"
+        },
+        "executionRules": {
+          "not_connected": "This HubSpot account is not connected to a ProofTell organization. Connect it from the ProofTell dashboard (Integrations).",
+          "insufficient_balance": "The ProofTell balance is too low for this check. Top it up in the ProofTell dashboard (Billing).",
+          "organization_suspended": "The ProofTell organization is suspended. Write to support@prooftell.com.",
+          "payment_disputed": "A card payment of the ProofTell organization is disputed: this check is paused. Write to support@prooftell.com.",
+          "staging_restricted": "This test organization runs sandbox checks only.",
+          "invalid_phone": "The phone number is missing or is not a phone number.",
+          "invalid_email": "The email address is missing or is not an email address.",
+          "invalid_ip": "The IP address is missing or is not an IP address.",
+          "invalid_country": "The country is not a two-letter ISO 3166-1 code.",
+          "invalid_level": "The level is not one of Basic, Line type, Current carrier, Line status or Fraud score.",
+          "invalid_reference": "The reference is too long.",
+          "bad_request": "Give a phone number, an email address or an IP address."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,289 @@
+{
+  "uid": "prooftell_phone",
+  "type": "workflow-action",
+  "config": {
+    "actionUrl": "https://api.prooftell.dev/integrations/hubspot/actions/phone",
+    "isPublished": true,
+    "supportedClients": [
+      {
+        "client": "WORKFLOWS"
+      }
+    ],
+    "objectTypes": [
+      "CONTACT"
+    ],
+    "inputFields": [
+      {
+        "typeDefinition": {
+          "name": "phone",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": [
+          "OBJECT_PROPERTY",
+          "STATIC_VALUE"
+        ],
+        "isRequired": true
+      },
+      {
+        "typeDefinition": {
+          "name": "country",
+          "type": "string",
+          "fieldType": "text"
+        },
+        "supportedValueTypes": [
+          "OBJECT_PROPERTY",
+          "STATIC_VALUE"
+        ],
+        "isRequired": false
+      },
+      {
+        "typeDefinition": {
+          "name": "level",
+          "type": "enumeration",
+          "fieldType": "select",
+          "options": [
+            {
+              "value": "basic",
+              "label": "Basic"
+            },
+            {
+              "value": "line_type",
+              "label": "Line type"
+            },
+            {
+              "value": "current_carrier",
+              "label": "Current carrier"
+            },
+            {
+              "value": "line_status",
+              "label": "Line status"
+            },
+            {
+              "value": "fraud_score",
+              "label": "Fraud score"
+            }
+          ]
+        },
+        "supportedValueTypes": [
+          "STATIC_VALUE"
+        ],
+        "isRequired": false
+      }
+    ],
+    "outputFields": [
+      {
+        "typeDefinition": {
+          "name": "valid",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "e164",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "line_type",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "country_code",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "original_carrier",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "reason",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "current_carrier",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "ported",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "reachable",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "fraud_score",
+          "type": "number",
+          "fieldType": "number"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "risk_level",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "cost",
+          "type": "string",
+          "fieldType": "text"
+        }
+      },
+      {
+        "typeDefinition": {
+          "name": "prooftell_error",
+          "type": "string",
+          "fieldType": "text"
+        }
+      }
+    ],
+    "executionRules": [
+      {
+        "labelName": "not_connected",
+        "conditions": {
+          "prooftell_error": "not_connected"
+        }
+      },
+      {
+        "labelName": "insufficient_balance",
+        "conditions": {
+          "prooftell_error": "insufficient_balance"
+        }
+      },
+      {
+        "labelName": "organization_suspended",
+        "conditions": {
+          "prooftell_error": "organization_suspended"
+        }
+      },
+      {
+        "labelName": "payment_disputed",
+        "conditions": {
+          "prooftell_error": "payment_disputed"
+        }
+      },
+      {
+        "labelName": "staging_restricted",
+        "conditions": {
+          "prooftell_error": "staging_restricted"
+        }
+      },
+      {
+        "labelName": "invalid_phone",
+        "conditions": {
+          "prooftell_error": "invalid_phone"
+        }
+      },
+      {
+        "labelName": "invalid_email",
+        "conditions": {
+          "prooftell_error": "invalid_email"
+        }
+      },
+      {
+        "labelName": "invalid_ip",
+        "conditions": {
+          "prooftell_error": "invalid_ip"
+        }
+      },
+      {
+        "labelName": "invalid_country",
+        "conditions": {
+          "prooftell_error": "invalid_country"
+        }
+      },
+      {
+        "labelName": "invalid_level",
+        "conditions": {
+          "prooftell_error": "invalid_level"
+        }
+      },
+      {
+        "labelName": "invalid_reference",
+        "conditions": {
+          "prooftell_error": "invalid_reference"
+        }
+      },
+      {
+        "labelName": "bad_request",
+        "conditions": {
+          "prooftell_error": "bad_request"
+        }
+      }
+    ],
+    "labels": {
+      "en": {
+        "actionName": "Look up a phone number",
+        "actionDescription": "Checks a phone number with ProofTell: valid or not, its line type and country; above the line type, its current carrier, whether the line is live, or a fraud score. Charged per check from your balance; the sandbox is free.",
+        "actionCardContent": "Look up a phone number with ProofTell",
+        "appDisplayName": "ProofTell",
+        "inputFieldLabels": {
+          "phone": "Phone number",
+          "country": "Country",
+          "level": "Level"
+        },
+        "inputFieldDescriptions": {
+          "phone": "In international format (+44 7700 900123), or national with the country.",
+          "country": "The two-letter code (GB, US) of a number in national format.",
+          "level": "How deep the check goes: Line type when left empty."
+        },
+        "outputFieldLabels": {
+          "valid": "Valid",
+          "e164": "Number in E.164",
+          "line_type": "Line type",
+          "country_code": "Country code",
+          "original_carrier": "Original carrier",
+          "reason": "Why not valid",
+          "current_carrier": "Current carrier",
+          "ported": "Ported",
+          "reachable": "Reachable",
+          "fraud_score": "Fraud score",
+          "risk_level": "Risk level",
+          "cost": "Cost (USD)",
+          "prooftell_error": "ProofTell error code"
+        },
+        "executionRules": {
+          "not_connected": "This HubSpot account is not connected to a ProofTell organization. Connect it from the ProofTell dashboard (Integrations).",
+          "insufficient_balance": "The ProofTell balance is too low for this check. Top it up in the ProofTell dashboard (Billing).",
+          "organization_suspended": "The ProofTell organization is suspended. Write to support@prooftell.com.",
+          "payment_disputed": "A card payment of the ProofTell organization is disputed: this check is paused. Write to support@prooftell.com.",
+          "staging_restricted": "This test organization runs sandbox checks only.",
+          "invalid_phone": "The phone number is missing or is not a phone number.",
+          "invalid_email": "The email address is missing or is not an email address.",
+          "invalid_ip": "The IP address is missing or is not an IP address.",
+          "invalid_country": "The country is not a two-letter ISO 3166-1 code.",
+          "invalid_level": "The level is not one of Basic, Line type, Current carrier, Line status or Fraud score.",
+          "invalid_reference": "The reference is too long.",
+          "bad_request": "Give a phone number, an email address or an IP address."
+        }
+      }
+    }
+  }
+}
