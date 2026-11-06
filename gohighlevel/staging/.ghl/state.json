@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "appId": "6aede33f959132de0efc66b5",
+  "versionId": "6aede33f959132de0efc66b5",
+  "baseline": {
+    "app": {
+      "schemaVersion": 1,
+      "appId": "6aede33f959132de0efc66b5",
+      "versionId": "6aede33f959132de0efc66b5",
+      "createdAt": "2026-11-06T14:25:03.767Z",
+      "version": "draft",
+      "status": "draft",
+      "appType": "standard",
+      "basicInfo": {
+        "name": "ProofTell staging",
+        "tagline": "",
+        "companyName": "",
+        "contact": {
+          "name": "",
+          "email": ""
+        },
+        "website": "",
+        "category": "",
+        "subcategory": [],
+        "businessNiche": [],
+        "logoUrl": ""
+      },
+      "listing": {
+        "private": true,
+        "userTypes": [
+          "Location"
+        ],
+        "isWhiteLabelFriendly": false,
+        "isAgencyBulkInstallEnabled": true,
+        "searchKeywords": []
+      },
+      "profiles": {
+        "agency": {
+          "description": "",
+          "previewImageUrls": [],
+          "previewVideoUrl": ""
+        },
+        "subAccount": {
+          "enabled": false,
+          "description": "",
+          "previewImageUrls": [],
+          "previewVideoUrl": ""
+        }
+      },
+      "oauth": {
+        "allowedScopes": [
+          "contacts.readonly",
+          "contacts.write",
+          "locations.readonly",
+          "locations/customFields.readonly",
+          "locations/customFields.write",
+          "workflows.readonly"
+        ],
+        "redirectUris": [
+          "https://app.prooftell.dev/integrations/sub-account/callback",
+          "http://localhost:5173/integrations/sub-account/callback"
+        ],
+        "defaults": {
+          "clientKey": null,
+          "redirectUrl": null
+        },
+        "clientKeys": [
+          {
+            "id": "6aede33f959132de0efc66b5-mw52hlig",
+            "name": "prooftell-staging",
+            "isDefault": false
+          }
+        ]
+      },
+      "supportConfig": {
+        "supportEmail": "",
+        "supportPhone": "",
+        "websiteUrl": "",
+        "documentationUrl": "",
+        "termsAndConditionsUrl": "",
+        "privacyPolicyUrl": "",
+        "supportedServices": []
+      },
+      "billing": {
+        "billingType": "free",
+        "isPaidApp": false,
+        "isFreemium": false,
+        "externalBilling": false,
+        "externalBillingUrl": "",
+        "hasFreeTrial": false,
+        "freeTrialDuration": null,
+        "hasUsageBasedPrice": false,
+        "paymentType": "",
+        "oneTimePrice": null,
+        "additionalInfoForBilling": ""
+      },
+      "review": {
+        "endToEndDemoUrl": "",
+        "scopesDemoUrl": "",
+        "additionalDetails": "",
+        "privateReason": ""
+      }
+    },
+    "webhooks": {
+      "schemaVersion": 1,
+      "appId": "6aede33f959132de0efc66b5",
+      "versionId": "6aede33f959132de0efc66b5",
+      "webhookUrl": "https://api.prooftell.dev/integrations/sub-account/events",
+      "subscribedEvents": []
+    }
+  }
+}

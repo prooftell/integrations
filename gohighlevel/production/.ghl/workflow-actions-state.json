@@ -1,0 +1,483 @@
+{
+  "schemaVersion": 1,
+  "appId": "6aedd79314f3ff12d05de224",
+  "baseline": {
+    "schemaVersion": 1,
+    "appId": "6aedd79314f3ff12d05de224",
+    "actions": [
+      {
+        "templateId": "01M6RM73FG4DV41G0D15DYBDBX",
+        "key": "prooftell_email_verification",
+        "versions": [
+          {
+            "version": "1.0",
+            "status": "draft",
+            "info": {
+              "name": "Verify an email address",
+              "description": "Deliverable or not, disposable, catch-all, a misspelt domain.",
+              "summary": "Deliverable or not, disposable, catch-all, a misspelt domain. Charged per check from your ProofTell balance; the sandbox is free.",
+              "groupName": "ProofTell",
+              "keywords": [
+                "ProofTell",
+                "verify",
+                "validation"
+              ]
+            },
+            "inputs": [
+              {
+                "field": "email",
+                "title": "Email address",
+                "required": true,
+                "fieldType": "string",
+                "helpText": "The address to verify.",
+                "value": "{{contact.email}}",
+                "allowCustomInputPicker": true
+              }
+            ],
+            "customVars": [
+              {
+                "name": "Result",
+                "reference": "result",
+                "fieldType": "string"
+              },
+              {
+                "name": "Deliverable",
+                "reference": "deliverable",
+                "fieldType": "string"
+              },
+              {
+                "name": "Verdict",
+                "reference": "verdict",
+                "fieldType": "string"
+              },
+              {
+                "name": "Reason",
+                "reference": "reason",
+                "fieldType": "string"
+              },
+              {
+                "name": "Did you mean",
+                "reference": "did_you_mean",
+                "fieldType": "string"
+              },
+              {
+                "name": "Cost (USD)",
+                "reference": "cost",
+                "fieldType": "string"
+              },
+              {
+                "name": "ProofTell error code",
+                "reference": "prooftell_error",
+                "fieldType": "string"
+              }
+            ],
+            "customVarsJson": {
+              "result": "deliverable",
+              "deliverable": "true",
+              "verdict": "deliverable",
+              "reason": "mailbox_exists",
+              "did_you_mean": "",
+              "cost": "0.004000",
+              "prooftell_error": ""
+            },
+            "executionConfig": {
+              "type": "API",
+              "url": "https://api.prooftell.com/integrations/sub-account/actions/email",
+              "method": "POST",
+              "headers": {
+                "X-ProofTell-Action-Secret": "${remote}"
+              }
+            },
+            "payloadCustomizationType": "default",
+            "customizedPayload": {},
+            "branchesConfig": {}
+          }
+        ]
+      },
+      {
+        "templateId": "01M6RM73X4M703876X9YN2MD62",
+        "key": "prooftell_ip_lookup",
+        "versions": [
+          {
+            "version": "1.0",
+            "status": "draft",
+            "info": {
+              "name": "Look up an IP address",
+              "description": "Its country and city, its network, and whether it is Tor, a VPN or a data centre.",
+              "summary": "Its country and city, its network, and whether it is Tor, a VPN or a data centre. Charged per check from your ProofTell balance; the sandbox is free.",
+              "groupName": "ProofTell",
+              "keywords": [
+                "ProofTell",
+                "verify",
+                "validation"
+              ]
+            },
+            "inputs": [
+              {
+                "field": "ip",
+                "title": "IP address",
+                "required": true,
+                "fieldType": "string",
+                "helpText": "An IPv4 or IPv6 address.",
+                "allowCustomInputPicker": true
+              }
+            ],
+            "customVars": [
+              {
+                "name": "Country code",
+                "reference": "country_code",
+                "fieldType": "string"
+              },
+              {
+                "name": "City",
+                "reference": "city",
+                "fieldType": "string"
+              },
+              {
+                "name": "Network number (ASN)",
+                "reference": "asn",
+                "fieldType": "numerical"
+              },
+              {
+                "name": "Network",
+                "reference": "as_org",
+                "fieldType": "string"
+              },
+              {
+                "name": "Tor",
+                "reference": "is_tor",
+                "fieldType": "string"
+              },
+              {
+                "name": "VPN",
+                "reference": "is_vpn",
+                "fieldType": "string"
+              },
+              {
+                "name": "Data centre",
+                "reference": "is_datacenter",
+                "fieldType": "string"
+              },
+              {
+                "name": "Anonymous",
+                "reference": "is_anonymous",
+                "fieldType": "string"
+              },
+              {
+                "name": "Cost (USD)",
+                "reference": "cost",
+                "fieldType": "string"
+              },
+              {
+                "name": "ProofTell error code",
+                "reference": "prooftell_error",
+                "fieldType": "string"
+              }
+            ],
+            "customVarsJson": {
+              "country_code": "GB",
+              "city": "London",
+              "asn": 15169,
+              "as_org": "GOOGLE",
+              "is_tor": "false",
+              "is_vpn": "false",
+              "is_datacenter": "true",
+              "is_anonymous": "false",
+              "cost": "0.000000",
+              "prooftell_error": ""
+            },
+            "executionConfig": {
+              "type": "API",
+              "url": "https://api.prooftell.com/integrations/sub-account/actions/ip",
+              "method": "POST",
+              "headers": {
+                "X-ProofTell-Action-Secret": "${remote}"
+              }
+            },
+            "payloadCustomizationType": "default",
+            "customizedPayload": {},
+            "branchesConfig": {}
+          }
+        ]
+      },
+      {
+        "templateId": "01M6RM74CM5K1ZT6P2PRS5JTP6",
+        "key": "prooftell_phone_lookup",
+        "versions": [
+          {
+            "version": "1.0",
+            "status": "draft",
+            "info": {
+              "name": "Look up a phone number",
+              "description": "Valid or not, the line type and country; above it, the current carrier, whether the line is live, or a fraud score.",
+              "summary": "Valid or not, the line type and country; above it, the current carrier, whether the line is live, or a fraud score. Charged per check from your ProofTell balance; the sandbox is free.",
+              "groupName": "ProofTell",
+              "keywords": [
+                "ProofTell",
+                "verify",
+                "validation"
+              ]
+            },
+            "inputs": [
+              {
+                "field": "phone",
+                "title": "Phone number",
+                "required": true,
+                "fieldType": "string",
+                "helpText": "In international format (+44 7700 900123), or national with the country.",
+                "value": "{{contact.phone}}",
+                "allowCustomInputPicker": true
+              },
+              {
+                "field": "country",
+                "title": "Country",
+                "required": false,
+                "fieldType": "string",
+                "helpText": "The two-letter code (GB, US) of a number in national format.",
+                "allowCustomInputPicker": true
+              },
+              {
+                "field": "level",
+                "title": "Level",
+                "required": false,
+                "fieldType": "select",
+                "helpText": "How deep the check goes: Line type when left empty.",
+                "options": [
+                  {
+                    "label": "Basic",
+                    "value": "basic"
+                  },
+                  {
+                    "label": "Line type",
+                    "value": "line_type"
+                  },
+                  {
+                    "label": "Current carrier",
+                    "value": "current_carrier"
+                  },
+                  {
+                    "label": "Line status",
+                    "value": "line_status"
+                  },
+                  {
+                    "label": "Fraud score",
+                    "value": "fraud_score"
+                  }
+                ]
+              }
+            ],
+            "customVars": [
+              {
+                "name": "Valid",
+                "reference": "valid",
+                "fieldType": "string"
+              },
+              {
+                "name": "Number in E.164",
+                "reference": "e164",
+                "fieldType": "string"
+              },
+              {
+                "name": "Line type",
+                "reference": "line_type",
+                "fieldType": "string"
+              },
+              {
+                "name": "Country code",
+                "reference": "country_code",
+                "fieldType": "string"
+              },
+              {
+                "name": "Original carrier",
+                "reference": "original_carrier",
+                "fieldType": "string"
+              },
+              {
+                "name": "Why not valid",
+                "reference": "reason",
+                "fieldType": "string"
+              },
+              {
+                "name": "Current carrier",
+                "reference": "current_carrier",
+                "fieldType": "string"
+              },
+              {
+                "name": "Ported",
+                "reference": "ported",
+                "fieldType": "string"
+              },
+              {
+                "name": "Reachable",
+                "reference": "reachable",
+                "fieldType": "string"
+              },
+              {
+                "name": "Fraud score",
+                "reference": "fraud_score",
+                "fieldType": "numerical"
+              },
+              {
+                "name": "Risk level",
+                "reference": "risk_level",
+                "fieldType": "string"
+              },
+              {
+                "name": "Cost (USD)",
+                "reference": "cost",
+                "fieldType": "string"
+              },
+              {
+                "name": "ProofTell error code",
+                "reference": "prooftell_error",
+                "fieldType": "string"
+              }
+            ],
+            "customVarsJson": {
+              "valid": "true",
+              "e164": "+447700900123",
+              "line_type": "mobile",
+              "country_code": "GB",
+              "original_carrier": "EE",
+              "reason": "",
+              "current_carrier": "EE",
+              "ported": "false",
+              "reachable": "true",
+              "fraud_score": 12,
+              "risk_level": "low",
+              "cost": "0.002500",
+              "prooftell_error": ""
+            },
+            "executionConfig": {
+              "type": "API",
+              "url": "https://api.prooftell.com/integrations/sub-account/actions/phone",
+              "method": "POST",
+              "headers": {
+                "X-ProofTell-Action-Secret": "${remote}"
+              }
+            },
+            "payloadCustomizationType": "default",
+            "customizedPayload": {},
+            "branchesConfig": {}
+          }
+        ]
+      },
+      {
+        "templateId": "01M6RM756T89ZCGWV4GE9KD3QH",
+        "key": "prooftell_risk_assessment",
+        "versions": [
+          {
+            "version": "1.0",
+            "status": "draft",
+            "info": {
+              "name": "Assess the risk of an identity",
+              "description": "A phone number, an email address and an IP address scored together: 0 to 100, a verdict (allow, review, deny) and its reasons.",
+              "summary": "A phone number, an email address and an IP address scored together: 0 to 100, a verdict (allow, review, deny) and its reasons. Charged per check from your ProofTell balance; the sandbox is free.",
+              "groupName": "ProofTell",
+              "keywords": [
+                "ProofTell",
+                "verify",
+                "validation"
+              ]
+            },
+            "inputs": [
+              {
+                "field": "phone",
+                "title": "Phone number",
+                "required": false,
+                "fieldType": "string",
+                "helpText": "Give at least one of the phone number, the email address and the IP address.",
+                "value": "{{contact.phone}}",
+                "allowCustomInputPicker": true
+              },
+              {
+                "field": "email",
+                "title": "Email address",
+                "required": false,
+                "fieldType": "string",
+                "helpText": "",
+                "value": "{{contact.email}}",
+                "allowCustomInputPicker": true
+              },
+              {
+                "field": "ip",
+                "title": "IP address",
+                "required": false,
+                "fieldType": "string",
+                "helpText": "",
+                "allowCustomInputPicker": true
+              },
+              {
+                "field": "country",
+                "title": "Country",
+                "required": false,
+                "fieldType": "string",
+                "helpText": "The two-letter code of a phone number in national format.",
+                "allowCustomInputPicker": true
+              },
+              {
+                "field": "reference",
+                "title": "Reference",
+                "required": false,
+                "fieldType": "string",
+                "helpText": "Your own id for this assessment, shown in the ProofTell dashboard.",
+                "allowCustomInputPicker": true
+              }
+            ],
+            "customVars": [
+              {
+                "name": "Score",
+                "reference": "score",
+                "fieldType": "numerical"
+              },
+              {
+                "name": "Verdict",
+                "reference": "verdict",
+                "fieldType": "string"
+              },
+              {
+                "name": "Reasons",
+                "reference": "reasons",
+                "fieldType": "string"
+              },
+              {
+                "name": "Assessment id",
+                "reference": "assessment_id",
+                "fieldType": "string"
+              },
+              {
+                "name": "Cost (USD)",
+                "reference": "cost",
+                "fieldType": "string"
+              },
+              {
+                "name": "ProofTell error code",
+                "reference": "prooftell_error",
+                "fieldType": "string"
+              }
+            ],
+            "customVarsJson": {
+              "score": 35,
+              "verdict": "review",
+              "reasons": "email_disposable",
+              "assessment_id": "asm_k3m9q2x7a8b4c5d6",
+              "cost": "0.006500",
+              "prooftell_error": ""
+            },
+            "executionConfig": {
+              "type": "API",
+              "url": "https://api.prooftell.com/integrations/sub-account/actions/assess",
+              "method": "POST",
+              "headers": {
+                "X-ProofTell-Action-Secret": "${remote}"
+              }
+            },
+            "payloadCustomizationType": "default",
+            "customizedPayload": {},
+            "branchesConfig": {}
+          }
+        ]
+      }
+    ]
+  }
+}

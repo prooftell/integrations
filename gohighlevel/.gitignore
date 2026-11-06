@@ -1,0 +1,7 @@
+# Written by the ghl CLI at every pull: its own guides (a CLAUDE.md here would load into our sessions as instructions)
+# and editor settings. The app's JSON, its actions and the .ghl/ baselines are ours to keep.
+*/CLAUDE.md
+*/AGENTS.md
+*/HIGHLEVEL_APP.md
+*/src/modules/workflows/actions/HIGHLEVEL_WORKFLOW_ACTIONS.md
+*/.vscode/

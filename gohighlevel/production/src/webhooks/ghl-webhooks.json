@@ -1,0 +1,8 @@
+{
+  "$schema": "../../.ghl/schemas/ghl-webhooks.schema.json",
+  "schemaVersion": 1,
+  "appId": "6aedd79314f3ff12d05de224",
+  "versionId": "6aedd79314f3ff12d05de224",
+  "webhookUrl": "https://api.prooftell.com/integrations/sub-account/events",
+  "subscribedEvents": []
+}

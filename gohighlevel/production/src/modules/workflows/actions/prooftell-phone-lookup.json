@@ -1,0 +1,164 @@
+{
+  "$schema": "../../../../.ghl/schemas/ghl-workflow-action.schema.json",
+  "schemaVersion": 1,
+  "key": "prooftell_phone_lookup",
+  "templateId": "01M6RM74CM5K1ZT6P2PRS5JTP6",
+  "versions": [
+    {
+      "version": "1.0",
+      "status": "draft",
+      "info": {
+        "name": "Look up a phone number",
+        "description": "Valid or not, the line type and country; above it, the current carrier, whether the line is live, or a fraud score.",
+        "summary": "Valid or not, the line type and country; above it, the current carrier, whether the line is live, or a fraud score. Charged per check from your ProofTell balance; the sandbox is free.",
+        "groupName": "ProofTell",
+        "keywords": [
+          "ProofTell",
+          "verify",
+          "validation"
+        ]
+      },
+      "inputs": [
+        {
+          "field": "phone",
+          "title": "Phone number",
+          "required": true,
+          "fieldType": "string",
+          "helpText": "In international format (+44 7700 900123), or national with the country.",
+          "value": "{{contact.phone}}",
+          "allowCustomInputPicker": true
+        },
+        {
+          "field": "country",
+          "title": "Country",
+          "required": false,
+          "fieldType": "string",
+          "helpText": "The two-letter code (GB, US) of a number in national format.",
+          "allowCustomInputPicker": true
+        },
+        {
+          "field": "level",
+          "title": "Level",
+          "required": false,
+          "fieldType": "select",
+          "helpText": "How deep the check goes: Line type when left empty.",
+          "options": [
+            {
+              "label": "Basic",
+              "value": "basic"
+            },
+            {
+              "label": "Line type",
+              "value": "line_type"
+            },
+            {
+              "label": "Current carrier",
+              "value": "current_carrier"
+            },
+            {
+              "label": "Line status",
+              "value": "line_status"
+            },
+            {
+              "label": "Fraud score",
+              "value": "fraud_score"
+            }
+          ]
+        }
+      ],
+      "customVars": [
+        {
+          "name": "Valid",
+          "reference": "valid",
+          "fieldType": "string"
+        },
+        {
+          "name": "Number in E.164",
+          "reference": "e164",
+          "fieldType": "string"
+        },
+        {
+          "name": "Line type",
+          "reference": "line_type",
+          "fieldType": "string"
+        },
+        {
+          "name": "Country code",
+          "reference": "country_code",
+          "fieldType": "string"
+        },
+        {
+          "name": "Original carrier",
+          "reference": "original_carrier",
+          "fieldType": "string"
+        },
+        {
+          "name": "Why not valid",
+          "reference": "reason",
+          "fieldType": "string"
+        },
+        {
+          "name": "Current carrier",
+          "reference": "current_carrier",
+          "fieldType": "string"
+        },
+        {
+          "name": "Ported",
+          "reference": "ported",
+          "fieldType": "string"
+        },
+        {
+          "name": "Reachable",
+          "reference": "reachable",
+          "fieldType": "string"
+        },
+        {
+          "name": "Fraud score",
+          "reference": "fraud_score",
+          "fieldType": "numerical"
+        },
+        {
+          "name": "Risk level",
+          "reference": "risk_level",
+          "fieldType": "string"
+        },
+        {
+          "name": "Cost (USD)",
+          "reference": "cost",
+          "fieldType": "string"
+        },
+        {
+          "name": "ProofTell error code",
+          "reference": "prooftell_error",
+          "fieldType": "string"
+        }
+      ],
+      "customVarsJson": {
+        "valid": "true",
+        "e164": "+447700900123",
+        "line_type": "mobile",
+        "country_code": "GB",
+        "original_carrier": "EE",
+        "reason": "",
+        "current_carrier": "EE",
+        "ported": "false",
+        "reachable": "true",
+        "fraud_score": 12,
+        "risk_level": "low",
+        "cost": "0.002500",
+        "prooftell_error": ""
+      },
+      "executionConfig": {
+        "type": "API",
+        "url": "https://api.prooftell.com/integrations/sub-account/actions/phone",
+        "method": "POST",
+        "headers": {
+          "X-ProofTell-Action-Secret": "${remote}"
+        }
+      },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {}
+    }
+  ]
+}

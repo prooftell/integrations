@@ -1,0 +1,108 @@
+{
+  "$schema": "../../../../.ghl/schemas/ghl-workflow-action.schema.json",
+  "schemaVersion": 1,
+  "key": "prooftell_ip",
+  "templateId": "01M6RM68JE9KKKRYNX2DJJWRX6",
+  "versions": [
+    {
+      "version": "1.0",
+      "status": "draft",
+      "info": {
+        "name": "Look up an IP address",
+        "description": "Its country and city, its network, and whether it is Tor, a VPN or a data centre.",
+        "summary": "Its country and city, its network, and whether it is Tor, a VPN or a data centre. Charged per check from your ProofTell balance; the sandbox is free.",
+        "groupName": "ProofTell",
+        "keywords": [
+          "ProofTell",
+          "verify",
+          "validation"
+        ]
+      },
+      "inputs": [
+        {
+          "field": "ip",
+          "title": "IP address",
+          "required": true,
+          "fieldType": "string",
+          "helpText": "An IPv4 or IPv6 address.",
+          "allowCustomInputPicker": true
+        }
+      ],
+      "customVars": [
+        {
+          "name": "Country code",
+          "reference": "country_code",
+          "fieldType": "string"
+        },
+        {
+          "name": "City",
+          "reference": "city",
+          "fieldType": "string"
+        },
+        {
+          "name": "Network number (ASN)",
+          "reference": "asn",
+          "fieldType": "numerical"
+        },
+        {
+          "name": "Network",
+          "reference": "as_org",
+          "fieldType": "string"
+        },
+        {
+          "name": "Tor",
+          "reference": "is_tor",
+          "fieldType": "string"
+        },
+        {
+          "name": "VPN",
+          "reference": "is_vpn",
+          "fieldType": "string"
+        },
+        {
+          "name": "Data centre",
+          "reference": "is_datacenter",
+          "fieldType": "string"
+        },
+        {
+          "name": "Anonymous",
+          "reference": "is_anonymous",
+          "fieldType": "string"
+        },
+        {
+          "name": "Cost (USD)",
+          "reference": "cost",
+          "fieldType": "string"
+        },
+        {
+          "name": "ProofTell error code",
+          "reference": "prooftell_error",
+          "fieldType": "string"
+        }
+      ],
+      "customVarsJson": {
+        "country_code": "GB",
+        "city": "London",
+        "asn": 15169,
+        "as_org": "GOOGLE",
+        "is_tor": "false",
+        "is_vpn": "false",
+        "is_datacenter": "true",
+        "is_anonymous": "false",
+        "cost": "0.000000",
+        "prooftell_error": ""
+      },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {},
+      "executionConfig": {
+        "type": "API",
+        "url": "https://api.prooftell.dev/integrations/sub-account/actions/ip",
+        "method": "POST",
+        "headers": {
+          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
+        }
+      }
+    }
+  ]
+}

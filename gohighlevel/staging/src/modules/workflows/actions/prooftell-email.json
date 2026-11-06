@@ -1,0 +1,91 @@
+{
+  "$schema": "../../../../.ghl/schemas/ghl-workflow-action.schema.json",
+  "schemaVersion": 1,
+  "key": "prooftell_email",
+  "templateId": "01M6RM683QMM1NH02K0N931W0C",
+  "versions": [
+    {
+      "version": "1.0",
+      "status": "draft",
+      "info": {
+        "name": "Verify an email address",
+        "description": "Deliverable or not, disposable, catch-all, a misspelt domain.",
+        "summary": "Deliverable or not, disposable, catch-all, a misspelt domain. Charged per check from your ProofTell balance; the sandbox is free.",
+        "groupName": "ProofTell",
+        "keywords": [
+          "ProofTell",
+          "verify",
+          "validation"
+        ]
+      },
+      "inputs": [
+        {
+          "field": "email",
+          "title": "Email address",
+          "required": true,
+          "fieldType": "string",
+          "helpText": "The address to verify.",
+          "allowCustomInputPicker": true,
+          "value": "{{contact.email}}"
+        }
+      ],
+      "customVars": [
+        {
+          "name": "Result",
+          "reference": "result",
+          "fieldType": "string"
+        },
+        {
+          "name": "Deliverable",
+          "reference": "deliverable",
+          "fieldType": "string"
+        },
+        {
+          "name": "Verdict",
+          "reference": "verdict",
+          "fieldType": "string"
+        },
+        {
+          "name": "Reason",
+          "reference": "reason",
+          "fieldType": "string"
+        },
+        {
+          "name": "Did you mean",
+          "reference": "did_you_mean",
+          "fieldType": "string"
+        },
+        {
+          "name": "Cost (USD)",
+          "reference": "cost",
+          "fieldType": "string"
+        },
+        {
+          "name": "ProofTell error code",
+          "reference": "prooftell_error",
+          "fieldType": "string"
+        }
+      ],
+      "customVarsJson": {
+        "result": "deliverable",
+        "deliverable": "true",
+        "verdict": "deliverable",
+        "reason": "mailbox_exists",
+        "did_you_mean": "",
+        "cost": "0.004000",
+        "prooftell_error": ""
+      },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {},
+      "executionConfig": {
+        "type": "API",
+        "url": "https://api.prooftell.dev/integrations/sub-account/actions/email",
+        "method": "POST",
+        "headers": {
+          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
+        }
+      }
+    }
+  ]
+}

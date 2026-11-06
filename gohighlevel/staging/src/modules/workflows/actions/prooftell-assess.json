@@ -1,0 +1,118 @@
+{
+  "$schema": "../../../../.ghl/schemas/ghl-workflow-action.schema.json",
+  "schemaVersion": 1,
+  "key": "prooftell_assess",
+  "templateId": "01M6RM67MWASXG2X80EGCWHBGC",
+  "versions": [
+    {
+      "version": "1.0",
+      "status": "draft",
+      "info": {
+        "name": "Assess the risk of an identity",
+        "description": "A phone number, an email address and an IP address scored together: 0 to 100, a verdict (allow, review, deny) and its reasons.",
+        "summary": "A phone number, an email address and an IP address scored together: 0 to 100, a verdict (allow, review, deny) and its reasons. Charged per check from your ProofTell balance; the sandbox is free.",
+        "groupName": "ProofTell",
+        "keywords": [
+          "ProofTell",
+          "verify",
+          "validation"
+        ]
+      },
+      "inputs": [
+        {
+          "field": "phone",
+          "title": "Phone number",
+          "required": false,
+          "fieldType": "string",
+          "helpText": "Give at least one of the phone number, the email address and the IP address.",
+          "allowCustomInputPicker": true,
+          "value": "{{contact.phone}}"
+        },
+        {
+          "field": "email",
+          "title": "Email address",
+          "required": false,
+          "fieldType": "string",
+          "helpText": "",
+          "allowCustomInputPicker": true,
+          "value": "{{contact.email}}"
+        },
+        {
+          "field": "ip",
+          "title": "IP address",
+          "required": false,
+          "fieldType": "string",
+          "helpText": "",
+          "allowCustomInputPicker": true
+        },
+        {
+          "field": "country",
+          "title": "Country",
+          "required": false,
+          "fieldType": "string",
+          "helpText": "The two-letter code of a phone number in national format.",
+          "allowCustomInputPicker": true
+        },
+        {
+          "field": "reference",
+          "title": "Reference",
+          "required": false,
+          "fieldType": "string",
+          "helpText": "Your own id for this assessment, shown in the ProofTell dashboard.",
+          "allowCustomInputPicker": true
+        }
+      ],
+      "customVars": [
+        {
+          "name": "Score",
+          "reference": "score",
+          "fieldType": "numerical"
+        },
+        {
+          "name": "Verdict",
+          "reference": "verdict",
+          "fieldType": "string"
+        },
+        {
+          "name": "Reasons",
+          "reference": "reasons",
+          "fieldType": "string"
+        },
+        {
+          "name": "Assessment id",
+          "reference": "assessment_id",
+          "fieldType": "string"
+        },
+        {
+          "name": "Cost (USD)",
+          "reference": "cost",
+          "fieldType": "string"
+        },
+        {
+          "name": "ProofTell error code",
+          "reference": "prooftell_error",
+          "fieldType": "string"
+        }
+      ],
+      "customVarsJson": {
+        "score": 35,
+        "verdict": "review",
+        "reasons": "email_disposable",
+        "assessment_id": "asm_k3m9q2x7a8b4c5d6",
+        "cost": "0.006500",
+        "prooftell_error": ""
+      },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {},
+      "executionConfig": {
+        "type": "API",
+        "url": "https://api.prooftell.dev/integrations/sub-account/actions/assess",
+        "method": "POST",
+        "headers": {
+          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
+        }
+      }
+    }
+  ]
+}
