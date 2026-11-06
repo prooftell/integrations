@@ -28,8 +28,9 @@ actions. The backend is the api's `prooftell.integrations` package; this folder 
 
 ## Commands
 
-The CLI logs in through a browser and a loopback port: from forge the approval's redirect is pasted back by hand (the
-plan's §0 has the way). Then, in a workspace:
+The CLI logs in through a browser and a loopback port on the machine it runs on: from forge, `node scripts/login.mjs`
+prints the approval link and waits an hour; the approver pastes back the failed `http://127.0.0.1:…/callback?…`
+address, and `curl '<address>'` on forge completes the login. Then, in a workspace:
 
 ```sh
 npx -y -p @gohighlevel/marketplace-cli@1.1.0 ghl app pull --force       # refresh from the portal (actions too)
