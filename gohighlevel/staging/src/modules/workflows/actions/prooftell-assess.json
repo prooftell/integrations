@@ -25,8 +25,8 @@
           "required": false,
           "fieldType": "string",
           "helpText": "Give at least one of the phone number, the email address and the IP address.",
-          "value": "{{contact.phone}}",
-          "allowCustomInputPicker": true
+          "allowCustomInputPicker": true,
+          "value": "{{contact.phone}}"
         },
         {
           "field": "email",
@@ -34,8 +34,8 @@
           "required": false,
           "fieldType": "string",
           "helpText": "",
-          "value": "{{contact.email}}",
-          "allowCustomInputPicker": true
+          "allowCustomInputPicker": true,
+          "value": "{{contact.email}}"
         },
         {
           "field": "ip",
@@ -102,17 +102,17 @@
         "cost": "0.006500",
         "prooftell_error": ""
       },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {},
       "executionConfig": {
         "type": "API",
         "url": "https://api.prooftell.dev/integrations/sub-account/actions/assess",
         "method": "POST",
         "headers": {
-          "X-ProofTell-Action-Secret": "${remote}"
+          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
         }
-      },
-      "payloadCustomizationType": "default",
-      "customizedPayload": {},
-      "branchesConfig": {}
+      }
     }
   ]
 }

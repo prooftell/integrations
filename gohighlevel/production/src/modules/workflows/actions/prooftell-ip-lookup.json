@@ -92,17 +92,17 @@
         "cost": "0.000000",
         "prooftell_error": ""
       },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {},
       "executionConfig": {
         "type": "API",
         "url": "https://api.prooftell.com/integrations/sub-account/actions/ip",
         "method": "POST",
         "headers": {
-          "X-ProofTell-Action-Secret": "${remote}"
+          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
         }
-      },
-      "payloadCustomizationType": "default",
-      "customizedPayload": {},
-      "branchesConfig": {}
+      }
     }
   ]
 }

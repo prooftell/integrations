@@ -25,8 +25,8 @@
           "required": true,
           "fieldType": "string",
           "helpText": "In international format (+44 7700 900123), or national with the country.",
-          "value": "{{contact.phone}}",
-          "allowCustomInputPicker": true
+          "allowCustomInputPicker": true,
+          "value": "{{contact.phone}}"
         },
         {
           "field": "country",
@@ -148,17 +148,17 @@
         "cost": "0.002500",
         "prooftell_error": ""
       },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {},
       "executionConfig": {
         "type": "API",
         "url": "https://api.prooftell.dev/integrations/sub-account/actions/phone",
         "method": "POST",
         "headers": {
-          "X-ProofTell-Action-Secret": "${remote}"
+          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
         }
-      },
-      "payloadCustomizationType": "default",
-      "customizedPayload": {},
-      "branchesConfig": {}
+      }
     }
   ]
 }

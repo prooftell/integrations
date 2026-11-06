@@ -8,8 +8,8 @@
       "appId": "6aede33f959132de0efc66b5",
       "versionId": "6aede33f959132de0efc66b5",
       "createdAt": "2026-11-06T14:25:03.767Z",
-      "version": "draft",
-      "status": "draft",
+      "version": "1.0.0",
+      "status": "live",
       "appType": "standard",
       "basicInfo": {
         "name": "ProofTell staging",

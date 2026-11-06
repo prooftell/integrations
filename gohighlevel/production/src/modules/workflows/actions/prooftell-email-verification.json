@@ -25,8 +25,8 @@
           "required": true,
           "fieldType": "string",
           "helpText": "The address to verify.",
-          "value": "{{contact.email}}",
-          "allowCustomInputPicker": true
+          "allowCustomInputPicker": true,
+          "value": "{{contact.email}}"
         }
       ],
       "customVars": [
@@ -75,17 +75,17 @@
         "cost": "0.004000",
         "prooftell_error": ""
       },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {},
       "executionConfig": {
         "type": "API",
         "url": "https://api.prooftell.com/integrations/sub-account/actions/email",
         "method": "POST",
         "headers": {
-          "X-ProofTell-Action-Secret": "${remote}"
+          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
         }
-      },
-      "payloadCustomizationType": "default",
-      "customizedPayload": {},
-      "branchesConfig": {}
+      }
     }
   ]
 }

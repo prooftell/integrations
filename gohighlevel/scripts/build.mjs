@@ -95,7 +95,7 @@ for (const env of ['staging', 'production']) {
       ...(existing?.templateId ? { templateId: existing.templateId } : {}),
       versions: [{
         version: existing?.versions?.[0]?.version ?? '1.0',
-        status: 'draft',
+        status: existing?.versions?.[0]?.status ?? 'draft', // the portal's: a published action changes through a new version
         info: { name: a.name, description: a.description, summary: `${a.description} ${CHARGE}`, groupName: 'ProofTell', keywords: ['ProofTell', 'verify', 'validation'] },
         inputs: a.inputs,
         customVars: [...a.outputs, ...COMMON_OUT],
