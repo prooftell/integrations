@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "api_key": {
+      "type": "string",
+      "description": "Create a key in the ProofTell dashboard (Developers → Integrations), named after this platform. A pt_test_ key is the free sandbox: simulated, deterministic answers. A pt_live_ key spends the account's balance."
+    }
+  },
+  "required": [
+    "api_key"
+  ]
+}
