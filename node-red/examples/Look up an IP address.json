@@ -1,0 +1,119 @@
+[
+  {
+    "id": "tip",
+    "type": "tab",
+    "label": "Look up an IP address",
+    "disabled": false,
+    "info": "A Tor exit. Open the ProofTell connection and paste a sandbox key (pt_test_…), created in the dashboard under Developers → Integrations. Then click the inject node."
+  },
+  {
+    "id": "iip",
+    "type": "inject",
+    "z": "tip",
+    "name": "The sandbox's input",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "203.0.113.66",
+    "payloadType": "str",
+    "x": 160,
+    "y": 100,
+    "wires": [
+      [
+        "pip"
+      ]
+    ]
+  },
+  {
+    "id": "pip",
+    "type": "prooftell",
+    "z": "tip",
+    "name": "",
+    "connection": "c0nf1g0000000001",
+    "action": "ip",
+    "phone": "payload.phone",
+    "phoneType": "msg",
+    "email": "payload.email",
+    "emailType": "msg",
+    "ip": "payload.ip",
+    "ipType": "msg",
+    "country": "",
+    "countryType": "str",
+    "level": "line_type",
+    "timeout": "",
+    "reference": "",
+    "referenceType": "str",
+    "output": "payload",
+    "x": 420,
+    "y": 100,
+    "wires": [
+      [
+        "dip"
+      ]
+    ]
+  },
+  {
+    "id": "dip",
+    "type": "debug",
+    "z": "tip",
+    "name": "The answer",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "kip",
+    "type": "catch",
+    "z": "tip",
+    "name": "A failed check",
+    "scope": [
+      "pip"
+    ],
+    "uncaught": false,
+    "x": 420,
+    "y": 160,
+    "wires": [
+      [
+        "eip"
+      ]
+    ]
+  },
+  {
+    "id": "eip",
+    "type": "debug",
+    "z": "tip",
+    "name": "The error",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "c0nf1g0000000001",
+    "type": "prooftell-config",
+    "name": "ProofTell sandbox",
+    "mode": "sandbox"
+  }
+]

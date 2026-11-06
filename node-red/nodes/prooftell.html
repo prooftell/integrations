@@ -1,0 +1,245 @@
+<!--
+  The editor side of the ProofTell nodes: the connection (`prooftell-config`) and the check (`prooftell`). The action
+  names are the same on every ProofTell connector; the rows shown follow the action. The connection's label says live
+  or sandbox from the key's prefix, read when the key is typed (a saved key never comes back to the editor).
+-->
+<script type="text/javascript">
+  (function () {
+    var ACTIONS = {
+      phone: { label: 'Look up a phone number', rows: ['phone', 'country', 'level'] },
+      email: { label: 'Verify an email address', rows: ['email', 'timeout'] },
+      ip: { label: 'Look up an IP address', rows: ['ip'] },
+      assess: { label: 'Assess the risk of an identity', rows: ['phone', 'email', 'ip', 'country', 'reference'] },
+    }
+    var ROWS = ['phone', 'email', 'ip', 'country', 'level', 'timeout', 'reference']
+    var TYPES = ['msg', 'flow', 'global', 'str', 'env', 'jsonata']
+
+    RED.nodes.registerType('prooftell-config', {
+      category: 'config',
+      defaults: {
+        name: { value: '' },
+        mode: { value: '' },
+      },
+      credentials: {
+        apiKey: { type: 'password', required: true },
+      },
+      label: function () {
+        if (this.name) return this.name
+        return this.mode ? 'ProofTell (' + this.mode + ')' : 'ProofTell'
+      },
+      oneditsave: function () {
+        var key = ($('#node-config-input-apiKey').val() || '').trim()
+        if (key && key !== '__PWRD__') {
+          var mode = key.indexOf('pt_test_') === 0 ? 'sandbox' : key.indexOf('pt_live_') === 0 ? 'live' : ''
+          $('#node-config-input-mode').val(mode)
+        }
+      },
+    })
+
+    RED.nodes.registerType('prooftell', {
+      category: 'network',
+      color: '#d6e2fc',
+      defaults: {
+        name: { value: '' },
+        connection: { value: '', type: 'prooftell-config', required: true },
+        action: { value: 'phone' },
+        phone: { value: 'payload.phone' },
+        phoneType: { value: 'msg' },
+        email: { value: 'payload.email' },
+        emailType: { value: 'msg' },
+        ip: { value: 'payload.ip' },
+        ipType: { value: 'msg' },
+        country: { value: '' },
+        countryType: { value: 'str' },
+        level: { value: 'line_type' },
+        timeout: {
+          value: '',
+          validate: function (v) {
+            return v === '' || v === undefined || (/^\d+$/.test(String(v)) && Number(v) >= 1000 && Number(v) <= 45000)
+          },
+        },
+        reference: { value: '' },
+        referenceType: { value: 'str' },
+        output: { value: 'payload' },
+      },
+      inputs: 1,
+      outputs: 1,
+      icon: 'prooftell.svg',
+      paletteLabel: 'ProofTell',
+      inputLabels: 'what to check',
+      outputLabels: 'the answer',
+      label: function () {
+        return this.name || (ACTIONS[this.action] || ACTIONS.phone).label
+      },
+      labelStyle: function () {
+        return this.name ? 'node_label_italic' : ''
+      },
+      oneditprepare: function () {
+        ;['phone', 'email', 'ip', 'country', 'reference'].forEach(function (field) {
+          $('#node-input-' + field).typedInput({ default: 'msg', types: TYPES, typeField: '#node-input-' + field + 'Type' })
+        })
+        $('#node-input-output').typedInput({ default: 'msg', types: ['msg'] })
+        $('#node-input-action')
+          .on('change', function () {
+            var shown = (ACTIONS[$(this).val()] || ACTIONS.phone).rows
+            ROWS.forEach(function (row) {
+              $('.prooftell-row-' + row).toggle(shown.indexOf(row) !== -1)
+            })
+            $('.prooftell-required').toggle($(this).val() !== 'assess')
+            $('.prooftell-any').toggle($(this).val() === 'assess')
+          })
+          .trigger('change')
+      },
+    })
+  })()
+</script>
+
+<script type="text/html" data-template-name="prooftell-config">
+  <div class="form-row">
+    <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-config-input-name" placeholder="ProofTell (live or sandbox, from the key)" />
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-apiKey"><i class="fa fa-key"></i> API key</label>
+    <input type="password" id="node-config-input-apiKey" placeholder="pt_live_… or pt_test_…" />
+  </div>
+  <input type="hidden" id="node-config-input-mode" />
+  <div class="form-tips">
+    Create a key in the ProofTell dashboard (Developers → Integrations), named after this platform. A
+    <code>pt_test_</code> key is the free sandbox: simulated, deterministic answers. A <code>pt_live_</code> key spends
+    the account's balance.
+  </div>
+</script>
+
+<script type="text/html" data-help-name="prooftell-config">
+  <p>A connection to ProofTell: the API key the checks use.</p>
+  <h3>Details</h3>
+  <p>
+    Create a key in the <a href="https://app.prooftell.com/integrations">ProofTell dashboard</a> (Developers →
+    Integrations), named after this platform. A <code>pt_test_</code> key is the free sandbox: simulated, deterministic
+    answers. A <code>pt_live_</code> key spends the account's balance. The key is kept in Node-RED's credentials, not in
+    the flow, so an exported flow does not carry it.
+  </p>
+</script>
+
+<script type="text/html" data-template-name="prooftell">
+  <div class="form-row">
+    <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
+    <input type="text" id="node-input-connection" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-action"><i class="fa fa-check-square-o"></i> Action</label>
+    <select id="node-input-action" style="width: 70%">
+      <option value="phone">Look up a phone number</option>
+      <option value="email">Verify an email address</option>
+      <option value="ip">Look up an IP address</option>
+      <option value="assess">Assess the risk of an identity</option>
+    </select>
+  </div>
+  <div class="form-row prooftell-row-phone">
+    <label for="node-input-phone"><i class="fa fa-phone"></i> Phone</label>
+    <input type="text" id="node-input-phone" style="width: 70%" />
+    <input type="hidden" id="node-input-phoneType" />
+  </div>
+  <div class="form-row prooftell-row-email">
+    <label for="node-input-email"><i class="fa fa-envelope"></i> Email</label>
+    <input type="text" id="node-input-email" style="width: 70%" />
+    <input type="hidden" id="node-input-emailType" />
+  </div>
+  <div class="form-row prooftell-row-ip">
+    <label for="node-input-ip"><i class="fa fa-globe"></i> IP address</label>
+    <input type="text" id="node-input-ip" style="width: 70%" />
+    <input type="hidden" id="node-input-ipType" />
+  </div>
+  <div class="form-row prooftell-row-country">
+    <label for="node-input-country"><i class="fa fa-flag"></i> Country</label>
+    <input type="text" id="node-input-country" style="width: 70%" placeholder="e.g. GB, for a number in national format" />
+    <input type="hidden" id="node-input-countryType" />
+  </div>
+  <div class="form-row prooftell-row-level">
+    <label for="node-input-level"><i class="fa fa-signal"></i> Level</label>
+    <select id="node-input-level" style="width: 70%">
+      <option value="basic">Basic</option>
+      <option value="line_type">Line type</option>
+      <option value="current_carrier">Current carrier</option>
+      <option value="line_status">Line status</option>
+      <option value="fraud_score">Fraud score</option>
+    </select>
+  </div>
+  <div class="form-row prooftell-row-timeout">
+    <label for="node-input-timeout"><i class="fa fa-clock-o"></i> Timeout (ms)</label>
+    <input type="text" id="node-input-timeout" style="width: 70%" placeholder="1000 to 45000; empty for 45000" />
+  </div>
+  <div class="form-row prooftell-row-reference">
+    <label for="node-input-reference"><i class="fa fa-bookmark"></i> Reference</label>
+    <input type="text" id="node-input-reference" style="width: 70%" placeholder="Your own id, echoed back" />
+    <input type="hidden" id="node-input-referenceType" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-output"><i class="fa fa-sign-out"></i> Answer to</label>
+    <input type="text" id="node-input-output" style="width: 70%" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" />
+  </div>
+  <div class="form-tips">
+    <span class="prooftell-required">A string in <code>msg.payload</code> is the value to check when the field gives none.</span>
+    <span class="prooftell-any">Give at least one of the phone number, the email address and the IP address.</span>
+    Each check is charged per check from your balance; the sandbox is free.
+  </div>
+</script>
+
+<script type="text/html" data-help-name="prooftell">
+  <p>
+    Runs one ProofTell check per message: look up a phone number, verify an email address, look up an IP address, or
+    assess the risk of an identity.
+  </p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">string | object</span></dt>
+    <dd>
+      By default each field reads <code>msg.payload.phone</code>, <code>msg.payload.email</code> or
+      <code>msg.payload.ip</code>; any field can instead hold a fixed value, another message property, a flow or global
+      value, an environment variable or a JSONata expression. For the three single checks a string payload is the value
+      to check when the field gives none.
+    </dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">object</span></dt>
+    <dd>
+      The API's answer, unchanged (or the property set in <i>Answer to</i>). A phone number: <code>valid</code>,
+      <code>line_type</code>, <code>e164</code>, the formats, <code>country_code</code>, the level's block. An email
+      address: <code>verdict</code> (deliverable, undeliverable, risky, unknown), <code>reason</code>,
+      <code>did_you_mean</code>. An IP address: <code>is_tor</code>, <code>is_vpn</code>, <code>is_datacenter</code>,
+      <code>country_code</code>, <code>asn</code>. An assessment: <code>score</code> (0–100), <code>verdict</code>
+      (allow, review, deny), <code>reasons</code>, each signal's result. Every answer has its <code>cost</code>.
+    </dd>
+  </dl>
+
+  <h3>Details</h3>
+  <p>
+    The phone level is a ladder, each level including the ones before it and priced on its own: Basic, Line type (the
+    default), Current carrier, Line status, Fraud score. What is not offered for a number comes back as unavailable, at
+    no cost. The email timeout is how long the mail server may take, 1000 to 45000 ms; past it the address comes back
+    unknown, free. Each check is charged per check from your balance; the sandbox is free.
+  </p>
+  <p>
+    A failed check stops the message and reports the API's own message as the node's error, which a Catch node
+    receives with <code>msg.statusCode</code> set: 401 for a wrong key, 402 when the balance cannot cover the check (the
+    message names the amounts), 429 above the key's rate, 503 when a source did not answer.
+  </p>
+  <p>
+    The sandbox's inputs: <code>+447700900123</code> is a GB mobile, <code>jane@example.com</code> is deliverable,
+    <code>203.0.113.1</code> a clean US address and <code>203.0.113.66</code> Tor.
+  </p>
+
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://prooftell.com/docs">The API reference</a>: every field and the sandbox's inputs</li>
+    <li><a href="https://prooftell.com/integrations#node-red">ProofTell for Node-RED</a></li>
+  </ul>
+</script>

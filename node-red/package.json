@@ -1,0 +1,48 @@
+{
+  "name": "@prooftell/node-red-prooftell",
+  "version": "1.0.0",
+  "description": "ProofTell for Node-RED: look up a phone number, verify an email address, look up an IP address, or assess the risk of an identity, with one API key.",
+  "license": "MIT",
+  "homepage": "https://prooftell.com/integrations?utm_source=node-red&utm_medium=integration",
+  "keywords": [
+    "node-red",
+    "prooftell",
+    "phone-validation",
+    "email-verification",
+    "ip-intelligence",
+    "fraud"
+  ],
+  "author": {
+    "name": "ProofTell",
+    "email": "support@prooftell.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prooftell/integrations.git",
+    "directory": "node-red"
+  },
+  "bugs": {
+    "url": "https://github.com/prooftell/integrations/issues",
+    "email": "support@prooftell.com"
+  },
+  "files": [
+    "nodes",
+    "examples"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "node-red": {
+    "version": ">=4.0.0",
+    "nodes": {
+      "prooftell": "nodes/prooftell.js"
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "node-red": "5.0.9",
+    "node-red-node-test-helper": "0.3.6"
+  }
+}

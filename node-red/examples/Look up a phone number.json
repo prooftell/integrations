@@ -1,0 +1,119 @@
+[
+  {
+    "id": "tphone",
+    "type": "tab",
+    "label": "Look up a phone number",
+    "disabled": false,
+    "info": "A GB mobile, at the line type level. Open the ProofTell connection and paste a sandbox key (pt_test_…), created in the dashboard under Developers → Integrations. Then click the inject node."
+  },
+  {
+    "id": "iphone",
+    "type": "inject",
+    "z": "tphone",
+    "name": "The sandbox's input",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "+447700900123",
+    "payloadType": "str",
+    "x": 160,
+    "y": 100,
+    "wires": [
+      [
+        "pphone"
+      ]
+    ]
+  },
+  {
+    "id": "pphone",
+    "type": "prooftell",
+    "z": "tphone",
+    "name": "",
+    "connection": "c0nf1g0000000001",
+    "action": "phone",
+    "phone": "payload.phone",
+    "phoneType": "msg",
+    "email": "payload.email",
+    "emailType": "msg",
+    "ip": "payload.ip",
+    "ipType": "msg",
+    "country": "",
+    "countryType": "str",
+    "level": "line_type",
+    "timeout": "",
+    "reference": "",
+    "referenceType": "str",
+    "output": "payload",
+    "x": 420,
+    "y": 100,
+    "wires": [
+      [
+        "dphone"
+      ]
+    ]
+  },
+  {
+    "id": "dphone",
+    "type": "debug",
+    "z": "tphone",
+    "name": "The answer",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "kphone",
+    "type": "catch",
+    "z": "tphone",
+    "name": "A failed check",
+    "scope": [
+      "pphone"
+    ],
+    "uncaught": false,
+    "x": 420,
+    "y": 160,
+    "wires": [
+      [
+        "ephone"
+      ]
+    ]
+  },
+  {
+    "id": "ephone",
+    "type": "debug",
+    "z": "tphone",
+    "name": "The error",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "c0nf1g0000000001",
+    "type": "prooftell-config",
+    "name": "ProofTell sandbox",
+    "mode": "sandbox"
+  }
+]

@@ -1,0 +1,119 @@
+[
+  {
+    "id": "temail",
+    "type": "tab",
+    "label": "Verify an email address",
+    "disabled": false,
+    "info": "A deliverable address. Open the ProofTell connection and paste a sandbox key (pt_test_…), created in the dashboard under Developers → Integrations. Then click the inject node."
+  },
+  {
+    "id": "iemail",
+    "type": "inject",
+    "z": "temail",
+    "name": "The sandbox's input",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "jane@example.com",
+    "payloadType": "str",
+    "x": 160,
+    "y": 100,
+    "wires": [
+      [
+        "pemail"
+      ]
+    ]
+  },
+  {
+    "id": "pemail",
+    "type": "prooftell",
+    "z": "temail",
+    "name": "",
+    "connection": "c0nf1g0000000001",
+    "action": "email",
+    "phone": "payload.phone",
+    "phoneType": "msg",
+    "email": "payload.email",
+    "emailType": "msg",
+    "ip": "payload.ip",
+    "ipType": "msg",
+    "country": "",
+    "countryType": "str",
+    "level": "line_type",
+    "timeout": "",
+    "reference": "",
+    "referenceType": "str",
+    "output": "payload",
+    "x": 420,
+    "y": 100,
+    "wires": [
+      [
+        "demail"
+      ]
+    ]
+  },
+  {
+    "id": "demail",
+    "type": "debug",
+    "z": "temail",
+    "name": "The answer",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "kemail",
+    "type": "catch",
+    "z": "temail",
+    "name": "A failed check",
+    "scope": [
+      "pemail"
+    ],
+    "uncaught": false,
+    "x": 420,
+    "y": 160,
+    "wires": [
+      [
+        "eemail"
+      ]
+    ]
+  },
+  {
+    "id": "eemail",
+    "type": "debug",
+    "z": "temail",
+    "name": "The error",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "c0nf1g0000000001",
+    "type": "prooftell-config",
+    "name": "ProofTell sandbox",
+    "mode": "sandbox"
+  }
+]

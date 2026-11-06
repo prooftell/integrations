@@ -1,0 +1,119 @@
+[
+  {
+    "id": "tassess",
+    "type": "tab",
+    "label": "Assess the risk of an identity",
+    "disabled": false,
+    "info": "A GB number with a US address: allow, with a geo_mismatch reason. Open the ProofTell connection and paste a sandbox key (pt_test_…), created in the dashboard under Developers → Integrations. Then click the inject node."
+  },
+  {
+    "id": "iassess",
+    "type": "inject",
+    "z": "tassess",
+    "name": "The sandbox's input",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"phone\":\"+447700900123\",\"ip\":\"203.0.113.1\"}",
+    "payloadType": "json",
+    "x": 160,
+    "y": 100,
+    "wires": [
+      [
+        "passess"
+      ]
+    ]
+  },
+  {
+    "id": "passess",
+    "type": "prooftell",
+    "z": "tassess",
+    "name": "",
+    "connection": "c0nf1g0000000001",
+    "action": "assess",
+    "phone": "payload.phone",
+    "phoneType": "msg",
+    "email": "payload.email",
+    "emailType": "msg",
+    "ip": "payload.ip",
+    "ipType": "msg",
+    "country": "",
+    "countryType": "str",
+    "level": "line_type",
+    "timeout": "",
+    "reference": "",
+    "referenceType": "str",
+    "output": "payload",
+    "x": 420,
+    "y": 100,
+    "wires": [
+      [
+        "dassess"
+      ]
+    ]
+  },
+  {
+    "id": "dassess",
+    "type": "debug",
+    "z": "tassess",
+    "name": "The answer",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "kassess",
+    "type": "catch",
+    "z": "tassess",
+    "name": "A failed check",
+    "scope": [
+      "passess"
+    ],
+    "uncaught": false,
+    "x": 420,
+    "y": 160,
+    "wires": [
+      [
+        "eassess"
+      ]
+    ]
+  },
+  {
+    "id": "eassess",
+    "type": "debug",
+    "z": "tassess",
+    "name": "The error",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "error",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "c0nf1g0000000001",
+    "type": "prooftell-config",
+    "name": "ProofTell sandbox",
+    "mode": "sandbox"
+  }
+]

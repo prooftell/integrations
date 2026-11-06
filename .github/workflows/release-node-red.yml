@@ -1,0 +1,57 @@
+# Publishes @prooftell/node-red-prooftell to npm with provenance when a tag node-red-v<version> is pushed. Plain
+# JavaScript, nothing to build: the tests run (the requests, then the nodes in a Node-RED runtime against a local
+# stand-in for the api), the tag is checked against the version, and the folder is published as it is (`files` names
+# what ships). Authenticates with the repository secret NPM_TOKEN when it is set, and through npm's trusted publishing
+# (GitHub's OIDC token; the publisher registered on npmjs.com for this workflow) when it is not. Needs a public
+# repository. Then the Flow Library picks the version up (node-red/README.md → Releasing).
+name: Release the Node-RED node
+
+on:
+  push:
+    tags:
+      - 'node-red-v*'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    name: Test and publish @prooftell/node-red-prooftell
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: node-red
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: node-red/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: The tag names the package's version
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          test "node-red-v${version}" = "${GITHUB_REF_NAME}" || {
+            echo "The tag ${GITHUB_REF_NAME} does not name package.json's version ${version}"
+            exit 1
+          }
+
+      - name: Publish with provenance
+        # With NPM_TOKEN set, the token goes into the runner's ~/.npmrc; without it nothing is written and npm
+        # falls back to trusted publishing (OIDC). An empty _authToken would break that fallback.
+        run: |
+          if [ -n "${NPM_TOKEN}" ]; then
+            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > "${HOME}/.npmrc"
+          fi
+          npm publish --provenance --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
