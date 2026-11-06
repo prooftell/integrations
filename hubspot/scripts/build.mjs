@@ -42,7 +42,8 @@ const text = (name) => ({ typeDefinition: { name, type: 'string', fieldType: 'te
 const number = (name) => ({ typeDefinition: { name, type: 'number', fieldType: 'number' } })
 const input = (name, required, fromContact = true) => ({
   typeDefinition: { name, type: 'string', fieldType: 'text' },
-  supportedValueTypes: fromContact ? ['OBJECT_PROPERTY', 'STATIC_VALUE'] : ['STATIC_VALUE'],
+  // HubSpot takes one value type per input: the contact's property for what is checked, a typed value otherwise.
+  supportedValueTypes: fromContact ? ['OBJECT_PROPERTY'] : ['STATIC_VALUE'],
   isRequired: required,
 })
 
@@ -61,7 +62,7 @@ const ERRORS = {
   invalid_reference: 'The reference is too long.',
   bad_request: 'Give a phone number, an email address or an IP address.',
 }
-const errorRules = Object.keys(ERRORS).map((code) => ({ labelName: code, conditions: { prooftell_error: code } }))
+const errorRules = Object.keys(ERRORS).map((code) => ({ labelName: code, conditions: { prooftell_error: [code] } }))
 
 const COMMON_OUT_LABELS = { cost: 'Cost (USD)', prooftell_error: 'ProofTell error code' }
 
@@ -74,7 +75,7 @@ const ACTIONS = [
     card: 'Look up a phone number with ProofTell',
     inputs: [
       input('phone', true),
-      input('country', false),
+      input('country', false, false),
       {
         typeDefinition: {
           name: 'level',
@@ -183,7 +184,7 @@ const ACTIONS = [
     description:
       'Scores a phone number, an email address and an IP address together with ProofTell: a score from 0 to 100, a verdict (allow, review, deny) and its reasons. Charged per check from your balance; the sandbox is free.',
     card: 'Assess the risk of an identity with ProofTell',
-    inputs: [input('phone', false), input('email', false), input('ip', false), input('country', false), input('reference', false)],
+    inputs: [input('phone', false), input('email', false), input('ip', false), input('country', false, false), input('reference', false, false)],
     inputLabels: { phone: 'Phone number', email: 'Email address', ip: 'IP address', country: 'Country', reference: 'Reference' },
     inputDescriptions: {
       phone: 'Give at least one of the phone number, the email address and the IP address.',
@@ -203,7 +204,7 @@ function action(a, env) {
       actionUrl: `${env.api}/integrations/hubspot/actions/${a.check}`,
       isPublished: true,
       supportedClients: [{ client: 'WORKFLOWS' }],
-      objectTypes: ['CONTACT'],
+      objectTypes: ['0-1'], // contacts, as HubSpot names an object type
       inputFields: a.inputs,
       outputFields: a.outputs,
       executionRules: errorRules,
@@ -234,6 +235,8 @@ function app(env) {
       logo: '/app/app-logo.png',
       distribution: env.distribution,
       auth: { type: 'oauth', redirectUrls: env.redirectUrls, requiredScopes: SCOPES, optionalScopes: [], conditionallyRequiredScopes: [] },
+      // The app has no card or page in HubSpot: nothing of ours is fetched or framed there.
+      permittedUrls: { fetch: [], iframe: [], img: [] },
       support: {
         supportEmail: 'support@prooftell.com',
         documentationUrl: 'https://prooftell.com/integrations#hubspot',

@@ -10,7 +10,7 @@
       }
     ],
     "objectTypes": [
-      "CONTACT"
+      "0-1"
     ],
     "inputFields": [
       {
@@ -20,8 +20,7 @@
           "fieldType": "text"
         },
         "supportedValueTypes": [
-          "OBJECT_PROPERTY",
-          "STATIC_VALUE"
+          "OBJECT_PROPERTY"
         ],
         "isRequired": true
       }
@@ -102,73 +101,97 @@
       {
         "labelName": "not_connected",
         "conditions": {
-          "prooftell_error": "not_connected"
+          "prooftell_error": [
+            "not_connected"
+          ]
         }
       },
       {
         "labelName": "insufficient_balance",
         "conditions": {
-          "prooftell_error": "insufficient_balance"
+          "prooftell_error": [
+            "insufficient_balance"
+          ]
         }
       },
       {
         "labelName": "organization_suspended",
         "conditions": {
-          "prooftell_error": "organization_suspended"
+          "prooftell_error": [
+            "organization_suspended"
+          ]
         }
       },
       {
         "labelName": "payment_disputed",
         "conditions": {
-          "prooftell_error": "payment_disputed"
+          "prooftell_error": [
+            "payment_disputed"
+          ]
         }
       },
       {
         "labelName": "staging_restricted",
         "conditions": {
-          "prooftell_error": "staging_restricted"
+          "prooftell_error": [
+            "staging_restricted"
+          ]
         }
       },
       {
         "labelName": "invalid_phone",
         "conditions": {
-          "prooftell_error": "invalid_phone"
+          "prooftell_error": [
+            "invalid_phone"
+          ]
         }
       },
       {
         "labelName": "invalid_email",
         "conditions": {
-          "prooftell_error": "invalid_email"
+          "prooftell_error": [
+            "invalid_email"
+          ]
         }
       },
       {
         "labelName": "invalid_ip",
         "conditions": {
-          "prooftell_error": "invalid_ip"
+          "prooftell_error": [
+            "invalid_ip"
+          ]
         }
       },
       {
         "labelName": "invalid_country",
         "conditions": {
-          "prooftell_error": "invalid_country"
+          "prooftell_error": [
+            "invalid_country"
+          ]
         }
       },
       {
         "labelName": "invalid_level",
         "conditions": {
-          "prooftell_error": "invalid_level"
+          "prooftell_error": [
+            "invalid_level"
+          ]
         }
       },
       {
         "labelName": "invalid_reference",
         "conditions": {
-          "prooftell_error": "invalid_reference"
+          "prooftell_error": [
+            "invalid_reference"
+          ]
         }
       },
       {
         "labelName": "bad_request",
         "conditions": {
-          "prooftell_error": "bad_request"
+          "prooftell_error": [
+            "bad_request"
+          ]
         }
       }
     ],

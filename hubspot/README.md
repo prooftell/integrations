@@ -32,12 +32,19 @@ Adil, once (the plan's §7.6 step 1): a HubSpot account for ProofTell on `admin@
 for the CLI (Development → Keys, or `hs account auth`'s link) saved as `hubspot.txt` in `../../keys/` (a date line,
 the key on line 2, the `.gitattributes` entry), and a second HubSpot account to install the staging app into. Then:
 
+The account is 6798532. The CLI takes the key from the environment, so it is never written to a config file:
+
 ```sh
 cd projects/staging       # then projects/production
-npx -y -p @hubspot/cli@8.18.0 hs account auth            # once per machine: the personal access key
-npx -y -p @hubspot/cli@8.18.0 hs project validate        # HubSpot's schemas, fetched with the account
-npx -y -p @hubspot/cli@8.18.0 hs project upload          # builds and deploys the app
+K=$(sed -n 2p ../../../../keys/hubspot.txt)
+HUBSPOT_ACCOUNT_ID=6798532 HUBSPOT_PERSONAL_ACCESS_KEY="$K" npx -y -p @hubspot/cli@8.18.0 hs project validate --use-env
+HUBSPOT_ACCOUNT_ID=6798532 HUBSPOT_PERSONAL_ACCESS_KEY="$K" npx -y -p @hubspot/cli@8.18.0 hs project upload --use-env --force -m "<what changed>"
 ```
+
+HubSpot's own rules, learnt at the first upload: an input takes exactly one value type (`OBJECT_PROPERTY` for what is
+checked, `STATIC_VALUE` for what is typed); an object type is named by its id (`0-1`, contacts); a rule's condition
+is a list of values; `permittedUrls` is required, empty here. The projects are `prooftell-staging` (app 60525952,
+private) and `prooftell` (app 60526039, marketplace).
 
 After the first upload, the app's Auth page shows its client id and secret: the id goes to the service's env
 (`PROOFTELL_HUBSPOT_CLIENT_ID`), the secret into the environment's `integrations` secret

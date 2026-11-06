@@ -23,6 +23,11 @@
       "optionalScopes": [],
       "conditionallyRequiredScopes": []
     },
+    "permittedUrls": {
+      "fetch": [],
+      "iframe": [],
+      "img": []
+    },
     "support": {
       "supportEmail": "support@prooftell.com",
       "documentationUrl": "https://prooftell.com/integrations#hubspot",
