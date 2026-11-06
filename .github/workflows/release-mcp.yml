@@ -1,0 +1,63 @@
+# Publishes @prooftell/mcp to npm with provenance when a tag mcp-v<version> is pushed. Plain JavaScript, nothing to
+# build: the tests run (the SDK's client spawns the server against a local stand-in for the api), the tag is checked
+# against the version in package.json and server.json, and the folder is published as it is (`files` names what
+# ships). Authenticates with the repository secret NPM_TOKEN when it is set, and through npm's trusted publishing
+# (GitHub's OIDC token; the publisher registered on npmjs.com for this workflow) when it is not. Needs a public
+# repository. The MCP Registry follows by hand, once the version is on npm (mcp/README.md → Releasing).
+name: Release the MCP server
+
+on:
+  push:
+    tags:
+      - 'mcp-v*'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    name: Test and publish @prooftell/mcp
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mcp
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: mcp/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: The tag names the version of package.json and server.json
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          test "mcp-v${version}" = "${GITHUB_REF_NAME}" || {
+            echo "The tag ${GITHUB_REF_NAME} does not name package.json's version ${version}"
+            exit 1
+          }
+          node -e "
+            const s = require('./server.json');
+            if (s.version !== '${version}' || s.packages[0].version !== '${version}') {
+              throw new Error('server.json does not name the version ${version}');
+            }
+          "
+
+      - name: Publish with provenance
+        # With NPM_TOKEN set, the token goes into the runner's ~/.npmrc; without it nothing is written and npm
+        # falls back to trusted publishing (OIDC). An empty _authToken would break that fallback.
+        run: |
+          if [ -n "${NPM_TOKEN}" ]; then
+            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > "${HOME}/.npmrc"
+          fi
+          npm publish --provenance --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

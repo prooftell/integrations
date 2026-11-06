@@ -14,6 +14,7 @@ re-published and reviewed: the workspace's `RUNBOOK.md` → Integrations; why: `
 | `make/` | The Make custom app, as files | Make's integrations page (a community app) |
 | `power-platform/` | The Power Platform independent-publisher connector | `microsoft/PowerPlatformConnectors` by PR |
 | `node-red/` | The Node-RED node, an npm package | npm, then Node-RED's Flow Library |
+| `mcp/` | The MCP server, an npm package (stdio) | npm, then the official MCP Registry |
 | `activepieces/` | The Activepieces piece | `activepieces/activepieces` by PR |
 | `postman/` | The Postman collection, generated from the api's OpenAPI | Postman's API Network |
 | `hubspot/` | The HubSpot app, two developer projects (production, staging) generated from one definition: OAuth and four workflow actions on ProofTell's own backend | HubSpot's marketplace |

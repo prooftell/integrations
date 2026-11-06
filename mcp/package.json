@@ -1,0 +1,47 @@
+{
+  "name": "@prooftell/mcp",
+  "version": "1.0.0",
+  "description": "ProofTell's MCP server: phone, email and IP checks and an identity's risk score as tools for Claude, Cursor, VS Code and any MCP client, with one API key.",
+  "license": "MIT",
+  "mcpName": "com.prooftell/mcp",
+  "homepage": "https://prooftell.com/integrations?utm_source=mcp&utm_medium=integration",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "prooftell",
+    "phone-validation",
+    "email-verification",
+    "ip-intelligence",
+    "fraud"
+  ],
+  "author": {
+    "name": "ProofTell",
+    "email": "support@prooftell.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prooftell/integrations.git",
+    "directory": "mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/prooftell/integrations/issues",
+    "email": "support@prooftell.com"
+  },
+  "type": "module",
+  "bin": {
+    "prooftell-mcp": "src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.0.0"
+  }
+}
