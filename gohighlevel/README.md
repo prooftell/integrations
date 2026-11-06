@@ -39,5 +39,8 @@ PROOFTELL_GHL_ACTION_SECRET=$(sed -n 9p ../../../keys/gohighlevel.txt) \
 npx -y -p @gohighlevel/marketplace-cli@1.1.0 ghl app validate --remote  # publish readiness, before `ghl app publish`
 ```
 
-A pull rewrites the action headers' value as `${remote}`: push after `build.mjs`, never the pulled files. Publishing:
-the private staging app goes live with `ghl app publish`; the public app enters the marketplace's review.
+A push or a pull rewrites the action headers' value as `${remote}` (GoHighLevel keeps the secret): push after
+`build.mjs`, which writes the `${env:…}` reference again. **An action shows in a workflow's builder only once published**
+(`ghl app actions publish <key> --notes "…" --force`); staging's four are. To change a published action:
+`ghl app actions new-version <key>`, then `build.mjs`, push, publish. The private staging app is installed by its draft
+version (the api adds `version_id`); the public app enters the marketplace's review with `ghl app publish`.

@@ -6,7 +6,7 @@
   "versions": [
     {
       "version": "1.0",
-      "status": "draft",
+      "status": "published",
       "info": {
         "name": "Verify an email address",
         "description": "Deliverable or not, disposable, catch-all, a misspelt domain.",
@@ -25,8 +25,8 @@
           "required": true,
           "fieldType": "string",
           "helpText": "The address to verify.",
-          "allowCustomInputPicker": true,
-          "value": "{{contact.email}}"
+          "value": "{{contact.email}}",
+          "allowCustomInputPicker": true
         }
       ],
       "customVars": [
@@ -75,17 +75,17 @@
         "cost": "0.004000",
         "prooftell_error": ""
       },
-      "payloadCustomizationType": "default",
-      "customizedPayload": {},
-      "branchesConfig": {},
       "executionConfig": {
         "type": "API",
         "url": "https://api.prooftell.dev/integrations/sub-account/actions/email",
         "method": "POST",
         "headers": {
-          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
+          "X-ProofTell-Action-Secret": "${remote}"
         }
-      }
+      },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {}
     }
   ]
 }

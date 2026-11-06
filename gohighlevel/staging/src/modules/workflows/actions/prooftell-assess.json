@@ -6,7 +6,7 @@
   "versions": [
     {
       "version": "1.0",
-      "status": "draft",
+      "status": "published",
       "info": {
         "name": "Assess the risk of an identity",
         "description": "A phone number, an email address and an IP address scored together: 0 to 100, a verdict (allow, review, deny) and its reasons.",
@@ -25,8 +25,8 @@
           "required": false,
           "fieldType": "string",
           "helpText": "Give at least one of the phone number, the email address and the IP address.",
-          "allowCustomInputPicker": true,
-          "value": "{{contact.phone}}"
+          "value": "{{contact.phone}}",
+          "allowCustomInputPicker": true
         },
         {
           "field": "email",
@@ -34,8 +34,8 @@
           "required": false,
           "fieldType": "string",
           "helpText": "",
-          "allowCustomInputPicker": true,
-          "value": "{{contact.email}}"
+          "value": "{{contact.email}}",
+          "allowCustomInputPicker": true
         },
         {
           "field": "ip",
@@ -102,17 +102,17 @@
         "cost": "0.006500",
         "prooftell_error": ""
       },
-      "payloadCustomizationType": "default",
-      "customizedPayload": {},
-      "branchesConfig": {},
       "executionConfig": {
         "type": "API",
         "url": "https://api.prooftell.dev/integrations/sub-account/actions/assess",
         "method": "POST",
         "headers": {
-          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
+          "X-ProofTell-Action-Secret": "${remote}"
         }
-      }
+      },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {}
     }
   ]
 }

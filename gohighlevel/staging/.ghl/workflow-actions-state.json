@@ -11,7 +11,7 @@
         "versions": [
           {
             "version": "1.0",
-            "status": "draft",
+            "status": "published",
             "info": {
               "name": "Assess the risk of an identity",
               "description": "A phone number, an email address and an IP address scored together: 0 to 100, a verdict (allow, review, deny) and its reasons.",
@@ -127,7 +127,7 @@
         "versions": [
           {
             "version": "1.0",
-            "status": "draft",
+            "status": "published",
             "info": {
               "name": "Verify an email address",
               "description": "Deliverable or not, disposable, catch-all, a misspelt domain.",
@@ -216,7 +216,7 @@
         "versions": [
           {
             "version": "1.0",
-            "status": "draft",
+            "status": "published",
             "info": {
               "name": "Look up an IP address",
               "description": "Its country and city, its network, and whether it is Tor, a VPN or a data centre.",
@@ -322,7 +322,7 @@
         "versions": [
           {
             "version": "1.0",
-            "status": "draft",
+            "status": "published",
             "info": {
               "name": "Look up a phone number",
               "description": "Valid or not, the line type and country; above it, the current carrier, whether the line is live, or a fraud score.",

@@ -6,7 +6,7 @@
   "versions": [
     {
       "version": "1.0",
-      "status": "draft",
+      "status": "published",
       "info": {
         "name": "Look up an IP address",
         "description": "Its country and city, its network, and whether it is Tor, a VPN or a data centre.",
@@ -92,17 +92,17 @@
         "cost": "0.000000",
         "prooftell_error": ""
       },
-      "payloadCustomizationType": "default",
-      "customizedPayload": {},
-      "branchesConfig": {},
       "executionConfig": {
         "type": "API",
         "url": "https://api.prooftell.dev/integrations/sub-account/actions/ip",
         "method": "POST",
         "headers": {
-          "X-ProofTell-Action-Secret": "${env:PROOFTELL_GHL_ACTION_SECRET}"
+          "X-ProofTell-Action-Secret": "${remote}"
         }
-      }
+      },
+      "payloadCustomizationType": "default",
+      "customizedPayload": {},
+      "branchesConfig": {}
     }
   ]
 }
