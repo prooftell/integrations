@@ -3,7 +3,7 @@
 //   node postprocess.js <raw collection> <openapi.json> <output>
 // What it does: names and describes the collection; bearer auth at the collection from {{api_key}}; the variables
 // base_url, api_key and file_id; every request on {{base_url}}; request bodies and parameters from the spec's examples
-// (the sandbox's documented inputs); the spec's response examples as saved examples; the requests in four folders in
+// (the sandbox's documented inputs); the spec's response examples as saved examples; the requests in three folders in
 // the spec's order; one test on every request (a 2xx, or the error's code and message); no generated ids, so that an
 // unchanged spec yields an unchanged file.
 'use strict';
@@ -129,22 +129,12 @@ function shape({ key, path, method, op, params }) {
   }
   req.url.raw = `{{base_url}}${path.replace(/\{(\w+)\}/g, ':$1')}${queryString(req.url.query)}`;
 
-  // The body: JSON from the spec's examples (a form body keeps the converter's fields, from the examples too).
+  // The body: JSON from the spec's examples.
   const body = op.requestBody && op.requestBody.content;
   if (body && body['application/json'] && req.body && req.body.mode === 'raw') {
     const value = bodies[key] !== undefined ? bodies[key] : exampleOf(body['application/json'].schema);
     req.body.raw = JSON.stringify(value === undefined ? {} : value, null, 2);
     req.body.options = { raw: { language: 'json' } };
-  } else if (body && body['application/x-www-form-urlencoded'] && req.body && req.body.mode === 'urlencoded') {
-    const schema = deref(body['application/x-www-form-urlencoded'].schema);
-    for (const f of req.body.urlencoded) {
-      const p = schema.properties && schema.properties[f.key];
-      const e = p && (p.example !== undefined ? p.example : p.default);
-      if (e !== undefined) f.value = String(e);
-      else { f.value = ''; f.disabled = true; }
-      if (f.key === 'key') { f.value = ''; f.disabled = true; }
-      f.description = clean(f.description) || (p && p.description) || '';
-    }
   }
 
   // The security: the pricing call is public; every other request inherits the collection's bearer.
@@ -193,7 +183,6 @@ const folders = [
   { name: 'Pricing and balance', description: 'The public rate card, and the balance of the account the key belongs to: 200 proves the key.', item: take('GET /v1/pricing', 'GET /v1/balance') },
   { name: 'Checks', description: 'The four checks, charged per check from the balance; with a pt_test_ key each is a free, simulated and deterministic answer.', item: take('POST /v1/phone', 'POST /v1/email', 'POST /v1/ip', 'POST /v1/assess') },
   { name: 'Files', description: 'A file of numbers, addresses or IPs checked as a job: create, upload (a PUT to the answer\'s upload_url with its headers, outside this collection), finish, run, follow, download, stop, delete. Start a file job stores the new file\'s id in {{file_id}} for the other requests. Live keys only: the sandbox answers 501.', item: take(...fileKeys) },
-  { name: 'Compatibility', description: 'The verify call of Veriphone and Verimail, answered by ProofTell under the same names.', item: take('GET /v3/verify', 'POST /v3/verify') },
 ];
 if (shaped.size) throw new Error(`requests without a folder: ${[...shaped.keys()].join(', ')}`);
 

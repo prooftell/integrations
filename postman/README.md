@@ -1,9 +1,9 @@
 # ProofTell on Postman
 
 `prooftell.postman_collection.json` is the public API as a Postman collection (v2.1), generated from `api/openapi.yaml`
-by `build.sh` (openapi-to-postmanv2, then `postprocess.js`; its header says what it changes). Four folders in the
+by `build.sh` (openapi-to-postmanv2, then `postprocess.js`; its header says what it changes). Three folders in the
 spec's order: Pricing and balance, Checks (the four actions: look up a phone number, verify an email address, look up an
-IP address, assess the risk of an identity), Files, Compatibility. Every request but the rate card sends
+IP address, assess the risk of an identity), Files. Every request but the rate card sends
 `Authorization: Bearer {{api_key}}` from the collection's auth; every request runs on `{{base_url}}`
 (`https://api.prooftell.com`), has its body filled with the spec's examples (the sandbox's documented inputs) and keeps
 the spec's response examples as saved examples. One test on every request: a 2xx, or the error's code and message.
