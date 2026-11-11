@@ -123,10 +123,14 @@ Proven through Make's API with the smoke organization's sandbox key (the connect
 header as `***` (the sanitize works), and the connection's `metadata.value` is `Sandbox` (the label expression
 works). The scenario 8321436 "ProofTell test: Look up a phone number" (`+447700900123` at Line type, stopped after
 the test, its history kept) ran once through `POST /scenarios/{id}/run`: `status 1`, SUCCESS, 1 operation, 441
-bytes back — the phone answer. Still to see in Make's editor, where the output panel shows the bundle: one run each
-of the three other modules with the sandbox's documented inputs — `jane@example.com`, `203.0.113.66`, and the three
-together in "Assess the risk of an identity" (`203.0.113.1` as the IP: a `geo_mismatch`, score 15) — and the error
-message's `ifempty` fallback (force a 400 by sending `phone` empty in the risk module with nothing else).
+bytes back — the phone answer. The scenario 8507240 "ProofTell test: email, IP and assessment" (2026-11-11) chains
+the three others with the sandbox's documented inputs — `jane@example.com`, `203.0.113.66`, and the three together
+in "Assess the risk of an identity" (`203.0.113.1` as the IP) — and ran SUCCESS, 3 operations, 2,293 bytes back.
+The scenario 8507256 "ProofTell test: an error's message" sends the risk module nothing and fails as it should:
+`DataError`, `[400 bad_request] Send at least one of phone, email, ip.` — the api's code and message, as the base's
+`error` writes them. Make's API gives a run's status, operations and bytes, never its bundles (a Return output
+module, `scenario-service:ReturnData` version 2, with the scenario's outputs, did not bring them back): the bundles
+show only in the editor's history of each scenario.
 
 Two traps of Make's API, for the next test: a custom app's modules and connection type carry the prefix `app#` —
 the blueprint's module is `app#prooftell-pu2f1x:lookUpPhoneNumber`, a connection's `accountType` is
@@ -149,16 +153,12 @@ organization installs the app by, in a browser: the API's "Accept App Invite" re
 "Organization-bound request can't be used outside of the Organization Context"), and the author's own
 organization needed no install — a connection and a scenario on the app worked there at once.
 
-What remains, Adil's part:
-
-1. The link on the site's and the dashboard's integration pages (`available: true` on both lists, the same hour).
-2. In Make's editor, the three runs still to see and the fallback above ("The connection's test"), on a `pt_test_`
-   key of his own account or the kept connection.
-3. Make's partner programme first: the Make Partnership Agreement, signed on the support@prooftell.com account —
-   the partner form requires an active one. Then the partner form at https://f.make.com/submit-your-app with
-   `LISTING.md`, the invite link and the logo. Make's business review takes 2–3 days; then the app is on Make's
-   integrations page. ("Request review" on the app's page, the route to an approved app for every Maker, needs a
-   universal module the app does not have: not this one.)
+The invite link is on the site's and the dashboard's integration pages. What remains, Adil's part: Make's partner
+programme. First the Make Partnership Agreement, signed on the support@prooftell.com account — the partner form
+requires an active one. Then the partner form at https://f.make.com/submit-your-app with `LISTING.md`, the invite
+link and the logo. Make's business review takes 2–3 days; then the app is on Make's integrations page. ("Request
+review" on the app's page, the route to an approved app for every Maker, needs a universal module the app does not
+have: not this one.)
 
 A change is a file edited here, `node validate.js`, then `make-cli … set-section` with the file (way 3) or "Deploy
 to Make" (way 1, the manifest's origin and `idMapping` name the app); a published app's modules cannot be removed,

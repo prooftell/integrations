@@ -69,9 +69,10 @@ entry), and, in his production ProofTell account, an organization "Zapier review
    each with a live Zap on the app (S001; live means on, with a recent successful run), so two more accounts take
    the invite link and turn one on. And the logo, `assets/logo-512.png`, is uploaded in developer.zapier.com (M004).
    `npx zapier-platform validate` lists every publishing task still open; none may remain.
-6. `npx zapier-platform promote 1.0.0`, then the publishing request in developer.zapier.com with `LISTING.md`'s copy
-   and the test Zaps. Zapier lists the app in beta about a week later; public after 90 days.
+6. `npx zapier-platform promote 1.0.0 --yes` (it sends the version's section of `CHANGELOG.md`, which it requires; on a
+   private app it answers with the publishing form's URL, developer.zapier.com/app/248997/publishing), then the
+   publishing request there with `LISTING.md`'s copy and the test Zaps. Zapier lists the app in beta about a week later; public after 90 days.
 
-A new version is a bump of `version` in `package.json`, `npx zapier-platform push`, then `npx zapier-platform promote` and, once
+A new version is a bump of `version` in `package.json`, its section in `CHANGELOG.md`, `npx zapier-platform push`, then `npx zapier-platform promote` and, once
 users are on it, `npx zapier-platform migrate <old> <new>`. The deploy key, the app id and each review's state are
 operated from the workspace's `RUNBOOK.md` → Integrations.
