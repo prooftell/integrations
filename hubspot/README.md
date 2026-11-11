@@ -50,5 +50,7 @@ After the first upload, the app's Auth page shows its client id and secret: the 
 (`PROOFTELL_HUBSPOT_CLIENT_ID`), the secret into the environment's `integrations` secret
 (`api/src/main/java/prooftell/integrations/IntegrationsConfig.java` says its shape), and the api's
 `actionReceipts` TTL policy is deployed first (`firebase deploy --only firestore` in `api/`). Staging's app is
-allowlisted to the test account in the project's settings. The marketplace listing: the review takes about ten
-business days, and HubSpot shows the listing only after three installs by unaffiliated accounts (D190).
+allowlisted to the test account in the project's settings. The marketplace listing: `LISTING.md` holds its copy, tab by tab, and
+what must stand before the submission — three active installs by unaffiliated accounts, every URL live, the setup
+guide (`/integrations#hubspot`) among them; the icon is `assets/listing-icon-800.png` (`scripts/icon.cjs`). The
+initial review takes up to ten business days (D190).
