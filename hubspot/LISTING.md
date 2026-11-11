@@ -11,9 +11,8 @@ provider never named (D68), HubSpot's name never joined to ours or our mark.
 
 - **Three active installs** by HubSpot production accounts unaffiliated with us, each with a successful action or API
   call in the last 30 days, or the submission is refused. 6798532 is ours: it does not count.
-- **Every URL live and public**: HubSpot's crawler opens each. The setup guide is `/integrations#hubspot`, a section
-  of the site that renders only once HubSpot's entry is `available` in `web/src/data/integrations.ts` (and the
-  dashboard already connects in production): it must be live before the submission.
+- **Every URL live and public**: HubSpot's crawler opens each. The setup guide is `/integrations#hubspot`, the site's
+  section, live since 2026-11-11 (D216): a change to what the app does changes it too.
 - One app under review at a time per developer account: a second submission meanwhile is refused.
 - The initial review: within 10 business days; the whole exchange at most 60 days from the first feedback.
 
