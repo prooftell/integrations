@@ -97,8 +97,10 @@ nodes since May 2026). The workflow is `.github/workflows/release-n8n.yml` at th
    token: a granular access token with publish rights on the package, stored as the repository secret `NPM_TOKEN`
    (the first release needs this: the package does not exist on npm before it). Without a secret: npm's trusted
    publishing — on npmjs.com, the package's settings, Publish access → Trusted Publishers → GitHub Actions, owner
-   `prooftell`, repository `integrations`, workflow `release-n8n.yml`; the workflow writes no token when `NPM_TOKEN`
-   is absent and `npm publish` then authenticates through GitHub's OIDC. The repository must be public (provenance
+   `prooftell`, repository `integrations`, workflow `release-n8n.yml`, "Allow npm publish" ticked; the workflow writes
+   no token when `NPM_TOKEN` is absent and `npm publish` then authenticates through GitHub's OIDC. npm expires a new
+   trusted publisher that no successful publish has used within 2 days: this package's, set after 1.0.0 and unused,
+   is to be deleted and created again the day of its next release. The repository must be public (provenance
    links the package to its source).
 2. For each release: bump `version` in `package.json`, add the entry to `CHANGELOG.md`, commit, then tag that commit
    `n8n-v<version>` (`git tag n8n-v1.0.0 && git push origin n8n-v1.0.0`). The workflow builds, lints, tests, checks

@@ -88,11 +88,14 @@ is read from the environment only.
 The package is published by GitHub Actions with npm provenance, from `.github/workflows/release-node-red.yml` at the
 root of [prooftell/integrations](https://github.com/prooftell/integrations).
 
-1. Once: the repository secret `NPM_TOKEN` publishes the first release (the package does not exist on npm before
-   it); then npm's trusted publishing — on npmjs.com, the package's settings, Publish access → Trusted Publishers →
-   GitHub Actions, owner `prooftell`, repository `integrations`, workflow `release-node-red.yml`.
+1. Once: the first release needs the repository secret `NPM_TOKEN` (the package does not exist on npm before it): a
+   granular token with Read and write on all packages and Bypass two-factor authentication, or the publish stops at
+   npm's one-time password. Then npm's trusted publishing — on npmjs.com, the package's settings, Publish access →
+   Trusted Publishers → GitHub Actions, owner `prooftell`, repository `integrations`, workflow
+   `release-node-red.yml`, "Allow npm publish" ticked — and the secret and the token deleted. npm expires a new trusted publisher that no successful publish has used within 2 days (then: delete it,
+   create it again and release within 2 days); the token-free path was first proven with 1.0.1.
 2. For each release: bump `version` in `package.json`, commit, then tag that commit `node-red-v<version>`
-   (`git tag node-red-v1.0.0 && git push origin node-red-v1.0.0`). The workflow tests, checks that the tag names the
+   (`git tag node-red-v1.0.1 && git push origin node-red-v1.0.1`). The workflow tests, checks that the tag names the
    version, and publishes.
 3. For the Flow Library, once: on https://flows.nodered.org, signed in with GitHub, + → Node, the package's name. It
    is listed at once; a new version is picked up from its page's "request refresh" link, or by submitting again.

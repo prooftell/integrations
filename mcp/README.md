@@ -100,8 +100,11 @@ environment only.
 1. npm, by GitHub Actions with provenance (`.github/workflows/release-mcp.yml` at the root of
    [prooftell/integrations](https://github.com/prooftell/integrations)): bump `version` in `package.json` and in
    `server.json` (both places), commit, tag `mcp-v<version>` and push the tag. The first release publishes with the
-   repository secret `NPM_TOKEN`; after it, npm's trusted publishing (the package's settings, Publish access →
-   Trusted Publishers → GitHub Actions, owner `prooftell`, repository `integrations`, workflow `release-mcp.yml`).
+   repository secret `NPM_TOKEN` (a granular token with Read and write on all packages and Bypass two-factor
+   authentication); after it, npm's trusted publishing (the package's settings, Publish access → Trusted Publishers
+   → GitHub Actions, owner `prooftell`, repository `integrations`, workflow `release-mcp.yml`, "Allow npm publish"
+   ticked), the secret and the token deleted. npm expires a new trusted publisher that no successful publish has used within 2 days (then: delete it,
+   create it again and release within 2 days); the token-free path was first proven with 1.0.1.
 2. The official MCP Registry, once the version is on npm, from this folder with
    [mcp-publisher](https://github.com/modelcontextprotocol/registry/releases): `mcp-publisher login dns --domain
    prooftell.com --private-key <the key's hex>`, then `mcp-publisher publish`. The name `com.prooftell/mcp` is proven

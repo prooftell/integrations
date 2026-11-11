@@ -1,6 +1,6 @@
 {
   "name": "@prooftell/node-red-prooftell",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ProofTell for Node-RED: look up a phone number, verify an email address, look up an IP address, or assess the risk of an identity, with one API key.",
   "license": "MIT",
   "homepage": "https://prooftell.com/integrations?utm_source=node-red&utm_medium=integration",

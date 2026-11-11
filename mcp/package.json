@@ -1,6 +1,6 @@
 {
   "name": "@prooftell/mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ProofTell's MCP server: phone, email and IP checks and an identity's risk score as tools for Claude, Cursor, VS Code and any MCP client, with one API key.",
   "license": "MIT",
   "mcpName": "com.prooftell/mcp",
