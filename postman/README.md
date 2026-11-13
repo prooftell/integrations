@@ -34,17 +34,18 @@ npx newman run prooftell.postman_collection.json --folder "Pricing and balance" 
 `sh build.sh` from this folder (node and npx). The build is stable: an unchanged spec yields an unchanged file. Review
 the diff of the collection before committing: the generator's output is the artifact.
 
-## Tomorrow (Adil)
+## Publishing (done on 2026-11-13)
 
-1. A Postman account on `support@prooftell.com` (postman.com, Sign up), and a team named ProofTell.
-2. A workspace "ProofTell", visibility Public (Workspaces, Create workspace, Public). Its summary: the one sentence of
-   this collection's description; its link https://prooftell.com/integrations?utm_source=postman&utm_medium=integration
-   (the docs link stays in the collection's description).
-3. Import `prooftell.postman_collection.json` into it; the collection's `api_key` variable stays empty (the public copy
-   must hold no key: Postman shows collection variables to every viewer).
-4. The team profile made public (Settings, Team profile: the ProofTell name and logo from `design/system/assets/Logos`,
-   the link above). A public workspace is the publication: it appears on the Postman API Network once Postman's Secret
-   Scanner has passed it.
+1. The Postman account is `admin@prooftell.com`; its team is ProofTell, team URL `prooftell-com`, the team profile public
+   at https://www.postman.com/prooftell-com (the name, the mark from `design/system/assets/Logos`, the link
+   https://prooftell.com/integrations?utm_source=postman&utm_medium=integration).
+2. A workspace "ProofTell", visibility Public; its summary the first sentence of the collection's description.
+3. `prooftell.postman_collection.json` imported into it by its link,
+   https://raw.githubusercontent.com/prooftell/integrations/main/postman/prooftell.postman_collection.json; the
+   collection's `api_key` variable stays empty (the public copy must hold no key: Postman shows collection variables to
+   every viewer). After a rebuild, the public copy is replaced the same way (Import, replace).
+4. A public workspace is the publication: it appears on the Postman API Network once Postman's Secret Scanner has
+   passed it.
 5. The link back: the workspace's URL (`https://www.postman.com/<team>/workspace/prooftell`) goes into
    `web/src/data/integrations.ts` and `app/src/lib/integrations.ts` as the Postman entry's link, with `available`
    flipped (plan §4, §5, §8.3), and into `RUNBOOK.md` → Integrations.
