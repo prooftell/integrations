@@ -46,10 +46,8 @@ module.exports = {
   display: {
     // Title case: Zapier's check D018 (see creates/phone.js).
     label: 'Look Up an IP Address',
-    description:
-      'Looks up an IP address: whether it is a Tor exit, a VPN or a datacenter address, and its country, city ' +
-      "and network. The address stays in ProofTell's infrastructure. " +
-      'Charged per check from your balance; the sandbox is free.',
+    // One sentence: Zapier's review (2026-11-17) gave the text (see creates/phone.js).
+    description: 'Returns IP geolocation and risk signals.',
   },
   operation: {
     inputFields: [

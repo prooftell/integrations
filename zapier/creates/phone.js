@@ -69,10 +69,9 @@ module.exports = {
     // Zapier's directory requires title case in labels (its check D018 blocks promoting otherwise); the name
     // itself is the one every ProofTell connector uses, "Look up a phone number".
     label: 'Look Up a Phone Number',
-    description:
-      'Checks a phone number: whether it is valid, its formats and its country, and, by level, its line type, ' +
-      'the carrier it is on today, whether it is on the network right now, or its fraud score. ' +
-      'Charged per check from your balance; the sandbox is free.',
+    // One sentence, no app name, no billing, no feature list: Zapier's review (2026-11-17) gave the text; the
+    // levels are explained in the Level field's help.
+    description: 'Returns phone validity and line details.',
   },
   operation: {
     inputFields: [

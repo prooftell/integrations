@@ -16,7 +16,9 @@ const perform = async (z, bundle) => {
     url: url('/v1/assess'),
     body: input,
   });
-  return response.data;
+  // The api answers createdAt; Zapier's review (2026-11-17) asks for snake_case output fields, as the trigger's.
+  const { createdAt, ...rest } = response.data;
+  return { ...rest, created_at: createdAt };
 };
 
 // The spec's example: the sandbox's answer for +447700900123, jane@example.com and 203.0.113.1, a geo mismatch.
@@ -108,7 +110,7 @@ const sample = {
   ruleset: '2026-10-07',
   cost: '0.000000',
   currency: 'USD',
-  createdAt: '2026-10-27T15:59:50.195198859Z',
+  created_at: '2026-10-27T15:59:50.195198859Z',
 };
 
 module.exports = {
@@ -117,10 +119,8 @@ module.exports = {
   display: {
     // Title case: Zapier's check D018 (see creates/phone.js).
     label: 'Assess the Risk of an Identity',
-    description:
-      'Scores a phone number, an email address and an IP address together, any one of the three at least: ' +
-      'a 0 to 100 score, a verdict (allow, review, deny) and the reasons, with each signal\'s own result. ' +
-      'Charged per signal from your balance; the sandbox is free.',
+    // One sentence: Zapier's review (2026-11-17) gave the text (see creates/phone.js).
+    description: 'Returns a combined risk score and verdict.',
   },
   operation: {
     inputFields: [
@@ -190,7 +190,7 @@ module.exports = {
       { key: 'reference', label: 'Reference', type: 'string' },
       { key: 'ruleset', label: 'Rule set', type: 'string' },
       { key: 'cost', label: 'Cost (USD)', type: 'string' },
-      { key: 'createdAt', label: 'Created at', type: 'datetime' },
+      { key: 'created_at', label: 'Created at', type: 'datetime' },
     ],
   },
 };

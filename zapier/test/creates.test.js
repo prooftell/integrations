@@ -136,6 +136,9 @@ describeSandbox('Assess the risk of an identity', () => {
     expect(result.signals.email.result.result).toBe('deliverable');
     expect(result.signals.ip.result.is_tor).toBe(false);
     expect(result.mode).toBe('test');
+    // snake_case like every other field (Zapier's review, 2026-11-17); the api's createdAt is renamed.
+    expect(result.created_at).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+    expect(result.createdAt).toBeUndefined();
     expect(result.cost).toBe('0.000000');
   });
 

@@ -55,9 +55,8 @@ module.exports = {
   display: {
     // Title case: Zapier's check D018 (see creates/phone.js).
     label: 'File Completed',
-    description:
-      'Triggers when a file uploaded to ProofTell completes: its counters and what it was charged. ' +
-      'Files need a live key; the results are downloaded from the dashboard or the api.',
+    // One sentence, no app name, no billing, no feature list: Zapier's review (2026-11-17) gave the text.
+    description: 'Triggers when a file upload completes.',
   },
   operation: {
     type: 'polling',

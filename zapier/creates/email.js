@@ -46,10 +46,8 @@ module.exports = {
   display: {
     // Title case: Zapier's check D018 (see creates/phone.js).
     label: 'Verify an Email Address',
-    description:
-      'Verifies an email address: whether its mailbox exists and accepts mail, with the reason, the flags ' +
-      '(disposable, role account, free provider, catch-all) and a likely correction of a misspelt domain. ' +
-      'Charged per check from your balance; the sandbox is free.',
+    // One sentence: Zapier's review (2026-11-17) gave the text (see creates/phone.js).
+    description: 'Returns email deliverability and flags.',
   },
   operation: {
     inputFields: [
